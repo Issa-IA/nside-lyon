@@ -1,0 +1,1157 @@
+<?xml-stylesheet type="text/xsl" href="TrierPersonnes.xsl"?>
+<odoo>
+ <report
+                        id="report_fiche_suivie"
+                        model="project.task"
+                        string="Fiche de suivie"
+                        name="eeg_intervention.fiche_suivie"
+                        file="eeg_intervention.fiche_suivie"
+                        report_type="qweb-pdf"
+
+        />
+<template id="fiche_suivie">
+     <t t-call="web.html_container">
+     <t t-call="web.external_layout">
+     <t t-foreach="docs" t-as="doc">
+           <div class="page">
+        <div class="text-center"><h2>DETAIL PAR MODELE</h2></div>
+                   <table class="table o_report_block_table">
+      <thead>
+        <tr style="background:#b64654; color:white;">
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>MODELE EEG</span>
+          </th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>OK TEST SEUL</span>
+          </th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>OK PILES + TEST</span>
+          </th>
+          <th colspan="5" style="background:#b64654; color:white;">HS</th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>ILLISIBLE</span>
+          </th>
+          <th colspan="3" style="background:#b64654; color:white;">CASSEES</th>
+            <th rowspan="2" style="background:#b64654; color:white;">TOTAL</th>
+        </tr>
+        <tr style="background:#b64654; color:white;">
+          <td>
+            <span>code erreur</span>
+          </td>
+          <td>
+            <span>affichage défectueux</span>
+          </td>
+          <td>
+            <span>Activation</span>
+          </td>
+          <td>
+            <span>Piles</span>
+          </td>
+                <td>
+            <span>TOTAUX HS</span>
+          </td>
+          <td>
+            <span>esthétique**</span>
+          </td>
+          <td>
+            <span>cassée</span>
+          </td>
+             <td style="background:#b64654; color:white;">
+            <span>TOTAUX CASSEES</span>
+          </td>
+
+        </tr>
+      </thead>
+      <tbody>
+
+            <tr>
+
+          <td>
+            <span>150E</span>
+          </td>
+                  <t t-set="total_test" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="total_test" t-value="total_test + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test"/>
+                        </td>
+
+              <t t-set="pile_test" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="pile_test" t-value="pile_test + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test"/>
+                        </td>     <t t-set="code_erreur" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="code_erreur" t-value="code_erreur + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur"/>
+                        </td>    <t t-set="affichage_defectueux" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="affichage_defectueux" t-value="affichage_defectueux + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux"/>
+                        </td>
+
+                         <t t-set="activation" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="activation" t-value="activation + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation"/>
+                        </td>
+                <t t-set="piles" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="piles" t-value="piles + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles"/>
+                        </td>
+
+                <t t-set="total_hs" t-value="0"/>
+                      <t t-set="total_hs" t-value="total_hs + piles + activation + affichage_defectueux + code_erreur"/>
+
+                      <td>
+                   <t t-esc="total_hs"/>
+                        </td>
+<td/>
+                        <t t-set="esthetique" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="esthetique" t-value="esthetique + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique"/>
+                        </td>
+                 <t t-set="cassees" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E'))" t-as="line">
+                         <t t-set="cassees" t-value="cassees + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees"/>
+                        </td>
+                 <t t-set="total_casse" t-value="0"/>
+                      <t t-set="total_casse" t-value="total_casse + cassees + esthetique"/>
+                      <td>
+                   <t t-esc="total_casse"/>
+                        </td>
+                 <t t-set="total" t-value="0"/>
+                      <t t-set="total" t-value="total + total_hs + total_casse + pile_test + total_test"/>
+                      <td>
+                   <t t-esc="total"/>
+                        </td>
+        </tr>
+          <!-- Modèle2-->
+          <tr>
+
+          <td>
+            <span>210EA</span>
+          </td>
+               <t t-set="total_test1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="total_test1" t-value="total_test1 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test1"/>
+                        </td>
+
+              <t t-set="pile_test1" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="pile_test1" t-value="pile_test1 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test1"/>
+                        </td>     <t t-set="code_erreur1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="code_erreur1" t-value="code_erreur1 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur1"/>
+                        </td>    <t t-set="affichage_defectueux1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="affichage_defectueux1" t-value="affichage_defectueux1 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux1"/>
+                        </td>
+
+                         <t t-set="activation1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="activation1" t-value="activation1 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation1"/>
+                        </td>     <t t-set="piles1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="piles1" t-value="piles1 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles1"/>
+                        </td>
+                <t t-set="total_hs1" t-value="0"/>
+                      <t t-set="total_hs1" t-value="total_hs1 + piles1 + activation1 + affichage_defectueux1 + code_erreur1"/>
+                      <td>
+                   <t t-esc="total_hs1"/>
+                        </td>
+  <td/>
+                        <t t-set="esthetique1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="esthetique1" t-value="esthetique1 + line.esthetique"/>
+
+                   </t>
+                      <td>
+
+                   <t t-esc="esthetique1"/>
+                        </td>
+               <t t-set="cassees1" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA'))" t-as="line">
+                         <t t-set="cassees1" t-value="cassees1 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees1"/>
+                        </td>
+               <t t-set="total_casse1" t-value="0"/>
+                      <t t-set="total_casse1" t-value="total_casse1 + cassees1 + esthetique1"/>
+                      <td>
+                   <t t-esc="total_casse1"/>
+                      </td>
+              <t t-set="total1" t-value="0"/>
+                      <t t-set="total1" t-value="total1 + total_hs1 + total_casse1 + pile_test1 + total_test1"/>
+                      <td>
+                   <t t-esc="total1"/>
+                        </td>
+        </tr>
+  <!--Modele3-->
+        <tr>
+
+          <td>
+            <span>210EF</span>
+          </td>
+             <t t-set="total_test2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="total_test2" t-value="total_test2 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test2"/>
+                        </td>
+
+              <t t-set="pile_test2" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="pile_test2" t-value="pile_test2 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test2"/>
+                        </td>     <t t-set="code_erreur2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="code_erreur2" t-value="code_erreur2 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur2"/>
+                        </td>    <t t-set="affichage_defectueux2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="affichage_defectueux2" t-value="affichage_defectueux2 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux2"/>
+                        </td>
+
+                         <t t-set="activation2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="activation2" t-value="activation2 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation2"/>
+                        </td>     <t t-set="piles2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="piles2" t-value="piles2 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles2"/>
+                        </td>
+
+                         <t t-set="total_hs2" t-value="0"/>
+                      <t t-set="total_hs2" t-value="total_hs2 + piles2 + activation2 + affichage_defectueux2 + code_erreur2"/>
+
+                      <td>
+                   <t t-esc="total_hs2"/>
+                        </td>
+            <td/>
+                        <t t-set="esthetique2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="esthetique2" t-value="esthetique2 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique2"/>
+                        </td>
+              <t t-set="cassees2" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF'))" t-as="line">
+                         <t t-set="cassees2" t-value="cassees2 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees2"/>
+                        </td>
+             <t t-set="total_casse2" t-value="0"/>
+                      <t t-set="total_casse2" t-value="total_casse2 + cassees2 + esthetique2"/>
+                      <td>
+                   <t t-esc="total_casse2"/>
+                        </td>
+            <t t-set="total2" t-value="0"/>
+                      <t t-set="total2" t-value="total2 + total_hs2 + total_casse2 + pile_test2 + total_test2"/>
+                      <td>
+                   <t t-esc="total2"/>
+                        </td>
+        </tr>
+          <!--Modele4-->
+
+        <tr>
+             <td>
+            <span>420E</span>
+          </td>
+            <t t-set="total_test3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="total_test3" t-value="total_test3 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test3"/>
+                        </td>
+
+              <t t-set="pile_test3" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="pile_test3" t-value="pile_test3 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test3"/>
+                        </td>     <t t-set="code_erreur3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="code_erreur3" t-value="code_erreur3 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur3"/>
+                        </td>    <t t-set="affichage_defectueux3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="affichage_defectueux3" t-value="affichage_defectueux3 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux3"/>
+                        </td>
+
+                         <t t-set="activation3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="activation3" t-value="activation3 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation3"/>
+                        </td>     <t t-set="piles3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="piles3" t-value="piles3 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles3"/>
+                        </td>
+
+                    <t t-set="total_hs3" t-value="0"/>
+                      <t t-set="total_hs3" t-value="total_hs3 + piles3 + activation3 + affichage_defectueux3 + code_erreur3"/>
+                      <td>
+                   <t t-esc="total_hs3"/>
+                        </td>
+                    <td/>
+                        <t t-set="esthetique3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="esthetique3" t-value="esthetique3 + line.esthetique"/>
+
+                   </t>
+                      <td>
+
+                   <t t-esc="esthetique3"/>
+                        </td>
+              <t t-set="cassees3" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '420E'))" t-as="line">
+                         <t t-set="cassees3" t-value="cassees3 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees3"/>
+                        </td>
+             <t t-set="total_casse3" t-value="0"/>
+                      <t t-set="total_casse3" t-value="total_casse3 + cassees3 + esthetique3"/>
+                      <td>
+                   <t t-esc="total_casse3"/>
+                        </td>
+            <t t-set="total3" t-value="0"/>
+                      <t t-set="total3" t-value="total3 + total_hs3 + total_casse3 + pile_test3 + total_test3"/>
+                      <td>
+                   <t t-esc="total3"/>
+                        </td>
+        </tr>
+          <!--Modele5-->
+
+                <tr>
+             <td>
+            <span>580E</span>
+          </td>
+              <t t-set="total_test4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="total_test4" t-value="total_test4 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test4"/>
+                        </td>
+
+              <t t-set="pile_test4" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="pile_test4" t-value="pile_test4 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test4"/>
+                        </td>     <t t-set="code_erreur4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="code_erreur4" t-value="code_erreur4 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur4"/>
+                        </td>    <t t-set="affichage_defectueux4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="affichage_defectueux4" t-value="affichage_defectueux4 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux4"/>
+                        </td>
+
+                         <t t-set="activation4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="activation4" t-value="activation4 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation4"/>
+                        </td>     <t t-set="piles4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="piles4" t-value="piles4 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles4"/>
+                        </td>
+                     <t t-set="total_hs4" t-value="0"/>
+                      <t t-set="total_hs4" t-value="total_hs4 + piles4 + activation4 + affichage_defectueux4 + code_erreur4"/>
+                      <td>
+                   <t t-esc="total_hs4"/>
+                        </td>
+                      <td/>
+                        <t t-set="esthetique4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="esthetique4" t-value="esthetique4 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique4"/>
+                        </td>
+                      <t t-set="cassees4" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '580E'))" t-as="line">
+                         <t t-set="cassees4" t-value="cassees4 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees4"/>
+                        </td>
+                     <t t-set="total_casse4" t-value="0"/>
+                      <t t-set="total_casse4" t-value="total_casse4 + cassees4 + esthetique4"/>
+                      <td>
+                   <t t-esc="total_casse4"/>
+                        </td>
+                    <t t-set="total4" t-value="0"/>
+                      <t t-set="total4" t-value="total4 + total_hs4 + total_casse4 + pile_test4 + total_test4"/>
+                      <td>
+                   <t t-esc="total4"/>
+                        </td>
+        </tr>
+          <!--Modele6-->
+
+                <tr>
+             <td>
+            <span>150E CC4U</span>
+          </td>
+           <t t-set="total_test5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="total_test5" t-value="total_test5 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test5"/>
+                        </td>
+
+              <t t-set="pile_test5" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="pile_test5" t-value="pile_test5 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test5"/>
+                        </td>     <t t-set="code_erreur5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="code_erreur5" t-value="code_erreur5 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur5"/>
+                        </td>    <t t-set="affichage_defectueux5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="affichage_defectueux5" t-value="affichage_defectueux5 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux5"/>
+                        </td>
+
+                         <t t-set="activation5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="activation5" t-value="activation5 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation5"/>
+                        </td>     <t t-set="piles5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="piles5" t-value="piles5 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles5"/>
+                        </td>
+                <t t-set="total_hs5" t-value="0"/>
+                      <t t-set="total_hs5" t-value="total_hs5 + piles5 + activation5 + affichage_defectueux5 + code_erreur5"/>
+                      <td>
+                   <t t-esc="total_hs5"/>
+                        </td>
+                      <td/>
+                        <t t-set="esthetique5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="esthetique5" t-value="esthetique5 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique5"/>
+                        </td>
+                      <t t-set="cassees5" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150E CC4U'))" t-as="line">
+                         <t t-set="cassees5" t-value="cassees5 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees5"/>
+                        </td>
+                     <t t-set="total_casse5" t-value="0"/>
+                      <t t-set="total_casse5" t-value="total_casse5 + cassees5 + esthetique5"/>
+                      <td>
+                   <t t-esc="total_casse5"/>
+                        </td>
+                    <t t-set="total5" t-value="0"/>
+                      <t t-set="total5" t-value="total5 + total_hs5 + total_casse5 + pile_test5 + total_test5"/>
+                      <td>
+                   <t t-esc="total5"/>
+                        </td>
+        </tr>
+          <!--Modele7-->
+
+                <tr>
+             <td>
+            <span>210EA CC4U</span>
+          </td>
+           <t t-set="total_test6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="total_test6" t-value="total_test6 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test6"/>
+                        </td>
+
+              <t t-set="pile_test6" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="pile_test6" t-value="pile_test6 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test6"/>
+                        </td>     <t t-set="code_erreur6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="code_erreur6" t-value="code_erreur6 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur6"/>
+                        </td>    <t t-set="affichage_defectueux6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="affichage_defectueux6" t-value="affichage_defectueux6 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux6"/>
+                        </td>
+
+                         <t t-set="activation6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="activation6" t-value="activation6 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation6"/>
+                        </td>     <t t-set="piles6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="piles6" t-value="piles6 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles6"/>
+                        </td>
+                <t t-set="total_hs6" t-value="0"/>
+                      <t t-set="total_hs6" t-value="total_hs6 + piles6 + activation6 + affichage_defectueux6 + code_erreur6"/>
+                      <td>
+                   <t t-esc="total_hs6"/>
+                        </td>
+                    <td/>
+                        <t t-set="esthetique6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="esthetique6" t-value="esthetique6 + line.esthetique"/>
+
+                   </t>
+                      <td>
+
+                   <t t-esc="esthetique6"/>
+                        </td>
+                      <t t-set="cassees6" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EA CC4U'))" t-as="line">
+                         <t t-set="cassees6" t-value="cassees6 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees6"/>
+                        </td>
+                     <t t-set="total_casse6" t-value="0"/>
+                      <t t-set="total_casse6" t-value="total_casse6 + cassees6 + esthetique6"/>
+                      <td>
+                   <t t-esc="total_casse6"/>
+                        </td>
+                    <t t-set="total6" t-value="0"/>
+                      <t t-set="total6" t-value="total6 + total_hs6 + total_casse6 + pile_test6 + total_test6"/>
+                      <td>
+                   <t t-esc="total6"/>
+                        </td>
+        </tr>
+          <!--Modele8-->
+
+                <tr>
+             <td>
+            <span>210EF CC4U</span>
+          </td>
+           <t t-set="total_test7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="total_test7" t-value="total_test7 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test7"/>
+                        </td>
+
+              <t t-set="pile_test7" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="pile_test7" t-value="pile_test7 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test7"/>
+                        </td>     <t t-set="code_erreur7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="code_erreur7" t-value="code_erreur7 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur7"/>
+                        </td>    <t t-set="affichage_defectueux7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="affichage_defectueux7" t-value="affichage_defectueux7 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux7"/>
+                        </td>
+
+                         <t t-set="activation7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="activation7" t-value="activation7 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation7"/>
+                        </td>     <t t-set="piles7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="piles7" t-value="piles7 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles7"/>
+                        </td>
+                    <t t-set="total_hs7" t-value="0"/>
+                      <t t-set="total_hs7" t-value="total_hs7 + piles7 + activation7 + affichage_defectueux7 + code_erreur7"/>
+                      <td>
+                   <t t-esc="total_hs7"/>
+                        </td>
+                    <td/>
+                        <t t-set="esthetique7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="esthetique7" t-value="esthetique7 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique7"/>
+                        </td>
+                      <t t-set="cassees7" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '210EF CC4U'))" t-as="line">
+                         <t t-set="cassees7" t-value="cassees7 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees7"/>
+                        </td>
+                     <t t-set="total_casse7" t-value="0"/>
+                      <t t-set="total_casse7" t-value="total_casse7 + cassees7 + esthetique7"/>
+                      <td>
+                   <t t-esc="total_casse7"/>
+                        </td>
+                    <t t-set="total7" t-value="0"/>
+                      <t t-set="total7" t-value="total7 + total_hs7 + total_casse7 + pile_test7 + total_test7"/>
+                      <td>
+                   <t t-esc="total7"/>
+                        </td>
+        </tr>
+          <!--Modele9-->
+
+                <tr>
+             <td>
+            <span>150W</span>
+          </td>
+          <t t-set="total_test8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="total_test8" t-value="total_test8 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test8"/>
+                        </td>
+
+              <t t-set="pile_test8" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="pile_test8" t-value="pile_test8 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test8"/>
+                        </td>     <t t-set="code_erreur8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="code_erreur8" t-value="code_erreur8 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur8"/>
+                        </td>    <t t-set="affichage_defectueux8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="affichage_defectueux8" t-value="affichage_defectueux8 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux8"/>
+                        </td>
+
+                         <t t-set="activation8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="activation8" t-value="activation8 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation8"/>
+                        </td>     <t t-set="piles8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="piles8" t-value="piles8 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles8"/>
+                        </td>
+
+                        <t t-set="total_hs8" t-value="0"/>
+                      <t t-set="total_hs8" t-value="total_hs8 + piles8 + activation8 + affichage_defectueux8 + code_erreur8"/>
+                      <td>
+                   <t t-esc="total_hs8"/>
+                        </td>
+                    <td/>
+                        <t t-set="esthetique8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="esthetique8" t-value="esthetique8 + line.esthetique"/>
+
+                   </t>
+                      <td>
+
+                   <t t-esc="esthetique8"/>
+                        </td>
+                      <t t-set="cassees8" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '150W'))" t-as="line">
+                         <t t-set="cassees8" t-value="cassees8 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees8"/>
+                        </td>
+                     <t t-set="total_casse8" t-value="0"/>
+                      <t t-set="total_casse8" t-value="total_casse8 + cassees8 + esthetique8"/>
+                      <td>
+                   <t t-esc="total_casse8"/>
+                        </td>
+                    <t t-set="total8" t-value="0"/>
+                      <t t-set="total8" t-value="total8 + total_hs8 + total_casse8 + pile_test8 + total_test8"/>
+                      <td>
+                   <t t-esc="total8"/>
+                        </td>
+        </tr>
+          <!--Modele10-->
+
+                <tr>
+             <td>
+            <span>250WA</span>
+          </td>
+           <t t-set="total_test9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="total_test9" t-value="total_test9 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test9"/>
+                        </td>
+
+              <t t-set="pile_test9" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="pile_test9" t-value="pile_test9 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test9"/>
+                        </td>     <t t-set="code_erreur9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="code_erreur9" t-value="code_erreur9 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur9"/>
+                        </td>    <t t-set="affichage_defectueux9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="affichage_defectueux9" t-value="affichage_defectueux9 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux9"/>
+                        </td>
+
+                         <t t-set="activation9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="activation9" t-value="activation9 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation"/>
+                        </td>     <t t-set="piles9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="piles9" t-value="piles9 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles9"/>
+                        </td>
+
+                        <t t-set="total_hs9" t-value="0"/>
+                      <t t-set="total_hs9" t-value="total_hs9 + piles9 + activation9 + affichage_defectueux9 + code_erreur9"/>
+                      <td>
+                   <t t-esc="total_hs9"/>
+                        </td>
+                      <td/>
+                        <t t-set="esthetique9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="esthetique9" t-value="esthetique9 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique9"/>
+                        </td>
+                      <t t-set="cassees9" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WA'))" t-as="line">
+                         <t t-set="cassees9" t-value="cassees9 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees9"/>
+                        </td>
+                     <t t-set="total_casse9" t-value="0"/>
+                      <t t-set="total_casse9" t-value="total_casse9 + cassees9 + esthetique9"/>
+                      <td>
+                   <t t-esc="total_casse9"/>
+                        </td>
+                    <t t-set="total9" t-value="0"/>
+                      <t t-set="total9" t-value="total9 + total_hs9 + total_casse9 + pile_test9 + total_test9"/>
+                      <td>
+                   <t t-esc="total9"/>
+                        </td>
+        </tr>
+
+          <!--Modele11-->
+
+                <tr>
+             <td>
+            <span>250WF</span>
+          </td>
+           <t t-set="total_test10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="total_test10" t-value="total_test10 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test10"/>
+                        </td>
+
+              <t t-set="pile_test10" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="pile_test10" t-value="pile_test10 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test10"/>
+                        </td>     <t t-set="code_erreur10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="code_erreur10" t-value="code_erreur10 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur10"/>
+                        </td>    <t t-set="affichage_defectueux10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="affichage_defectueux10" t-value="affichage_defectueux10 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux10"/>
+                        </td>
+
+                         <t t-set="activation10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="activation10" t-value="activation10 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation10"/>
+                        </td>     <t t-set="piles10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="piles10" t-value="piles10 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles10"/>
+                        </td>
+                    <t t-set="total_hs10" t-value="0"/>
+                      <t t-set="total_hs10" t-value="total_hs10 + piles10 + activation10 + affichage_defectueux10 + code_erreur10"/>
+                      <td>
+                   <t t-esc="total_hs10"/>
+                        </td>
+                      <td/>
+                        <t t-set="esthetique10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="esthetique10" t-value="esthetique10 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique10"/>
+                        </td>
+                      <t t-set="cassees10" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '250WF'))" t-as="line">
+                         <t t-set="cassees10" t-value="cassees10 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees10"/>
+                        </td>
+                     <t t-set="total_casse10" t-value="0"/>
+                      <t t-set="total_casse10" t-value="total_casse10 + cassees10 + esthetique10"/>
+                      <td>
+                   <t t-esc="total_casse10"/>
+                        </td>
+                    <t t-set="total10" t-value="0"/>
+                      <t t-set="total10" t-value="total10 + total_hs10 + total_casse10 + pile_test10 + total_test10"/>
+                      <td>
+                   <t t-esc="total10"/>
+                        </td>
+        </tr>
+          <!--Modele12-->
+
+                <tr>
+             <td>
+            <span>400W</span>
+          </td>
+           <t t-set="total_test11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="total_test11" t-value="total_test11 + line.test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="total_test11"/>
+                        </td>
+
+              <t t-set="pile_test11" t-value="0"/>
+
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="pile_test11" t-value="pile_test11 + line.pile_test"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="pile_test11"/>
+                        </td>     <t t-set="code_erreur11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="code_erreur11" t-value="code_erreur11 + line.code_erreur"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="code_erreur11"/>
+                        </td>    <t t-set="affichage_defectueux11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="affichage_defectueux11" t-value="affichage_defectueux11 + line.affichage_defectueux"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="affichage_defectueux11"/>
+                        </td>
+
+                         <t t-set="activation11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="activation11" t-value="activation11 + line.activation"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="activation11"/>
+                        </td>
+                    <t t-set="piles11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="piles11" t-value="piles11 + line.piles"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="piles11"/>
+                        </td>
+                        <t t-set="total_hs11" t-value="0"/>
+                      <t t-set="total_hs11" t-value="total_hs11 + piles11 + activation11 + affichage_defectueux11 + code_erreur11"/>
+                      <td>
+                   <t t-esc="total_hs11"/>
+                        </td>
+                    <td/>
+                        <t t-set="esthetique11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="esthetique11" t-value="esthetique11 + line.esthetique"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="esthetique11"/>
+                        </td>
+                      <t t-set="cassees11" t-value="0"/>
+                    <t t-foreach="set(doc.intervention_ids.filtered(lambda line: line.etiquette_id.name == '400W'))" t-as="line">
+                         <t t-set="cassees11" t-value="cassees11 + line.cassees"/>
+
+                   </t>
+                      <td>
+                   <t t-esc="cassees11"/>
+                        </td>
+                    <t t-set="total_casse11" t-value="0"/>
+                      <t t-set="total_casse11" t-value="total_casse11 + cassees11 + esthetique11"/>
+                      <td>
+                   <t t-esc="total_casse11"/>
+                        </td>
+                    <t t-set="total11" t-value="0"/>
+                      <t t-set="total11" t-value="total11 + total_hs11 + total_casse11 + pile_test11 + total_test11"/>
+                      <td>
+                   <t t-esc="total11"/>
+                        </td>
+        </tr>
+          <tr style="background:#b64654; color:white;">
+              <td>TOTAL</td>
+              <t t-set="test_total" t-value="0"/>
+                      <t t-set="test_total" t-value="test_total + total_test + total_test1 + total_test2 + total_test3 + total_test4 + total_test5 + total_test6 + total_test7 + total_test8 + total_test8 + total_test9 + total_test10 + total_test11"/>
+                      <td>
+                   <t t-esc="test_total"/>
+                        </td>
+               <t t-set="total_pile_test" t-value="0"/>
+                      <t t-set="total_pile_test" t-value="total_pile_test + pile_test + pile_test1 + pile_test2 + pile_test3 + pile_test4 + pile_test5 + pile_test6 +pile_test7 + pile_test8 +pile_test9 + pile_test10 + pile_test11"/>
+                      <td>
+                   <t t-esc="total_pile_test"/>
+                        </td>
+              <td colspan="8">Total HS, Cassées et illisibles</td>
+             <t t-set="total_cassees_tot" t-value="0"/>
+                      <t t-set="total_cassees_tot" t-value="total_cassees_tot + total_casse + total_casse1 + total_casse2 + total_casse3 + total_casse4 + total_casse5 + total_casse6 + total_casse7 + total_casse8 + total_casse9 + total_casse10 + total_casse11"/>
+                      <td>
+                   <t t-esc="total_cassees_tot"/>
+                        </td>
+                <t t-set="total_tot" t-value="0"/>
+                      <t t-set="total_tot" t-value="total_tot + total + total1 + total2 + total3 + total4 + total5 + total6 + total7 + total8 + total9 + total10 + total11"/>
+                      <td style="background:#b64654; color:white;">
+                   <t t-esc="total_tot"/>
+                        </td>
+          </tr>
+
+      </tbody>
+    </table>
+
+           </div>
+     </t>
+     </t>
+     </t>
+</template>
+</odoo>
