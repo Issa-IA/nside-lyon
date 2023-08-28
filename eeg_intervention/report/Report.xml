@@ -14,9 +14,16 @@
      <t t-call="web.external_layout">
      <t t-foreach="docs" t-as="doc">
            <div class="page">
-        <div class="text-center"><h2>DETAIL PAR MODELE</h2></div>
+                      <div class="row">
+        <div class="text-center text-black"><h1>FICHE DE SUIVIE</h1></div>
+                   </div>
+
                    <table class="table o_report_block_table">
       <thead>
+          <tr style="background:#b64654; color:white;">
+              <th colspan="13" style="background:#b64654; color:white;">
+            <h3>DETAIL PAR MODELE</h3>
+          </th></tr>
         <tr style="background:#b64654; color:white;">
           <th rowspan="2" style="background:#b64654; color:white;">
             <span>MODELE EEG</span>

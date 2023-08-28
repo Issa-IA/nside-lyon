@@ -9,8 +9,21 @@ class inheritTask(models.Model):
     qte_recue = fields.Integer(string='Qté reçues')
     qte_non_traitee = fields.Integer(string='Non Traité')
     carton_ids = fields.One2many('carton.carton', 'task_id', string='Cartons')
+    cartons_count = fields.Integer(compute='_compute_cartons_count', string='Cartons Count')
     intervention_ids = fields.One2many('intervention.line.eeg', 'task_id', string='Lines')
+    etiquette_count = fields.Integer(compute='_compute_intervention_count', string='Intervention Count')
+
     Total_illisible = fields.Integer(string='Total ILLISIBLES', compute='calcul_total_illisible')
+
+    @api.depends('intervention_ids')
+    def _compute_intervention_count(self):
+        for record in self:
+            record.etiquette_count = len(record.intervention_ids)
+
+    @api.depends('carton_ids')
+    def _compute_cartons_count(self):
+        for record in self:
+            record.cartons_count = len(record.carton_ids)
 
     def calcul_total_illisible(self):
         for rec in self.carton_ids:
@@ -95,7 +108,7 @@ class Carton(models.Model):
         states={'opening_control': [('readonly', False)]},
         default=lambda self: self.env.uid,
         ondelete='restrict')
-    task_id = fields.Many2one('project.task', 'Tâche')
+    task_id = fields.Many2one('project.task', 'Tâche' , default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
     intervention_line_eeg_ids = fields.One2many('intervention.line.eeg', 'carton_id', string='Lines')
 
     total_ok = fields.Integer(string='Total OK', compute='calcul_total_ok')
@@ -195,7 +208,8 @@ class InterventionLineEeg(models.Model):
                                  states={'done': [('readonly', True)]})
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36')
-    task_id = fields.Many2one('project.task', 'Tâche')
+    task_id = fields.Many2one('project.task', 'Tâche', default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
+
     carton_id = fields.Many2one('carton.carton', 'Carton')
     pile_test = fields.Integer('Pile + Test')
     test = fields.Integer('test seulement')

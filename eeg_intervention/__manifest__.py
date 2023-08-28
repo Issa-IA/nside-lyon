@@ -27,6 +27,7 @@
         "report/bon_livraison.xml",
         "report/box_report.xml",
         "report/test_ok.xml",
+        "report/Fiche_suivie_par_carton.xml"
     ],
     'demo': [""],
     'development_status': "Beta",

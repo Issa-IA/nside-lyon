@@ -6,6 +6,7 @@
         <field name="priority">4</field>
         <field name="arch" type="xml">
             <tree string="Carton" class="" sample="1">
+                <field name="name"/>
                 <field name="model_carton"/>
                 <field name="task_id"/>
                 <field name="total_ok"/>
@@ -105,11 +106,15 @@
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
                  <div class="oe_button_box" name="button_box">
-                                 <button name="action_open_related_cartons" string="Cartons" type="object" class="btn-secondary"/>
-                                <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="btn-secondary"/>
+                                 <button name="action_open_related_cartons" type="object" class="oe_stat_button" attrs="{'invisible': [('cartons_count', '=', 0)]}" icon="fa-cubes">
+                                    <field string="Cartons" name="cartons_count" widget="statinfo"/>
+                                 </button>
+                     <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button" attrs="{'invisible': [('etiquette_count', '=', 0)]}" icon="fa-credit-card">
+                                    <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
+                     </button>
                             </div>
                 <xpath expr="//page[@name='extra_info']" position="after">
-                        <page string="RMA" name="gestion_rma">
+                        <page string="RMA" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
                              <group>
                                  <group>
                                      <field name="qte_annoncee"/>
