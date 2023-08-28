@@ -1,9 +1,9 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 {
-    'name': "EEG intervention",
+    'name': "Gestion RMA",
     'summary': """
-        Intervention""",
+        Gestion RMA""",
     'version': '1.2',
     'category': "Sales/Sales",
     'author':
@@ -27,7 +27,8 @@
         "report/bon_livraison.xml",
         "report/box_report.xml",
         "report/test_ok.xml",
-        "report/Fiche_suivie_par_carton.xml"
+        "report/Fiche_suivie_par_carton.xml",
+        "report/fiche_suivie.xml"
     ],
     'demo': [""],
     'development_status': "Beta",
