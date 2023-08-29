@@ -15,7 +15,11 @@
         'utm',
         'contacts',
         'product',
-        'sale'
+        'sale',
+        'resource',
+        'web',
+        'web_tour',
+        'digest',
     ],
     'data': [
         "security/security.xml",
@@ -28,7 +32,8 @@
         "report/box_report.xml",
         "report/test_ok.xml",
         "report/Fiche_suivie_par_carton.xml",
-        "report/fiche_suivie.xml"
+        "report/fiche_suivie.xml",
+        "report/decimalOK.xml",
     ],
     'demo': [""],
     'development_status': "Beta",

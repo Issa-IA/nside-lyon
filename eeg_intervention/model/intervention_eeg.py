@@ -96,7 +96,7 @@ class Carton(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin', 'utm.mixin']
 
     # Define fields for the quotation
-    name = fields.Text(string='nom')
+    name = fields.Text(string='Carton N°')
     model_carton = fields.Many2one('model.carton', 'Modèle')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True,
                                  states={'done': [('readonly', True)]})
@@ -193,6 +193,7 @@ class Carton(models.Model):
 
 class InterventionLineEeg(models.Model):
     _name = 'intervention.line.eeg'
+    _description = 'lines'
 
     # Define fields for the quotation
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')

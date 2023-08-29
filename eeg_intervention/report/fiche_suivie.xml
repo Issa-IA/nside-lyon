@@ -1,14 +1,21 @@
 <?xml-stylesheet type="text/xsl" href="TrierPersonnes.xsl"?>
 <odoo>
- <report
+ <record
                         id="report_fiche_suivie"
-                        model="project.task"
-                        string="Fiche de suivie"
-                        name="eeg_intervention.fiche_suivie"
-                        file="eeg_intervention.fiche_suivie"
-                        report_type="qweb-pdf"
+                        model="ir.actions.report"
 
-        />
+ >
+    <field name="name">Fiche de suivie</field>
+    <field name="model">project.task</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.fiche_suivie</field>
+     <field name="report_file">eeg_intervention.fiche_suivie</field>
+     <field name="attachment_use">True</field>
+    <field name="print_report_name">'FICHE DE SUIVIE - %s' % (object.name)</field>
+
+
+
+ </record>
 <template id="fiche_suivie">
      <t t-call="web.html_container">
      <t t-call="web.external_layout">
@@ -17,7 +24,19 @@
                       <div class="row">
         <div class="text-center text-black"><h1>FICHE DE SUIVIE</h1></div>
                    </div>
-
+<table class="table o_report_block_table">
+    <thead></thead>
+    <tbody>
+        <tr>
+            <td style="background:#b64654; color:white;">N°RFB ou RMA ou DEVIS</td>
+            <td><t t-esc="doc.name"></t></td>
+        </tr>
+        <tr>
+            <td style="background:#b64654; color:white;">MAGASIN</td>
+            <td><span ></span></td>
+        </tr>
+    </tbody>
+</table>
                    <table class="table o_report_block_table">
       <thead>
           <tr style="background:#b64654; color:white;">
@@ -1156,12 +1175,10 @@
       </tbody>
     </table>
 
-           </div>
 
-        <div class="row">
-        <div class="text-center text-black"><h1>FICHE DE SUIVIE PAR CARTON</h1></div>
-                   </div>
-                   <table class="table o_report_block_table">
+
+
+    <table class="table o_report_block_table">
       <thead>
           <tr style="background:#b64654; color:white;">
               <th colspan="14" style="background:#b64654; color:white;">
@@ -1256,8 +1273,7 @@
       </tbody>
     </table>
 
-
-
+   </div>
      </t>
      </t>
      </t>

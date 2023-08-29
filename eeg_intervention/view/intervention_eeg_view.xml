@@ -24,6 +24,7 @@
         <menuitem
             parent="project.menu_project_config"
             id="menu_carton_form"
+            groups="eeg_intervention.group_admin_rma"
             action="carton_action_window"/>
 
      <record id="task_form_line_intervention_eeg" model="ir.ui.view">
@@ -36,7 +37,7 @@
 
                             <div class="oe_title">
                                  <h1>
-                                    <field name="name" readonly="1"/>
+                                    <field name="name" />
                                  </h1>
                             </div>
                                          <group name="intervention_header">
@@ -106,10 +107,10 @@
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
                  <div class="oe_button_box" name="button_box">
-                                 <button name="action_open_related_cartons" type="object" class="oe_stat_button" attrs="{'invisible': [('cartons_count', '=', 0)]}" icon="fa-cubes">
+                                 <button name="action_open_related_cartons" type="object" class="oe_stat_button"  icon="fa-cubes" groups="eeg_intervention.group_admin_rma">
                                     <field string="Cartons" name="cartons_count" widget="statinfo"/>
                                  </button>
-                     <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button" attrs="{'invisible': [('etiquette_count', '=', 0)]}" icon="fa-credit-card">
+                     <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
                             </div>

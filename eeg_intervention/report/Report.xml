@@ -1,14 +1,22 @@
 <?xml-stylesheet type="text/xsl" href="TrierPersonnes.xsl"?>
 <odoo>
- <report
-                        id="report_fiche_suivie_model"
-                        model="project.task"
-                        string="Fiche de suivie par modèle"
-                        name="eeg_intervention.fiche_suivie_model"
-                        file="eeg_intervention.fiche_suivie_model"
-                        report_type="qweb-pdf"
 
-        />
+     <record
+                        id="report_fiche_suivie_model"
+                        model="ir.actions.report"
+
+ >
+    <field name="name">Fiche de suivie par model</field>
+    <field name="model">project.task</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.fiche_suivie_model</field>
+     <field name="report_file">eeg_intervention.fiche_suivie_model</field>
+     <field name="attachment_use">True</field>
+    <field name="print_report_name">'SUIVIE PAR MODEL - %s' % (object.name)</field>
+
+
+
+ </record>
 <template id="fiche_suivie_model">
      <t t-call="web.html_container">
      <t t-call="web.external_layout">

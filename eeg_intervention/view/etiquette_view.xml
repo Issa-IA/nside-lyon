@@ -30,6 +30,7 @@
         <menuitem
             parent="project.menu_project_config"
             id="menu_etiquette_form"
+            groups="eeg_intervention.group_admin_rma"
             action="etiquette_action_window"/>
 
 </data>
