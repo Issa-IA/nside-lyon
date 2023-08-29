@@ -15,7 +15,11 @@
         'utm',
         'contacts',
         'product',
-
+        'sale',
+        'resource',
+        'web',
+        'web_tour',
+        'digest',
     ],
     'data': [
         "security/security.xml",
