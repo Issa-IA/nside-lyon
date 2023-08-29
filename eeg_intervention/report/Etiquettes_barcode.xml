@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<report         id="report_texte_hs_etiquette"
+                model="carton.carton"
+                string="TEST HS"
+                name="eeg_intervention.report_test_hs"
+                file="eeg_intervention.report_test_hs"
+                report_type="qweb-text"
+                print_report_name = "'Carton- %s' % object.name"
+/>
+<template id="report_test_hs">
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_line_eeg_ids" t-as="table_line">
+<t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+
++<t t-out="doc.total_illisible"/> ILLISIBLES
+
+<t t-foreach="doc.intervention_line_eeg_ids" t-as="table_line">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+CASSEES:
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+
+</template>
+</odoo>

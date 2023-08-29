@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+group_carton_admin_rma,carton.carton,model_carton_carton,group_admin_rma,1,1,1,1
+group_model_admin_rma,model.carton,model_model_carton,group_admin_rma,1,1,1,1
+group_etiquette_admin_rma,model.etiquette,model_model_etiquette,group_admin_rma,1,1,1,1
+group_intervention_admin_rma,intervention.line.eeg,model_intervention_line_eeg,group_admin_rma,1,1,1,1

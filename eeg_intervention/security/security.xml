@@ -1,0 +1,9 @@
+<odoo>
+		<record id="group_admin_rma" model="res.groups">
+			<field name="name">GestionRMA/Admin</field>
+		</record>
+
+
+
+
+</odoo>

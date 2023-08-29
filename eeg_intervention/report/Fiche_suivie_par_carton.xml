@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record
+                        id="report_fiche_suivie_carton"
+                        model="ir.actions.report"
+
+ >
+    <field name="name">Fiche de suivie par carton</field>
+    <field name="model">project.task</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.fiche_suivie_carton</field>
+     <field name="report_file">eeg_intervention.fiche_suivie_carton</field>
+     <field name="attachment_use">True</field>
+    <field name="print_report_name">'SUIVIE PAR CARTON - %s' % (object.name)</field>
+
+
+
+ </record>
+<template id="fiche_suivie_carton">
+     <t t-call="web.html_container">
+     <t t-call="web.external_layout">
+     <t t-foreach="docs" t-as="doc">
+           <div class="page">
+               <div class="row">
+        <div class="text-center text-black"><h1>FICHE DE SUIVIE PAR CARTON</h1></div>
+                   </div>
+                   <table class="table o_report_block_table">
+      <thead>
+          <tr style="background:#b64654; color:white;">
+              <th colspan="14" style="background:#b64654; color:white;">
+            <h3>DETAIL PAR CARTON</h3>
+          </th></tr>
+        <tr style="background:#b64654; color:white;">
+             <th rowspan="2" style="background:#b64654; color:white;">
+            <span>Carton N°</span>
+          </th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>MODELE EEG</span>
+          </th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>OK TEST SEUL</span>
+          </th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>OK PILES + TEST</span>
+          </th>
+          <th colspan="5" style="background:#b64654; color:white;">HS</th>
+          <th rowspan="2" style="background:#b64654; color:white;">
+            <span>ILLISIBLE</span>
+          </th>
+          <th colspan="3" style="background:#b64654; color:white;">CASSEES</th>
+            <th rowspan="2" style="background:#b64654; color:white;">TOTAL</th>
+        </tr>
+        <tr style="background:#b64654; color:white;">
+          <td>
+            <span>code erreur</span>
+          </td>
+          <td>
+            <span>affichage défectueux</span>
+          </td>
+          <td>
+            <span>Activation</span>
+          </td>
+          <td>
+            <span>Piles</span>
+          </td>
+                <td>
+            <span>TOTAUX HS</span>
+          </td>
+          <td>
+            <span>esthétique**</span>
+          </td>
+          <td>
+            <span>cassée</span>
+          </td>
+             <td style="background:#b64654; color:white;">
+            <span>TOTAUX CASSEES</span>
+          </td>
+
+        </tr>
+      </thead>
+      <tbody>
+        <t t-foreach="doc.carton_ids" t-as="cartons">
+          <t t-set="unique_names" t-value="cartons.intervention_line_eeg_ids.mapped('etiquette_id')"/>
+                                <t t-foreach="unique_names" t-as="name">
+                                    <t t-set="lines_with_name" t-value="cartons.intervention_line_eeg_ids.filtered(lambda r: r.etiquette_id == name)"/>
+                                    <tr>
+                                        <td><t t-esc="lines_with_name.carton_id.display_name"/></td>
+                                        <td><t t-esc="name.name"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('test'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('pile_test'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('code_erreur'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('affichage_defectueux'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('activation'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('piles'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('code_erreur')) + sum(lines_with_name.mapped('affichage_defectueux')) + sum(lines_with_name.mapped('activation')) + sum(lines_with_name.mapped('piles'))"/> </td>
+
+                                        <td><span></span></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('esthetique'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('cassees'))"/></td>
+                                        <td><t t-esc="sum(lines_with_name.mapped('esthetique')) + sum(lines_with_name.mapped('cassees'))"/></td>
+                                        <td t-esc="sum(lines_with_name.mapped('code_erreur')) + sum(lines_with_name.mapped('affichage_defectueux')) + sum(lines_with_name.mapped('activation')) + sum(lines_with_name.mapped('piles')) + sum(lines_with_name.mapped('esthetique')) + sum(lines_with_name.mapped('cassees'))"/>
+
+
+                                    </tr>
+                                </t>
+      </t>
+
+                      <tr style="background:#b64654; color:white;">
+                          <td colspan="2">TOTAL</td>
+
+                          <td></td>
+                          <td colspan="9">Total HS, Cassées et illisibles</td>
+                          <td>
+                          </td>
+                          <td></td>
+
+                      </tr>
+
+      </tbody>
+    </table>
+
+           </div>
+     </t>
+     </t>
+     </t>
+</template>
+</odoo>

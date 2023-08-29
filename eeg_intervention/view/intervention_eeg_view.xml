@@ -1,0 +1,136 @@
+<odoo>
+<data>
+    <record id="view_carton_tree" model="ir.ui.view">
+        <field name="name">cartons.tree</field>
+        <field name="model">carton.carton</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Carton" class="" sample="1">
+                <field name="name"/>
+                <field name="model_carton"/>
+                <field name="task_id"/>
+                <field name="total_ok"/>
+                <field name="total_hs"/>
+                <field name="total_illisible" />
+                <field name="total_casse" />
+
+            </tree>
+        </field>
+    </record>
+<record model="ir.actions.act_window" id="carton_action_window">
+                <field name="name">Cartons</field>
+                <field name="res_model">carton.carton</field>
+        </record>
+        <menuitem
+            parent="project.menu_project_config"
+            id="menu_carton_form"
+            groups="eeg_intervention.group_admin_rma"
+            action="carton_action_window"/>
+
+     <record id="task_form_line_intervention_eeg" model="ir.ui.view">
+                <field name="name">form.line.intervention.eeg</field>
+                <field name="model">carton.carton</field>
+                <field name="arch" type="xml">
+                    <form string="carton" duplicate="0">
+                        <sheet>
+
+
+                            <div class="oe_title">
+                                 <h1>
+                                    <field name="name" />
+                                 </h1>
+                            </div>
+                                         <group name="intervention_header">
+                                             <group name="intervention_details">
+                                            <field name="model_carton" class="oe_inline"/>
+                                            <field name="task_id" class="oe_inline"/>
+
+                                             </group>
+                                            <group name="intervention_total">
+                                                <field name="total_ok" class="oe_inline"/>
+                                                <field name="total_hs" class="oe_inline"/>
+                                                <field name="total_illisible" class="oe_inline"/>
+                                                <field name="total_casse" class="oe_inline"/>
+                                            </group>
+                                         </group>
+
+                        <notebook position="inside">
+                       <page string="Details" name="lines">
+                            <field name ="intervention_line_eeg_ids">
+                             <tree string="Lines eeg" create="true" editable="top" multi_edit="true">
+                                    <field name="etiquette_id"/>
+                                    <field name="serial_number_10"/>
+                                    <field name="serial_number_36"/>
+                                    <field name="task_id"/>
+                                    <field name="carton_id"/>
+                                    <field name="pile_test"/>
+                                    <field name="test"/>
+                                    <field name="code_erreur"/>
+                                    <field name="affichage_defectueux"/>
+                                    <field name="activation"/>
+                                    <field name="piles"/>
+                                    <field name="esthetique"/>
+                                    <field name="cassees"/>
+
+
+                             </tree>
+                            </field>
+
+                        </page>
+                      <page string="Recap" name="recap">
+                          <group string="Recap" name="recap">
+                              <field name ="pile_test"/>
+                              <field name ="test"/>
+                              <field name ="code_erreur"/>
+                              <field name ="affichage_defectueux"/>
+                              <field name ="activation"/>
+                              <field name ="piles"/>
+                              <field name ="esthetique"/>
+                              <field name ="cassees"/>
+                          </group>
+                        </page>
+                        </notebook>
+                          </sheet>
+
+                         <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                    </form>
+                </field>
+
+        </record>
+
+    <record id="view_project_task_form" model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                 <div class="oe_button_box" name="button_box">
+                                 <button name="action_open_related_cartons" type="object" class="oe_stat_button"  icon="fa-cubes" groups="eeg_intervention.group_admin_rma">
+                                    <field string="Cartons" name="cartons_count" widget="statinfo"/>
+                                 </button>
+                     <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
+                                    <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
+                     </button>
+                            </div>
+                <xpath expr="//page[@name='extra_info']" position="after">
+                        <page string="RMA" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
+                             <group>
+                                 <group>
+                                     <field name="qte_annoncee"/>
+                                    <field name="qte_recue"/>
+                                    <field name="qte_non_traitee"/>
+                                </group>
+                             </group>
+
+
+                        </page>
+                    </xpath>
+            </field>
+</record>
+
+
+
+</data>
+</odoo>
