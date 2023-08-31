@@ -20,6 +20,7 @@
         'web',
         'web_tour',
         'digest',
+        'portal'
     ],
     'data': [
         "security/security.xml",
