@@ -87,7 +87,7 @@
             <span><p/></span>
           </td>
            <td style="border:2px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Client: INFOMIL </span>
+            <span style="font-family: Times New Roman, Times, serif;"> Client: <t-esc="partner_id.name"/> </span>
 
           </td>
         </tr>
@@ -108,8 +108,8 @@
         <tr style="border-right:2px solid black; border_bottom:2px solid black;">
              <td style="border-top:2px solid black; border-right:2px solid black; border_bottom:2px solid black;">
 
-            <div><span style="font-family: Times New Roman, Times, serif;">  <p  t-field="doc.partner_id"/></span></div>
-            <t t-foreach="doc.partner_id" t-as="add">
+            <div><span style="font-family: Times New Roman, Times, serif;">  <p  t-field="doc.shipping_address"/></span></div>
+            <t t-foreach="doc.shipping_address" t-as="add">
                  <div><span style="font-family: Times New Roman, Times, serif;"> <p  t-field="add.street"/> </span></div>
             <div><span style="font-family: Times New Roman, Times, serif;"><p  t-field="add.street2"/> </span></div>
                 <div>
