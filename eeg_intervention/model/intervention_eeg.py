@@ -46,6 +46,34 @@ class inheritTask(models.Model):
             'domain': [('task_id', '=', self.id)],
             'view_mode': 'tree,form',
         }
+        
+    @api.model
+    def generate_report(self):
+        report = self.env.ref('project.task.fiche_suivie')
+        report_data = report.render_qweb([self.id])[0]
+
+        self.message_post(
+            body="Here is the automatically generated report.",
+            subject="Auto-generated Report",
+            attachment_ids=[(0, 0, {
+                'name': 'fiche.pdf',
+                'datas': report_data,
+            })]
+        )
+
+   @api.model
+    def generate_report_bon_livraison(self):
+        report = self.env.ref('project.task.bon_livraison')
+        report_data = report.render_qweb([self.id])[0]
+
+        self.message_post(
+            body="Here is the automatically generated report.",
+            subject="Auto-generated Report",
+            attachment_ids=[(0, 0, {
+                'name': 'fiche.pdf',
+                'datas': report_data,
+            })]
+        )
 
 
 class ModelCarton(models.Model):
