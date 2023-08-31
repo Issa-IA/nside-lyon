@@ -10,7 +10,7 @@
     <field name="name">Bon livraison</field>
     <field name="model">project.task</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">eeg_intervention.bon_livraisont</field>
+    <field name="report_name">eeg_intervention.bon_livraison</field>
      <field name="report_file">eeg_intervention.bon_livraison</field>
      <field name="attachment_use">True</field>
     <field name="print_report_name">'Bon de livraison - %s' % (object.name)</field>
@@ -100,8 +100,8 @@
       <tbody>
         <tr style="border-right:2px solid black; border-top:2px solid black;">
           <td style="border-right:2px solid black; border-top:2px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Adresse de Livraison</span>
-
+            <span style="font-family: Times New Roman, Times, serif;"> Adresse de Livraison : </span>
+<t t-esc="doc.shipping_address.name"/>
           </td>
 
         </tr>
