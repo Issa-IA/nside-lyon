@@ -34,7 +34,7 @@
      
         <tr>
             <td style="background:#b64654; color:white;">MAGASIN</td>
-            <td><t t-esc="shipping_address.name"/></td>
+            <td><t t-esc="doc.shipping_address.name"/></td>
         </tr>
     </tbody>
 </table>
