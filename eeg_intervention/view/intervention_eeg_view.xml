@@ -114,6 +114,9 @@
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
                             </div>
+                <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
+                    <field name="shipping_address"/>
+                </xpath>
                 <xpath expr="//page[@name='extra_info']" position="after">
                         <page string="RMA" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
                              <group>
