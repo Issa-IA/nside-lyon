@@ -6,6 +6,9 @@ class inheritTask(models.Model):
     _inherit = 'project.task'
 
     qte_annoncee = fields.Integer(string='Qté annoncées')
+     shipping_address = fields.Many2one(
+        'res.partner', string='Magasin', index=True, ondelete='cascade')
+    
     qte_recue = fields.Integer(string='Qté reçues')
     qte_non_traitee = fields.Integer(string='Non Traité')
     carton_ids = fields.One2many('carton.carton', 'task_id', string='Cartons')
