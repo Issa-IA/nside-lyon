@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
  <record
-                        id="report_fiche_suivie"
+                        id="report_fiche_suivi"
                         model="ir.actions.report"
 
  >
-    <field name="name">Fiche de suivie</field>
+    <field name="name">Fiche de suivi</field>
     <field name="model">project.task</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">eeg_intervention.fiche_suivie</field>
-     <field name="report_file">eeg_intervention.fiche_suivie</field>
+    <field name="report_name">eeg_intervention.fiche_suivi</field>
+     <field name="report_file">eeg_intervention.fiche_suivi</field>
      <field name="attachment_use">True</field>
-    <field name="print_report_name">'FICHE DE SUIVIE - %s' % (object.name)</field>
+    <field name="print_report_name">'FICHE DE SUIVI - %s' % (object.name)</field>
 
 
 
  </record>
-<template id="fiche_suivie">
+<template id="fiche_suivi">
      <t t-call="web.html_container">
      <t t-call="web.external_layout">
      <t t-foreach="docs" t-as="doc">
            <div class="page">
                       <div class="row">
-        <div class="text-center text-black"><h1>FICHE DE SUIVIE</h1></div>
+        <div class="text-center text-black"><h1>FICHE DE SUIVI</h1></div>
                    </div>
 <table class="table o_report_block_table">
     <thead></thead>
