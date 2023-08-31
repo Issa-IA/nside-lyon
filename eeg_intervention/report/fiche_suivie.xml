@@ -31,9 +31,10 @@
             <td style="background:#b64654; color:white;">N°RFB ou RMA ou DEVIS</td>
             <td><t t-esc="doc.name"></t></td>
         </tr>
+     
         <tr>
             <td style="background:#b64654; color:white;">MAGASIN</td>
-            <td><span ></span></td>
+            <td><t t-esc="shipping_address.name"/></td>
         </tr>
     </tbody>
 </table>
@@ -42,7 +43,7 @@
     <tbody>
         <tr>
             <td style="background:#b64654; color:white;">TECHNICIEN</td>
-            <td><t t-esc="doc.user_ids"></t></td>
+            <td><t t-esc="doc.user_ids.name"></t></td>
         </tr>
         
     </tbody>
