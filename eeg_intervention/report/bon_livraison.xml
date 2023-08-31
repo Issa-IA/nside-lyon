@@ -87,7 +87,7 @@
             <span><p/></span>
           </td>
            <td style="border:2px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Client: <t-esc="partner_id.name"/> </span>
+            <span style="font-family: Times New Roman, Times, serif;"> Client: <t-esc="doc.partner_id.name"/> </span>
 
           </td>
         </tr>
