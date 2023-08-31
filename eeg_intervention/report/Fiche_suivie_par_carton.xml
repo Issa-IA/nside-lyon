@@ -6,24 +6,24 @@
                         model="ir.actions.report"
 
  >
-    <field name="name">Fiche de suivie par carton</field>
+    <field name="name">Fiche de suivi par carton</field>
     <field name="model">project.task</field>
     <field name="report_type">qweb-pdf</field>
-    <field name="report_name">eeg_intervention.fiche_suivie_carton</field>
-     <field name="report_file">eeg_intervention.fiche_suivie_carton</field>
+    <field name="report_name">eeg_intervention.fiche_suivi_carton</field>
+     <field name="report_file">eeg_intervention.fiche_suivi_carton</field>
      <field name="attachment_use">True</field>
-    <field name="print_report_name">'SUIVIE PAR CARTON - %s' % (object.name)</field>
+    <field name="print_report_name">'DETAIL PAR CARTON - %s' % (object.name)</field>
 
 
 
  </record>
-<template id="fiche_suivie_carton">
+<template id="fiche_suivi_carton">
      <t t-call="web.html_container">
      <t t-call="web.external_layout">
      <t t-foreach="docs" t-as="doc">
            <div class="page">
                <div class="row">
-        <div class="text-center text-black"><h1>FICHE DE SUIVIE PAR CARTON</h1></div>
+        <div class="text-center text-black"><h1>FICHE DE SUIVI PAR CARTON</h1></div>
                    </div>
                    <table class="table o_report_block_table">
       <thead>
