@@ -37,6 +37,16 @@
         </tr>
     </tbody>
 </table>
+            <table class="table o_report_block_table">
+    <thead></thead>
+    <tbody>
+        <tr>
+            <td style="background:#b64654; color:white;">TECHNICIEN</td>
+            <td><t t-esc="doc.user_ids"></t></td>
+        </tr>
+        
+    </tbody>
+</table>
                    <table class="table o_report_block_table">
       <thead>
           <tr style="background:#b64654; color:white;">
