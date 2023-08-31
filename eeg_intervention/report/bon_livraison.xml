@@ -101,7 +101,7 @@
         <tr style="border-right:2px solid black; border-top:2px solid black;">
           <td style="border-right:2px solid black; border-top:2px solid black;">
             <span style="font-family: Times New Roman, Times, serif;"> Adresse de Livraison : </span>
-<t t-esc="doc.shipping_address.name"/>
+
           </td>
 
         </tr>
@@ -125,22 +125,7 @@
 
 
 
-           <div class="row address" >
-              <div class="col-5" t-options-widget="'contact'">
-
-                 <t t-if="doc.partner_id.name is not False ">
-
-                          <t t-if="doc.partner_id.phone is not False ">
-                                 <t t-set="var" t-value="doc.partner_id.name +' - '+ doc.partner_id.phone"/>
-                                          Contact: <t t-esc="var" />
-                          </t>
-                         <t t-if="doc.partner_id.phone is False ">
-                                 <t t-set="var" t-value="doc.partner_id.name"/>
-                                         Contact: <t t-esc="var" />
-                         </t>
-                 </t>
-
-              </div>
+           
               <div class="col-5 offset-2"/>
               </div>
           </td></tr>
