@@ -61,7 +61,7 @@ class inheritTask(models.Model):
             })]
         )
 
-   @api.model
+    @api.model
     def generate_report_bon_livraison(self):
         report = self.env.ref('project.task.bon_livraison')
         report_data = report.render_qweb([self.id])[0]
