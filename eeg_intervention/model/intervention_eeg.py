@@ -139,7 +139,7 @@ class Carton(models.Model):
         ondelete='restrict')
     task_id = fields.Many2one('project.task', 'Tâche' , default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
     intervention_line_eeg_ids = fields.One2many('intervention.line.eeg', 'carton_id', string='Lines')
-
+    intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='calcul_total_ok')
     total_hs = fields.Integer(string='Total HS', compute='calcul_total_hs')
     total_illisible = fields.Integer(string='Total Illisible')
@@ -261,3 +261,14 @@ class InterventionLineEeg(models.Model):
                     rec.serial_number_10 = int(rec.serial_number_36, 36)
                 except ValueError:
                     raise ValidationError("code-barres n'est pas valide")
+
+
+class InterventionLineIllisible(models.Model):
+    _name = 'intervention.line.illisble'
+    _description = 'illisibles'
+
+    # Define fields for the quotation
+    etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
+    task_id = fields.Many2one('project.task', 'Tâche', default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
+    qte_illisible = fields.Integer('Qté Illisible')
+    carton_id = fields.Many2one('carton.carton', 'Carton', default=lambda self: self.env['carton.carton'].search([], limit=1), index=True, copy=Fal
