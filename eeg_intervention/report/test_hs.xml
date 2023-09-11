@@ -39,11 +39,31 @@
 </t>
 </t>
 </t>
+210EA CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '210EA'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 210EF (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
 <t t-if="table_line.etiquette_id.name == '210EF'">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
+210EF CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '210EF'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
@@ -59,11 +79,31 @@
 </t>
 </t>
 </t>
+420E CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '420E'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 580E (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '580E'">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
+580E CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '580E'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
@@ -79,11 +119,31 @@
 </t>
 </t>
 </t>
+150E CC4U CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '150E CC4U'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 210EA CC4U (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '210EA CC4U'">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
+210EA CC4U CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '210EA CC4U'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
@@ -99,11 +159,31 @@
 </t>
 </t>
 </t>
+210EF CC4U CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '210EF CC4U'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 150W (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '150W'">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
+150W CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '150W'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
@@ -119,11 +199,31 @@
 </t>
 </t>
 </t>
+250WA CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '250WA'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 250WF (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '250WF'">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
+250WF CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '250WF'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
@@ -139,6 +239,15 @@
 </t>
 </t>
 </t>
-
+400W CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '400W'">
+<t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
+<t t-out="table_line.serial_number_10"/>
+</t>
+</t>
+</t>
+</t>
 </template>
 </odoo>
