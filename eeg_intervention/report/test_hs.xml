@@ -9,7 +9,7 @@
                 print_report_name = "'Test (HS) - %s' % object.name"
 />
 <template id="report_decimal_hs">
-150E (OK):
+150E (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
@@ -19,7 +19,7 @@
 </t>
 </t>
 </t>
-210EA (OK):
+210EA (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
@@ -29,7 +29,7 @@
 </t>
 </t>
 </t>
-210EF (OK):
+210EF (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
@@ -39,7 +39,7 @@
 </t>
 </t>
 </t>
-420E (OK):
+420E (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.code_erreur == 1 or table_line.affichage_defectueux == 1 or table_line.activation == 1 or table_line.piles == 1 ">
@@ -49,7 +49,7 @@
 </t>
 </t>
 </t>
-580E (OK):
+580E (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '580E'">
@@ -59,7 +59,7 @@
 </t>
 </t>
 </t>
-150E CC4U (OK):
+150E CC4U (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '150E CC4U'">
@@ -69,7 +69,7 @@
 </t>
 </t>
 </t>
-210EA CC4U (OK):
+210EA CC4U (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '210EA CC4U'">
@@ -79,7 +79,7 @@
 </t>
 </t>
 </t>
-210EF CC4U (OK):
+210EF CC4U (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '210EF CC4U'">
@@ -89,7 +89,7 @@
 </t>
 </t>
 </t>
-150W (OK):
+150W (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '150W'">
@@ -99,7 +99,7 @@
 </t>
 </t>
 </t>
-250WA (OK):
+250WA (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '250WA'">
@@ -109,7 +109,7 @@
 </t>
 </t>
 </t>
-250WF (OK):
+250WF (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '250WF'">
@@ -119,7 +119,7 @@
 </t>
 </t>
 </t>
-400W (OK):
+400W (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '400W'">
