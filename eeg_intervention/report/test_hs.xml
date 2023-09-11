@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<report         id="report_decimal_hs"
+<report         id="report_decimal_hs_etiquette"
                 model="project.task"
                 string="Test HS"
                 name="eeg_intervention.report_decimal_hs"
