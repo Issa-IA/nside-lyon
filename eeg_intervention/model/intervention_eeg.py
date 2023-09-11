@@ -12,6 +12,7 @@ class inheritTask(models.Model):
     carton_ids = fields.One2many('carton.carton', 'task_id', string='Cartons')
     cartons_count = fields.Integer(compute='_compute_cartons_count', string='Cartons Count')
     intervention_ids = fields.One2many('intervention.line.eeg', 'task_id', string='Lines')
+    intervention_illisible_ids = fields.One2many('intervention.line.illisble', 'task_id', string='Lines Illisible')
     etiquette_count = fields.Integer(compute='_compute_intervention_count', string='Intervention Count')
 
     Total_illisible = fields.Integer(string='Total ILLISIBLES', compute='calcul_total_illisible')
