@@ -35,6 +35,7 @@
         "report/Fiche_suivie_par_carton.xml",
         "report/fiche_suivie.xml",
         "report/decimalOK.xml",
+        "report/test_hs.xml",
     ],
     'demo': [""],
     'development_status': "Beta",
