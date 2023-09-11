@@ -26,18 +26,22 @@
 </t>
 </t>
 </t>
+<t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '210EF'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 210EF (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
+</t>
+<t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '420E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 420E (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
+</t><t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '580E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 580E (OK):
