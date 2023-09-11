@@ -9,7 +9,7 @@
                 print_report_name = "'Test (HS) - %s' % object.name"
 />
 <template id="report_decimal_hs">
-150E (OK):
+150E (HS):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '150E'">
@@ -17,9 +17,15 @@
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
+</t>
+</t>
+150E CASSEES:
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
+<t t-if="table_line.etiquette_id.name == '150E'">
 <t t-if="table_line.cassees == 1 or table_line.esthetique == 1">
-CASSEES:
 <t t-out="table_line.serial_number_10"/>
+</t>
 </t>
 </t>
 </t>
