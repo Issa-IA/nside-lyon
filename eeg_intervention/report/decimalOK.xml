@@ -9,15 +9,17 @@
                 print_report_name = "'150E (OK) - %s' % object.name"
 />
 <template id="report_decimal_ok">
+150E (OK):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 <t t-if="table_line.etiquette_id.name == '150E'">
-150E (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
 </t>
+</t>
+<t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 <t t-if="table_line.etiquette_id.name == '210EA'">
