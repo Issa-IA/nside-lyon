@@ -11,75 +11,75 @@
 <template id="report_decimal_ok">
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
-150E (OK)
 <t t-if="table_line.etiquette_id.name == '150E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+150E (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-210EA (OK)
 <t t-if="table_line.etiquette_id.name == '210EA'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+210EA (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-210EF (OK)
 <t t-if="table_line.etiquette_id.name == '210EF'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+210EF (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-420E (OK)
 <t t-if="table_line.etiquette_id.name == '420E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+420E (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-580E (OK)
 <t t-if="table_line.etiquette_id.name == '580E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+580E (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-150E CC4U (OK)
 <t t-if="table_line.etiquette_id.name == '150E CC4U'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+150E CC4U (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-210EA CC4U (OK)
 <t t-if="table_line.etiquette_id.name == '210EA CC4U'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+210EA CC4U (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-210EF CC4U (OK)
 <t t-if="table_line.etiquette_id.name == '210EF CC4U'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+210EF CC4U (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-150W (OK)
 <t t-if="table_line.etiquette_id.name == '150W'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+150W (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-250WA (OK)
 <t t-if="table_line.etiquette_id.name == '250WA'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+250WA (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-250WF (OK)
 <t t-if="table_line.etiquette_id.name == '250WF'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+250WF (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
-400W (OK)
 <t t-if="table_line.etiquette_id.name == '400W'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
+400W (OK):
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
