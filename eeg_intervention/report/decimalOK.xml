@@ -49,7 +49,6 @@
 </t>
 </t>
 </t>
-</t>
 580E (OK):
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
