@@ -17,10 +17,13 @@
 <t t-out="table_line.serial_number_10"/>
 </t>
 </t>
+</t>
+<t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '210EA'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 210EA (OK):
 <t t-out="table_line.serial_number_10"/>
+</t>
 </t>
 </t>
 <t t-if="table_line.etiquette_id.name == '210EF'">
