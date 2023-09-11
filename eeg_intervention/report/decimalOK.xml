@@ -127,7 +127,7 @@
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 <t t-out="table_line.serial_number_10"/>
 </t>
-</t></t>
+</t>
 </t>
 </t>
 </template>
