@@ -270,6 +270,6 @@ class InterventionLineIllisible(models.Model):
 
     # Define fields for the quotation
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
-    task_id = fields.Many2one('project.task', 'Tâche', default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
+    task_id = fields.Many2one('project.task', 'Tâche')
     qte_illisible = fields.Integer('Qté Illisible')
     carton_id = fields.Many2one('carton.carton', 'Carton', default=lambda self: self.env['carton.carton'].search([], limit=1), index=True, copy=False)
