@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<report         id="report_decimal_ok"
+<report         id="report_decimal_ok_etiquette"
                 model="project.task"
-                string="150E (OK)"
+                string="Test OK"
                 name="eeg_intervention.report_decimal_ok"
                 file="eeg_intervention.report_decimal_ok"
                 report_type="qweb-text"
-                print_report_name = "'150E (OK)- %s' % object.name"
+                print_report_name = "'TEST OK - %s' % object.name"
 />
 <template id="report_decimal_ok">
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
-<t t-if="intervention_ids.etiquette_id.name == '150E'">
 <t t-if="table_line.test == 1 or table_line.pile_test == 1">
 <t t-out="table_line.serial_number_10"/>
-</t>
 </t>
 </t>
 </t>
