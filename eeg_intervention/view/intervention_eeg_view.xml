@@ -92,8 +92,8 @@
                         <page string="Illisibles" name="illisible">
                             <field name ="intervention_line_illisible_ids">
                              <tree string="Illisible eeg" create="true" editable="top" multi_edit="true">
-                                    <field name="qte_illisible"/>
                                     <field name="etiquette_id"/>
+                                    <field name="qte_illisible"/>
                                     <field name="task_id"/>
                                     <field name="carton_id"/>
                              </tree>
