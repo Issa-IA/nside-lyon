@@ -14,6 +14,8 @@ class inheritTask(models.Model):
     intervention_ids = fields.One2many('intervention.line.eeg', 'task_id', string='Lines')
     intervention_illisible_ids = fields.One2many('intervention.line.illisble', 'task_id', string='Lines Illisible')
     etiquette_count = fields.Integer(compute='_compute_intervention_count', string='Intervention Count')
+    sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
+
 
     Total_illisible = fields.Integer(string='Total ILLISIBLES', compute='calcul_total_illisible')
 
