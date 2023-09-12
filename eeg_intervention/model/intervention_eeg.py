@@ -104,12 +104,22 @@ class ModelCarton(models.Model):
         digits='Poids carton', default=0.0,
         store=True, readonly=False, required=True)
 
+
+class MarqueEtiquette(models.Model):
+    _name = 'marque.etiquette'
+    _description = 'Marque Etiquette'
+
+    name = fields.Text(string='Marque')
+
+
 class Carton(models.Model):
     _name = 'model.etiquette'
     _description ='Modèle Etiquette'
 
     # Define fields for the quotation
-    name = fields.Text(string='nom')
+    name = fields.Text(string='Etiquette')
+    display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
+    marque_id = fields.Many2one('marque.etiquette', string='Marque', required=True, create=True)
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
@@ -120,6 +130,16 @@ class Carton(models.Model):
         ondelete='restrict')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True,
                                  states={'done': [('readonly', True)]})
+
+    @api.depends('marque_id.name')
+    def _compute_display_name(self):
+        for names in self:
+            if names.marque_id:
+                names.display_name = "[%s] %s" % (names.marque_id.name, names.name)
+            else:
+                names.display_name = names.name
+            
+
 
 
 class Carton(models.Model):
