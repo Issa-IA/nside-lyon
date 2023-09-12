@@ -143,6 +143,7 @@
                                      <field name="qte_annoncee"/>
                                     <field name="qte_recue"/>
                                     <field name="qte_non_traitee"/>
+                                     <field name="sequence1/>
                                 </group>
                              </group>
 
