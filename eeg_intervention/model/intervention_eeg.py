@@ -112,7 +112,7 @@ class MarqueEtiquette(models.Model):
     name = fields.Text(string='Marque')
 
 
-class Carton(models.Model):
+class ModelEtiquette(models.Model):
     _name = 'model.etiquette'
     _description ='Modèle Etiquette'
 
@@ -125,11 +125,9 @@ class Carton(models.Model):
         required=True,
         index=True,
         readonly=True,
-        states={'opening_control': [('readonly', False)]},
         default=lambda self: self.env.uid,
         ondelete='restrict')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True,
-                                 states={'done': [('readonly', True)]})
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
 
     @api.depends('marque_id.name')
     def _compute_display_name(self):
@@ -150,14 +148,12 @@ class Carton(models.Model):
     # Define fields for the quotation
     name = fields.Text(string='Carton N°')
     model_carton = fields.Many2one('model.carton', 'Modèle')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True,
-                                 states={'done': [('readonly', True)]})
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
         index=True,
         readonly=True,
-        states={'opening_control': [('readonly', False)]},
         default=lambda self: self.env.uid,
         ondelete='restrict')
     task_id = fields.Many2one('project.task', 'Tâche' , default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
@@ -254,11 +250,9 @@ class InterventionLineEeg(models.Model):
         required=True,
         index=True,
         readonly=True,
-        states={'opening_control': [('readonly', False)]},
         default=lambda self: self.env.uid,
         ondelete='restrict')
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True,
-                                 states={'done': [('readonly', True)]})
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36')
     task_id = fields.Many2one('project.task', 'Tâche', default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
