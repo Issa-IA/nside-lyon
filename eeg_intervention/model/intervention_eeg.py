@@ -110,6 +110,7 @@ class MarqueEtiquette(models.Model):
     _description = 'Marque Etiquette'
 
     name = fields.Text(string='Marque')
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
 
 
 class ModelEtiquette(models.Model):
