@@ -4,6 +4,40 @@
 		</record>
 
 
+<record model="ir.rule" id="record_not_shared_multi_company_carton">
+		<field name="name">Non Shared Records:carton</field>
+		<field name="model_id" ref="model_carton_carton"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">
+		   [('company_id', 'in', company_ids)]
+		</field>
+		</record>
+	<record model="ir.rule" id="record_not_shared_multi_company_carton_model">
+		<field name="name">Non Shared Records:model_carton</field>
+		<field name="model_id" ref="model_model_carton"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">
+		   [('company_id', 'in', company_ids)]
+		</field>
+		</record>
+
+	<record model="ir.rule" id="record_not_shared_multi_company_etiquette">
+		<field name="name">Non Shared Records:model_etiquette</field>
+		<field name="model_id" ref="model_model_etiquette"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">
+		   [('company_id', 'in', company_ids)]
+		</field>
+		</record>
+
+	<record model="ir.rule" id="record_not_shared_multi_company_line">
+		<field name="name">Non Shared Records:line</field>
+		<field name="model_id" ref="model_intervention_line_eeg"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">
+		   [('company_id', 'in', company_ids)]
+		</field>
+		</record>
 
 
 </odoo>
