@@ -119,7 +119,7 @@ class ModelEtiquette(models.Model):
     # Define fields for the quotation
     name = fields.Text(string='Etiquette')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
-    marque_id = fields.Many2one('marque.etiquette', string='Marque', required=True, create=True)
+    marque_id = fields.Many2one('marque.etiquette', string='Marque', create=True)
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
