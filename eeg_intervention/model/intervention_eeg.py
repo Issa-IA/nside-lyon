@@ -178,7 +178,27 @@ class Carton(models.Model):
             rec.total_casse = rec.cassees + rec.esthetique
 
 
-
+    def write(self, values):
+        res = super(Carton, self).write(values)
+    
+        for rec in self:
+            if rec.intervention_line_illisible_ids:
+                for intervention_line in rec.intervention_line_illisible_ids:
+                    existing_line_test = rec.env['intervention.line.eeg'].search([
+                        ('illisible_id', '=', intervention_line.id),
+                    ])
+                    
+                    if not existing_line_test:
+                        line_values = {
+                            'etiquette_id': intervention_line.etiquette_id.id,
+                            'task_id': intervention_line.task_id.id,
+                            'illisible': intervention_line.qte_illisible,
+                            'carton_id': rec.id,
+                            'illisible_id': intervention_line.id, 
+                        }
+                        rec.env['intervention.line.eeg'].create(line_values)
+           
+        return res
     pile_test = fields.Integer(string='Total Pile + Test', compute='calcul_total_pile_test')
     test = fields.Integer(string='Total test seulement', compute='calcul_total_test')
     code_erreur = fields.Integer(string='Total Code erreur', compute='calcul_total_code_erreur')
@@ -266,7 +286,8 @@ class InterventionLineEeg(models.Model):
     piles = fields.Integer('Piles')
     esthetique = fields.Integer('Esthétique')
     cassees = fields.Integer('Cassées')
-
+    illisible = fields.Integer('Illisible')
+    illisible_id = fields.Many2one('intervention.line.illisble', 'Illisible_id')
 
     @api.depends('serial_number_36')
     def convert_base_10(self):
@@ -289,6 +310,7 @@ class InterventionLineIllisible(models.Model):
     task_id = fields.Many2one('project.task', 'Tâche', compute='_compute_task_id')
     qte_illisible = fields.Integer('Qté Illisible')
     carton_id = fields.Many2one('carton.carton', 'Carton', default=lambda self: self.env['carton.carton'].search([], limit=1), index=True, copy=False)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
 
     @api.depends('carton_id')
     def _compute_task_id(self):
