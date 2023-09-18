@@ -29,6 +29,15 @@
 		   [('company_id', 'in', company_ids)]
 		</field>
 		</record>
+	
+	<record model="ir.rule" id="record_not_shared_multi_company_marque_etiquette">
+		<field name="name">Non Shared Records:marque_etiquette</field>
+		<field name="model_id" ref="model_marque_etiquette"/>
+		<field name="global" eval="True"/>
+		<field name="domain_force">
+		   [('company_id', 'in', company_ids)]
+		</field>
+		</record>
 
 	<record model="ir.rule" id="record_not_shared_multi_company_line">
 		<field name="name">Non Shared Records:line</field>
