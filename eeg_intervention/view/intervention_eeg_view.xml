@@ -137,7 +137,7 @@
                     <field name="shipping_address"/>
                 </xpath>
                 <xpath expr="//page[@name='extra_info']" position="after">
-                        <page string="RMA" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
+                        <page string="RMA/RFB" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
                              <group>
                                  <group>
                                      <field name="qte_annoncee"/>
