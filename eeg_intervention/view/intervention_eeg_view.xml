@@ -3,7 +3,7 @@
     <record id="sequence_project_task" model="ir.sequence">
             <field name="name">project tasksequence</field>
             <field name="code">project.tasksequence</field>
-            <field name="prefix">D/</field>
+            <field name="prefix"></field>
             <field name="padding">5</field>
             <field name="number_next">1</field>
             <field name="number_increment">1</field>
@@ -53,6 +53,9 @@
                                              <group name="intervention_details">
                                             <field name="model_carton" class="oe_inline"/>
                                             <field name="task_id" class="oe_inline"/>
+                                            <field name ="nb_palette"/>
+                                            <field name ="nb_carton"/>
+                                            <field name ="transporteur"/>
 
                                              </group>
                                             <group name="intervention_total">
