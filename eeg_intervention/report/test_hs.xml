@@ -2,7 +2,7 @@
 <odoo>
 <report         id="report_decimal_hs_etiquette"
                 model="project.task"
-                string="Test HS"
+                string="Etiquette HS"
                 name="eeg_intervention.report_decimal_hs"
                 file="eeg_intervention.report_decimal_hs"
                 report_type="qweb-text"
@@ -19,6 +19,12 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row2" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-set="sum_row2" t-value="sum_row2+line.illisible"/>
+</t>
++<t t-out="sum_row2"/> ILLISIBLES
+  
 150E CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
