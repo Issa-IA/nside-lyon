@@ -152,6 +152,12 @@ class Carton(models.Model):
     # Define fields for the quotation
     name = fields.Text(string='Carton N°')
     model_carton = fields.Many2one('model.carton', 'Modèle')
+    nb_carton = fields.Integer(string='Nombre carton')
+    transporteur = fields.Selection([
+        ('UPS', 'UPS'),
+        ('TRANSALDIS', 'TRANSALDIS')
+    ])
+    nb_palette = fields.Integer(string='Nombre palette')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     user_id = fields.Many2one(
         'res.users', string='Opened By',
