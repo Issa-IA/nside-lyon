@@ -21,10 +21,12 @@
 </t>
 <t t-set="sum_row2" t-value="0"/>
 <t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '150E'">
 <t t-set="sum_row2" t-value="sum_row2+line.illisible"/>
 </t>
+</t>
 +<t t-out="sum_row2"/> ILLISIBLES
-  
+
 150E CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -45,6 +47,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row1" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '210EA'">
+<t t-set="sum_row1" t-value="sum_row1+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row1"/> ILLISIBLES
+  
 210EA CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -65,6 +75,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row3" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '210EF'">
+<t t-set="sum_row3" t-value="sum_row3+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row3"/> ILLISIBLES
+ 
 210EF CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -85,6 +103,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row4" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '420E'">
+<t t-set="sum_row4" t-value="sum_row4+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row4"/> ILLISIBLES
+ 
 420E CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -105,6 +131,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row5" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '580E'">
+<t t-set="sum_row5" t-value="sum_row5+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row5"/> ILLISIBLES
+ 
 580E CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -125,6 +159,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row6" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '150E CC4U'">
+<t t-set="sum_row6" t-value="sum_row6+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row6"/> ILLISIBLES
+ 
 150E CC4U CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -145,6 +187,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row7" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '210EA CC4U'">
+<t t-set="sum_row7" t-value="sum_row7+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row7"/> ILLISIBLES
+ 
 210EA CC4U CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -165,6 +215,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row8" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '210EF CC4U'">
+<t t-set="sum_row8" t-value="sum_row8+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row8"/> ILLISIBLES
+ 
 210EF CC4U CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -185,6 +243,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row9" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '150W'">
+<t t-set="sum_row9" t-value="sum_row9+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row9"/> ILLISIBLES
+ 
 150W CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -205,6 +271,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row10" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '250WA'">
+<t t-set="sum_row10" t-value="sum_row10+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row10"/> ILLISIBLES
+ 
 250WA CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -225,6 +299,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row11" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '250WF'">
+<t t-set="sum_row11" t-value="sum_row11+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row11"/> ILLISIBLES
+ 
 250WF CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
@@ -245,6 +327,14 @@
 </t>
 </t>
 </t>
+<t t-set="sum_row12" t-value="0"/>
+<t t-foreach="doc.intervention_ids" t-as="line">
+<t t-if="table_line.etiquette_id.name == '400W'">
+<t t-set="sum_row12" t-value="sum_row12+line.illisible"/>
+</t>
+</t>
++<t t-out="sum_row12"/> ILLISIBLES
+ 
 400W CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
