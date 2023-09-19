@@ -103,6 +103,9 @@ class ModelCarton(models.Model):
         string="Poids",
         digits='Poids carton', default=0.0,
         store=True, readonly=False, required=True)
+    
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
+
 
 
 class MarqueEtiquette(models.Model):
