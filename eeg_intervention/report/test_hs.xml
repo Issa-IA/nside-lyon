@@ -20,12 +20,14 @@
 </t>
 </t>
 <t t-set="sum_row2" t-value="0"/>
-<t t-foreach="doc.intervention_ids" t-as="line">
-<t t-set="sum_row2" t-value="sum_row2+line.illisible"/>
-</t>
+<t t-foreach="docs" t-as="doc">
+<t t-foreach="doc.intervention_ids" t-as="table_line">
 <t t-if="table_line.etiquette_id.name == '150E'">
-+<t t-out="sum_row2"/> ILLISIBLES
+<t t-set="sum_row2" t-value="sum_row2+table_line.illisible"/>
 </t>
+</t>
+</t>
++<t t-out="sum_row2"/> ILLISIBLES
 150E CASSEES:
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_ids" t-as="table_line">
