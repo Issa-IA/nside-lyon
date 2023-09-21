@@ -168,7 +168,21 @@ class Carton(models.Model):
         readonly=True,
         default=lambda self: self.env.uid,
         ondelete='restrict')
-    task_id = fields.Many2one('project.task', 'Tâche' , default=lambda self: self.env['project.task'].search([], limit=1), index=True, copy=False)
+    
+    task_id = fields.Many2one('project.task','Tâche', default=lambda self: self._get_default_task(), index=True, copy=False)
+
+    def _get_default_task(self):
+    # Récupérer l'enregistrement Étiquette actuellement actif
+        active_etiquette = self.env.context.get('self.id')
+        
+        if active_etiquette:
+            # Récupérer la valeur du champ task_id de l'enregistrement Étiquette actif
+            etiquette = self.env['intervention.line.eeg'].browse(active_etiquette)
+            return etiquette.task_id.id if etiquette.task_id else False
+    
+        # Si aucun enregistrement Étiquette actif n'est trouvé, renvoyer False
+        return False
+    
     intervention_line_eeg_ids = fields.One2many('intervention.line.eeg', 'carton_id', string='Lines')
     intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='calcul_total_ok')
