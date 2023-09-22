@@ -45,7 +45,7 @@ class inheritTask(models.Model):
 
     def action_open_related_etiquettes(self):
         return {
-            'name': 'Etiquettes',
+            'name': 'EEG',
             'type': 'ir.actions.act_window',
             'res_model': 'intervention.line.eeg',
             'domain': [('task_id', '=', self.id)],
