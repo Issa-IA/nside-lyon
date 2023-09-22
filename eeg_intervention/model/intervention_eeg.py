@@ -187,8 +187,14 @@ class Carton(models.Model):
     intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='calcul_total_ok')
     total_hs = fields.Integer(string='Total HS', compute='calcul_total_hs')
-    total_illisible = fields.Integer(string='Total Illisible')
+    total_illisible = fields.Integer(string='Total Illisible',  compute='calcul_total_illisibles')
     total_casse = fields.Integer(string='Total cassée', compute='calcul_total_cassee')
+    
+    @api.depends('intervention_line_eeg_ids.test')
+    def calcul_total_illisibles(self):
+        for rec in self:
+            selected_lines = rec.intervention_line_eeg_ids
+            rec.total_illisible = sum(selected_lines.mapped('illisible'))
 
 
     def calcul_total_ok(self):
