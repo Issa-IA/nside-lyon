@@ -190,7 +190,7 @@ class Carton(models.Model):
     total_illisible = fields.Integer(string='Total Illisible',  compute='calcul_total_illisibles')
     total_casse = fields.Integer(string='Total cassée', compute='calcul_total_cassee')
     
-    @api.depends('intervention_line_eeg_ids.test')
+    @api.depends('intervention_line_eeg_ids.illisible')
     def calcul_total_illisibles(self):
         for rec in self:
             selected_lines = rec.intervention_line_eeg_ids
