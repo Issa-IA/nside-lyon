@@ -24,7 +24,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="etiquette_action_window">
-                <field name="name">Etiquettes</field>
+                <field name="name">EEG</field>
                 <field name="res_model">intervention.line.eeg</field>
         </record>
         <menuitem
