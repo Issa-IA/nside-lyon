@@ -100,11 +100,6 @@ class ModelCarton(models.Model):
         string="Longueur",
         digits='Longueur carton', default=0.0,
         store=True, readonly=False, required=True)
-
-    poids_carton = fields.Float(
-        string="Poids",
-        digits='Poids carton', default=0.0,
-        store=True, readonly=False, required=True)
     
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
 
@@ -168,7 +163,14 @@ class Carton(models.Model):
         readonly=True,
         default=lambda self: self.env.uid,
         ondelete='restrict')
-    
+    poids_carton = fields.Float(
+        string="Poids",
+        digits='Poids carton', default=0.0,
+        store=True, readonly=False)
+    proprietaire_carton =  fields.Selection([
+        ('CLIENT', 'CLIENT'),
+        ('ICR', 'ICR')
+    ])
     task_id = fields.Many2one('project.task','Tâche', default=lambda self: self._get_default_task(), index=True, copy=False)
 
     def _get_default_task(self):
