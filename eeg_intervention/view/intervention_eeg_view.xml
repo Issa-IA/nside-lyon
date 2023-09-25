@@ -61,6 +61,7 @@
 
                                              </group>
                                             <group name="intervention_total">
+                                                <field name="date_expedition">
                                                 <field name="total_ok" class="oe_inline"/>
                                                 <field name="total_hs" class="oe_inline"/>
                                                 <field name="total_illisible" class="oe_inline"/>
