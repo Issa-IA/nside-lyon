@@ -172,6 +172,7 @@ class Carton(models.Model):
         ('ICR', 'ICR')
     ])
     task_id = fields.Many2one('project.task','Tâche', default=lambda self: self._get_default_task(), index=True, copy=False)
+    date_expedition = fields.Date(string="Date d'expédition", tracking=True)
 
     def _get_default_task(self):
     # Récupérer l'enregistrement Étiquette actuellement actif
