@@ -308,7 +308,7 @@ class InterventionLineEeg(models.Model):
         default=lambda self: self.env.uid,
         ondelete='restrict')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
-    serial_number_10 = fields.Text(string='N° De série Base 10')
+    serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
     _sql_constraints = [
             ('serial_number_36_unique', 'unique (serial_number_36)', 'Le N° de Série Base 36 doit être unique!'),
@@ -336,7 +336,19 @@ class InterventionLineEeg(models.Model):
                 try:
                     rec.serial_number_10 = int(rec.serial_number_36, 36)
                 except ValueError:
-                    raise ValidationError("code-barres n'est pas valide")
+                    raise ValidationError(f"Le code-barres '{serial_number_36}' n'est pas valide.")
+
+
+    @api.model
+    def create(self, values):
+        if 'serial_number_36' in values:
+            serial_number_36 = values.get('serial_number_36')
+            try:
+                int(serial_number_36, 36)  # Tente de convertir le numéro de série
+            except ValueError:
+                raise ValidationError(f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+        return super(InterventionLineEeg, self).create(values)
+        
 
 
 class InterventionLineIllisible(models.Model):
