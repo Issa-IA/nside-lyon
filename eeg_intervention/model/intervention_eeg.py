@@ -348,7 +348,7 @@ class InterventionLineEeg(models.Model):
         if 'serial_number_36' in values:
             serial_number_36 = values.get('serial_number_36')
         else:
-            if re.match("^[0-9A-Z]+$", rec.serial_number_36):    
+            if re.match("^[0-9A-Z]+$", serial_number_36):    
                 try:
                     int(serial_number_36, 36)  # Tente de convertir le numéro de série
                 except ValueError:
