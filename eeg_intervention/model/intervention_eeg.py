@@ -341,19 +341,6 @@ class InterventionLineEeg(models.Model):
                         raise ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
                 else:
                     rec.serial_number_10 = 0
-
-
-    @api.model
-    def create(self, values):
-        if 'serial_number_36' in values:
-            serial_number_36 = values.get('serial_number_36')
-        else:
-            if re.match("^[0-9A-Z]+$", serial_number_36):    
-                try:
-                    int(serial_number_36, 36)  # Tente de convertir le numéro de série
-                except ValueError:
-                    raise ValidationError(f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
-        return super(InterventionLineEeg, self).create(values)
         
 
 
