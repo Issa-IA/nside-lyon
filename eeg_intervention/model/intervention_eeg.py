@@ -3,6 +3,27 @@ from odoo import api, fields, models, SUPERUSER_ID, _
 from datetime import timedelta
 from odoo.exceptions import ValidationError,Warning
 
+
+class Composant(models.Model):
+    _name = 'composant.model'
+
+    etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
+    product = fields.Many2one('product.product', string='Piles')
+    quantity = fields.Float(string='Quantité')
+    
+class PileModel(models.Model):
+    _name = 'pile.model'
+    _description = 'Pile'
+    
+    
+    product_id = fields.Many2one('product.product', string='Produit')
+    pile_factured = fields.Float(string='Pile Facturée')
+    task_id = fields.Many2one('project.task', string='Task')
+    pile_non_facture = fields.Float(string='Pile Non Facturée')
+    pile_factured_total = fields.Float(string='Total Pile Facturée')
+
+
+
 class inheritTask(models.Model):
     _inherit = 'project.task'
 
@@ -16,10 +37,124 @@ class inheritTask(models.Model):
     intervention_illisible_ids = fields.One2many('intervention.line.illisble', 'task_id', string='Lines Illisible')
     etiquette_count = fields.Integer(compute='_compute_intervention_count', string='Intervention Count')
     sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
-
-
+    num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
+    pile_factured_total = fields.Float(string='Total Pile Facturée')
+    @api.depends('carton_ids')
+    def _compute_num_cartons_client(self):
+        for task in self:
+            num_cartons_client = len(task.carton_ids.filtered(lambda carton: carton.proprietaire_carton == 'ICR'))
+            task.num_cartons_client = num_cartons_client
+            
     Total_illisible = fields.Integer(string='Total ILLISIBLES', compute='calcul_total_illisible')
+    transport_type = fields.Selection([('palette', 'Palette'),('carton', 'Carton')], string='Transport', default='carton', readonly=False, compute='_compute_proprietaire_type')
+    num_palette = fields.Integer(string='Quantité palette')
+    @api.depends('cartons_count')
+    def _compute_proprietaire_type(self):
+        for record in self:
+            if record.cartons_count > 7:
+                record.transport_type = 'palette'
+            else:
+                record.transport_type = 'carton'
 
+    piles_ids = fields.One2many('pile.model', 'task_id', string='Piles', compute='_compute_piles_ids', store=True)
+    
+    
+    
+    @api.depends('intervention_ids.etiquette_id', 'intervention_ids.pile_test', 'intervention_ids.test', 'intervention_ids.affichage_defectueux', 'intervention_ids.code_erreur', 'intervention_ids.activation', 'intervention_ids.piles', 'intervention_ids.esthetique', 'intervention_ids.cassees', 'intervention_ids.illisible')
+    def _compute_piles_ids(self):
+        for task in self:
+            piles_by_etiquette = {}
+    
+            # Supprimer toutes les lignes existantes dans piles_ids
+            task.piles_ids.unlink()
+    
+            for intervention in task.intervention_unique_ids:
+                etiquette_id = intervention.etiquette_id
+                if etiquette_id not in piles_by_etiquette:
+                    piles_by_etiquette[etiquette_id] = {
+                        'pile_factured_total': 0.0,
+                        'pile_lines': {},
+                    }
+    
+                for composant in etiquette_id.composant_ids:
+                    product_id = composant.product.id
+                    quantity_used = int(composant.quantity) * int(intervention.quantity_ok)
+                    used_non_facturee = int(composant.quantity) * int(intervention.quantity_hs_piles)
+    
+                    if product_id not in piles_by_etiquette[etiquette_id]['pile_lines']:
+                        piles_by_etiquette[etiquette_id]['pile_lines'][product_id] = {
+                            'product_id': product_id,
+                            'pile_factured': 0,
+                            'pile_non_facture': 0,
+                        }
+    
+                    piles_by_etiquette[etiquette_id]['pile_lines'][product_id]['pile_factured'] += quantity_used
+                    piles_by_etiquette[etiquette_id]['pile_lines'][product_id]['pile_non_facture'] += used_non_facturee
+    
+                    piles_by_etiquette[etiquette_id]['pile_factured_total'] += quantity_used
+    
+            piles = []
+            for etiquette_id, data in piles_by_etiquette.items():
+                pile_lines = list(data['pile_lines'].values())
+                pile_factured_total = data['pile_factured_total']
+    
+                piles.extend(pile_lines)
+    
+            task.piles_ids = [(0, 0, line) for line in piles]
+            task.pile_factured_total = sum(data['pile_factured_total'] for data in piles_by_etiquette.values())
+
+    @api.depends('intervention_ids.etiquette_id', 'intervention_ids.pile_test', 'intervention_ids.test','intervention_ids.affichage_defectueux', 'intervention_ids.code_erreur', 'intervention_ids.activation', 'intervention_ids.piles', 'intervention_ids.esthetique', 'intervention_ids.cassees', 'intervention_ids.illisible')
+    def _compute_intervention_unique_ids(self):
+        for task in self:
+            unique_interventions = task.intervention_ids.filtered(
+                lambda line: line.etiquette_id and (line.pile_test or line.test or line.code_erreur or line.affichage_defectueux or line.activation or line.piles or line.esthetique or line.cassees or line.illisible))
+            quantity_dict = {} 
+    
+            for line in unique_interventions:
+                etiquette_id = line.etiquette_id
+                quantity_ok = line.pile_test + line.test
+                quantity_hs = line.code_erreur + line.affichage_defectueux + line.activation + line.piles
+                quantity_hs_piles = line.piles
+                quantity_cassees = line.esthetique + line.cassees
+                quantity_illisible = line.illisible
+                quantity = quantity_ok + quantity_hs + quantity_cassees + quantity_illisible
+    
+                if etiquette_id in quantity_dict:
+                    quantity_dict[etiquette_id]['quantity_ok'] += quantity_ok
+                    quantity_dict[etiquette_id]['quantity_hs'] += quantity_hs
+                    quantity_dict[etiquette_id]['quantity_hs_piles'] += quantity_hs_piles
+                    quantity_dict[etiquette_id]['quantity_cassees'] += quantity_cassees
+                    quantity_dict[etiquette_id]['quantity_illisible'] += quantity_illisible
+                    quantity_dict[etiquette_id]['quantity'] += quantity
+                    
+                else:
+                    quantity_dict[etiquette_id] = {
+                        'quantity_ok': quantity_ok,
+                        'quantity_hs': quantity_hs,
+                        'quantity_hs_piles' : quantity_hs_piles,
+                        'quantity_cassees': quantity_cassees,
+                        'quantity_illisible': quantity_illisible,
+                        'quantity' : quantity
+                    }
+    
+            unique_intervention_lines = self.env['intervention.line.eeg']
+    
+            for etiquette_id, quantities in quantity_dict.items():
+                unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                    'etiquette_id': etiquette_id.id,
+                    'quantity_ok': quantities['quantity_ok'],
+                    'quantity_hs': quantities['quantity_hs'],
+                    'quantity_hs_piles' : quantities['quantity_hs_piles'],
+                    'quantity_cassees': quantities['quantity_cassees'],
+                    'quantity_illisible': quantities['quantity_illisible'],
+                    'quantity': quantities['quantity'],
+                })
+    
+            task.intervention_unique_ids = [(5, 0, 0)] + [
+                (0, 0, {'etiquette_id': line.etiquette_id.id, 'quantity_ok': line.quantity_ok,'quantity': line.quantity,'quantity_hs_piles':line.quantity_hs_piles, 'quantity_hs': line.quantity_hs, 'quantity_cassees': line.quantity_cassees, 'quantity_illisible': line.quantity_illisible}) for line in
+                unique_intervention_lines]
+
+       
     @api.depends('intervention_ids')
     def _compute_intervention_count(self):
         for record in self:
@@ -81,6 +216,153 @@ class inheritTask(models.Model):
                 'datas': report_data,
             })]
         )
+
+    prestation_ids = fields.One2many('prestation.model', 'task_id', string='Prestations', compute='create_prestation_lines')
+    intervention_unique_ids = fields.One2many('intervention.unique', 'task_id', string='Interventions Unique', compute='_compute_intervention_unique_ids', store=True)
+    transport_product_carton= fields.Many2one('product.product', string='Transport product Carton', default=4252)
+    transport_product_palette= fields.Many2one('product.product', string='Transport product palette', default=5711)
+    product_carton= fields.Many2one('product.product', string='Product carton', default=5293)
+    
+    @api.onchange('intervention_unique_ids')
+    def _onchange_intervention_unique_ids(self):
+        pass
+
+
+    @api.depends('intervention_unique_ids')
+    def create_prestation_lines(self):
+        prestation_obj = self.env['prestation.model']  
+        prestation_ids = self.env['prestation.model'] 
+
+        for record in self.intervention_unique_ids:
+            etiquette_id = record.etiquette_id
+            quantity = record.quantity - record.quantity_cassees
+
+            liste_de_prix = etiquette_id.marque_id.pricelist_id  
+
+            if liste_de_prix:
+                for item in liste_de_prix.item_ids:
+                    price = item.fixed_price
+                    product = item.product_id
+
+                    existing_line = prestation_ids.filtered(
+                        lambda line: line.product == product and line.price == price)
+
+                    if existing_line:
+                        existing_line.quantity += quantity
+                    else:
+                        prestation_ids |= prestation_obj.create({
+                            'etiquette_id': etiquette_id.id,
+                            'product': product.id,
+                            'price': price,
+                            'price_total': price * quantity,
+                            'task_id': self.id, 
+                            'quantity': quantity, 
+                            
+                        })
+
+        self.prestation_ids = prestation_ids
+
+   
+    @api.depends('intervention_ids.etiquette_id')
+    def _compute_interventions(self):
+        for task in self:
+            unique_etiquettes = task.intervention_ids.mapped('etiquette_id')
+            task.intervention_ids = [(6, 0, unique_etiquettes.ids)]
+
+    def create_sale_order(self):
+        SaleOrder = self.env['sale.order']
+        SaleOrderLine = self.env['sale.order.line']
+    
+        for task in self:
+            num_cartons_client = task.num_cartons_client
+            
+            order = SaleOrder.create({
+                'partner_id': task.partner_id.id,
+            })
+
+            order_lines_by_product = {}
+            for intervention in task.intervention_unique_ids:
+                for component in intervention.etiquette_id.composant_ids:
+                    product_id = component.product.id
+    
+                    if product_id in order_lines_by_product:
+                        order_line = SaleOrderLine.browse(order_lines_by_product[product_id])
+                        order_line.product_uom_qty += component.quantity * intervention.quantity_ok
+                    else:
+                        order_line = SaleOrderLine.create({
+                            'order_id': order.id,
+                            'product_id': product_id,
+                            'product_uom_qty': component.quantity * intervention.quantity_ok,
+                            'price_unit': component.product.list_price,
+                        })
+                        order_lines_by_product[product_id] = order_line.id
+    
+            order_lines_by_service = {}
+    
+            for service in task.prestation_ids:
+                product_id = service.product.id
+    
+                if product_id in order_lines_by_service:
+                    order_line = SaleOrderLine.browse(order_lines_by_service[product_id])
+                    order_line.product_uom_qty += service.quantity
+                else:
+                    order_line = SaleOrderLine.create({
+                        'order_id': order.id,
+                        'product_id': product_id,
+                        'product_uom_qty': service.quantity,
+                        'price_unit': service.price,
+                    })
+                    order_lines_by_service[product_id] = order_line.id
+                    
+            # ligne pour product_carton_transport
+            if task.transport_type == 'carton' and task.transport_product_carton:
+                SaleOrderLine.create({
+                    'order_id': order.id,
+                    'product_id': task.transport_product_carton.id,
+                    'product_uom_qty': num_cartons_client,
+                    'price_unit': task.transport_product_carton.list_price,
+                })
+            
+            # ligne pour product_carton
+            if task.product_carton:
+                SaleOrderLine.create({
+                    'order_id': order.id,
+                    'product_id': task.product_carton.id,
+                    'product_uom_qty': num_cartons_client,
+                    'price_unit': task.product_carton.list_price,
+                })
+              # ligne pour product_palette_transport  
+            if task.transport_type == 'palette' and task.transport_product_palette and task.num_palette > 0:
+                SaleOrderLine.create({
+                    'order_id': order.id,
+                    'product_id': task.transport_product_palette.id,
+                    'product_uom_qty': task.num_palette,
+                    'price_unit': task.transport_product_palette.list_price,
+                    })
+         
+class prestation(models.Model):
+    _name = 'prestation.model'
+
+    etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
+    product = fields.Many2one('product.product', string='Prestation')
+    quantity = fields.Float(string='Quantité')
+    price = fields.Float(string='Price')
+    price_total = fields.Float(string='Price total')
+    task_id = fields.Many2one('project.task', string='Task')
+
+
+class InterventionUnique(models.Model):
+    _name = 'intervention.unique'
+    _description = 'Intervention Unique'
+
+    task_id = fields.Many2one('project.task', string='Task')
+    etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
+    quantity_ok = fields.Integer(string='OK')
+    quantity_hs = fields.Integer(string='HS')
+    quantity_hs_piles = fields.Integer(string='HS Piles')
+    quantity_illisible = fields.Integer(string='ILLISIBLE')
+    quantity_cassees = fields.Integer(string='CASSEES')
+    quantity = fields.Float(string='quantity')
 
 
 class ModelCarton(models.Model):
