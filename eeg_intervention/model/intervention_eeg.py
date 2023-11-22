@@ -399,7 +399,7 @@ class MarqueEtiquette(models.Model):
 
 
 class ModelEtiquette(models.Model):
-    _name = 'model.etiquette'.
+    _name = 'model.etiquette'
     _description ='Modèle Etiquette'
 
     # Define fields for the quotation
