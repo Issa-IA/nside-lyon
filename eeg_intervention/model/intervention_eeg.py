@@ -610,6 +610,12 @@ class InterventionLineEeg(models.Model):
     cassees = fields.Integer('Cassées')
     illisible = fields.Integer('Illisible')
     illisible_id = fields.Many2one('intervention.line.illisble', 'Illisible_id')
+    quantity = fields.Float('Quantité OK')
+    quantity_ok = fields.Integer(string='OK')
+    quantity_hs = fields.Integer(string='HS')
+    quantity_hs_piles = fields.Integer(string='HS Piles')
+    quantity_illisible = fields.Integer(string='ILLISIBLE')
+    quantity_cassees = fields.Integer(string='CASSEES')
 
     @api.depends('serial_number_36')
     def convert_base_10(self):
