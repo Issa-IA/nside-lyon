@@ -131,6 +131,9 @@
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
+                 <header>
+                     <button name="create_sale_order" string="Créer Commande" type="object" class="oe_highlight" />
+                 </header>
                  <div class="oe_button_box" name="button_box">
                                  <button name="action_open_related_cartons" type="object" class="oe_stat_button"  icon="fa-cubes" groups="eeg_intervention.group_admin_rma">
                                     <field string="Cartons" name="cartons_count" widget="statinfo"/>
