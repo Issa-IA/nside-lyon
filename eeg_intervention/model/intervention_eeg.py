@@ -395,16 +395,18 @@ class MarqueEtiquette(models.Model):
 
     name = fields.Text(string='Marque')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
+    pricelist_id = fields.Many2one('product.pricelist', 'Liste des prix')
 
 
 class ModelEtiquette(models.Model):
-    _name = 'model.etiquette'
+    _name = 'model.etiquette'.
     _description ='Modèle Etiquette'
 
     # Define fields for the quotation
     name = fields.Text(string='Etiquette')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
     marque_id = fields.Many2one('marque.etiquette', string='Marque', create=True)
+    composant_ids = fields.One2many('composant.model', 'etiquette_id', string='Composants')
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
