@@ -40,6 +40,7 @@ class inheritTask(models.Model):
     sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
     num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
     pile_factured_total = fields.Float(string='Total Pile Facturée')
+    sale_order_id = fields.Many2one('sale.order', string='Commande intervention', store=True)
     @api.depends('carton_ids')
     def _compute_num_cartons_client(self):
         for task in self:
@@ -280,6 +281,7 @@ class inheritTask(models.Model):
             order = SaleOrder.create({
                 'partner_id': task.partner_id.id,
             })
+            task.sale_order_id = order.id
 
             order_lines_by_product = {}
             for intervention in task.intervention_unique_ids:
