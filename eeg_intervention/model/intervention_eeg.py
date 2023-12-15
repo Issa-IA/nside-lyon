@@ -182,16 +182,8 @@ class inheritTask(models.Model):
             record.cartons_count = len(record.carton_ids)
 
     def calcul_total_illisible(self):
-        # Use a single database query to sum 'total_illisible' for all carton_ids
-        self.env.cr.execute("""
-            UPDATE your_model_name
-            SET Total_illisible = carton.total_illisible
-            FROM your_model_name
-            INNER JOIN carton_table_name AS carton
-            ON your_model_name.id = carton.your_model_name_id
-        """)
-        # Commit the changes to the database
-        self.env.cr.commit()
+        for rec in self.carton_ids:
+            rec.Total_illisible = rec.total_illisible
 
     def action_open_related_cartons(self):
         return {
