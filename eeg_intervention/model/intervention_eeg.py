@@ -525,11 +525,6 @@ class Carton(models.Model):
 
         return res
 
-    class YourClass(models.Model):
-        _name = 'your.class'
-
-        # ... other fields ...
-
         pile_test = fields.Integer(string='Total Pile + Test', compute='calcul_total_fields')
         test = fields.Integer(string='Total test seulement', compute='calcul_total_fields')
         code_erreur = fields.Integer(string='Total Code erreur', compute='calcul_total_fields')
