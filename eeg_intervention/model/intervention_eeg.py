@@ -495,6 +495,14 @@ class Carton(models.Model):
     total_hs = fields.Integer(string='Total HS', compute='_compute_totals')
     total_illisible = fields.Integer(string='Total Illisible', compute='_compute_totals')
     total_casse = fields.Integer(string='Total cassée', compute='_compute_totals')
+    pile_test = fields.Integer(string='Total Pile + Test', compute='calcul_total_fields')
+    test = fields.Integer(string='Total test seulement', compute='calcul_total_fields')
+    code_erreur = fields.Integer(string='Total Code erreur', compute='calcul_total_fields')
+    affichage_defectueux = fields.Integer(string='Total ,Affichage défectueux', compute='calcul_total_fields')
+    activation = fields.Integer(string='Total Activation', compute='calcul_total_fields')
+    piles = fields.Integer(string='Total Piles', compute='calcul_total_fields')
+    esthetique = fields.Integer(string='Total Esthétique', compute='calcul_total_fields')
+    cassees = fields.Integer(string='Total Cassées', compute='calcul_total_fields')
 
     @api.depends('intervention_line_illisible_ids.qte_illisible', 'intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test', 'intervention_line_eeg_ids.code_erreur',
                  'intervention_line_eeg_ids.affichage_defectueux', 'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles', 'intervention_line_eeg_ids.cassees', 'intervention_line_eeg_ids.esthetique')
@@ -525,30 +533,23 @@ class Carton(models.Model):
 
         return res
 
-        pile_test = fields.Integer(string='Total Pile + Test', compute='calcul_total_fields')
-        test = fields.Integer(string='Total test seulement', compute='calcul_total_fields')
-        code_erreur = fields.Integer(string='Total Code erreur', compute='calcul_total_fields')
-        affichage_defectueux = fields.Integer(string='Total ,Affichage défectueux', compute='calcul_total_fields')
-        activation = fields.Integer(string='Total Activation', compute='calcul_total_fields')
-        piles = fields.Integer(string='Total Piles', compute='calcul_total_fields')
-        esthetique = fields.Integer(string='Total Esthétique', compute='calcul_total_fields')
-        cassees = fields.Integer(string='Total Cassées', compute='calcul_total_fields')
 
-        @api.depends('intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test',
+
+    @api.depends('intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test',
                      'intervention_line_eeg_ids.code_erreur', 'intervention_line_eeg_ids.affichage_defectueux',
                      'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles',
                      'intervention_line_eeg_ids.esthetique', 'intervention_line_eeg_ids.cassees')
-        def calcul_total_fields(self):
-            for rec in self:
-                selected_lines = rec.intervention_line_eeg_ids
-                rec.pile_test = sum(selected_lines.mapped('pile_test'))
-                rec.test = sum(selected_lines.mapped('test'))
-                rec.code_erreur = sum(selected_lines.mapped('code_erreur'))
-                rec.affichage_defectueux = sum(selected_lines.mapped('affichage_defectueux'))
-                rec.activation = sum(selected_lines.mapped('activation'))
-                rec.piles = sum(selected_lines.mapped('piles'))
-                rec.esthetique = sum(selected_lines.mapped('esthetique'))
-                rec.cassees = sum(selected_lines.mapped('cassees'))
+    def calcul_total_fields(self):
+        for rec in self:
+            selected_lines = rec.intervention_line_eeg_ids
+            rec.pile_test = sum(selected_lines.mapped('pile_test'))
+            rec.test = sum(selected_lines.mapped('test'))
+            rec.code_erreur = sum(selected_lines.mapped('code_erreur'))
+            rec.affichage_defectueux = sum(selected_lines.mapped('affichage_defectueux'))
+            rec.activation = sum(selected_lines.mapped('activation'))
+            rec.piles = sum(selected_lines.mapped('piles'))
+            rec.esthetique = sum(selected_lines.mapped('esthetique'))
+            rec.cassees = sum(selected_lines.mapped('cassees'))
 
 
 class InterventionLineEeg(models.Model):
