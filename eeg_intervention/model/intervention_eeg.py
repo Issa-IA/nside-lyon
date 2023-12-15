@@ -496,8 +496,8 @@ class Carton(models.Model):
     total_illisible = fields.Integer(string='Total Illisible', compute='_compute_totals')
     total_casse = fields.Integer(string='Total cassée', compute='_compute_totals')
 
-    @api.depends('intervention_line_illisible_ids.qte_illisible', 'pile_test', 'test', 'code_erreur',
-                 'affichage_defectueux', 'activation', 'piles', 'cassees', 'esthetique')
+    @api.depends('intervention_line_illisible_ids.qte_illisible', 'intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test', 'intervention_line_eeg_ids.code_erreur',
+                 'intervention_line_eeg_ids.affichage_defectueux', 'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles', 'intervention_line_eeg_ids.cassees', 'intervention_line_eeg_ids.esthetique')
     def _compute_totals(self):
         for rec in self:
             selected_lines = rec.intervention_line_illisible_ids
