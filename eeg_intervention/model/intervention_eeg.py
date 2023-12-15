@@ -601,7 +601,7 @@ class InterventionLineEeg(models.Model):
             except ValueError:
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
-        return super(YourModel, self).create(values)
+        return super(InterventionLineEeg, self).create(values)
 
 
 class InterventionLineIllisible(models.Model):
