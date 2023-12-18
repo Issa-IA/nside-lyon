@@ -562,10 +562,6 @@ class InterventionLineEeg(models.Model):
     _sql_constraints = [
         ('serial_number_36_unique', 'unique (serial_number_36)', 'Le N° de Série Base 36 doit être unique!'),
     ]
-    @api.model
-    def detect_duplicates(self, data):
-        duplicates = self.env['intervention.line.eeg'].search_count([('serial_number_36', 'in', data)])
-        return duplicates
 
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
 
@@ -598,14 +594,27 @@ class InterventionLineEeg(models.Model):
                     raise exceptions.ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
 
     @api.model
+    def detect_duplicates(self, serial_number_36):
+        duplicates = self.search_count([('serial_number_36', '=', serial_number_36)])
+        return duplicates
+
+    @api.model
     def create(self, values):
         serial_number_36 = values.get('serial_number_36')
+
+        # Vérifier si le numéro de série existe déjà
+        if serial_number_36 and self.detect_duplicates(serial_number_36) > 0:
+            raise exceptions.ValidationError(
+                f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
+
+        # Valider la validité du numéro de série base 36
         if serial_number_36:
             try:
                 int(serial_number_36, 36)
             except ValueError:
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+
         return super(InterventionLineEeg, self).create(values)
 
 
