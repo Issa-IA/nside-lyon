@@ -1,5 +1,5 @@
 import re
-from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo import api, fields, models, exceptions, SUPERUSER_ID, _
 from datetime import timedelta
 from odoo.exceptions import ValidationError,Warning
 
@@ -632,15 +632,28 @@ class InterventionLineEeg(models.Model):
                 except ValueError:
                     rec.serial_number_10 = 0 
                     #raise ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
+    @api.model
+    def detect_duplicates(self, serial_number_36):
+        duplicates = self.search_count([('serial_number_36', '=', serial_number_36)])
+        return duplicates
 
     @api.model
     def create(self, values):
-        if 'serial_number_36' in values:
-            serial_number_36 = values.get('serial_number_36')   
+        serial_number_36 = values.get('serial_number_36')
+
+        # Vérifier si le numéro de série existe déjà
+        if serial_number_36 and self.detect_duplicates(serial_number_36) > 0:
+            raise exceptions.ValidationError(
+                f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
+
+        # Valider si le numéro de série base 36 est valide
+        if serial_number_36:
             try:
-                int(serial_number_36, 36)  # Tente de convertir le numéro de série
+                int(serial_number_36, 36)
             except ValueError:
-                raise ValidationError(f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+                raise exceptions.ValidationError(
+                    f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+
         return super(InterventionLineEeg, self).create(values)
         
 
