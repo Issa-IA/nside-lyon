@@ -1,6 +1,6 @@
 import re
 import json
-from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo import api, fields, models, exceptions, SUPERUSER_ID, _
 from datetime import timedelta
 from odoo.exceptions import ValidationError, Warning
 
