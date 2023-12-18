@@ -562,6 +562,11 @@ class InterventionLineEeg(models.Model):
     _sql_constraints = [
         ('serial_number_36_unique', 'unique (serial_number_36)', 'Le N° de Série Base 36 doit être unique!'),
     ]
+    @api.model
+    def detect_duplicates(self, data):
+        duplicates = self.env['intervention.line.eeg'].search_count([('serial_number_36', 'in', data)])
+        return duplicates
+
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
 
     carton_id = fields.Many2one('carton.carton', 'Carton')
