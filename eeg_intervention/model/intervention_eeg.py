@@ -597,7 +597,7 @@ class InterventionLineEeg(models.Model):
         ondelete='restrict')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
-    serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
+    serial_number_36 = fields.Text(string='N° de Série Base 36')
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
     active = fields.Boolean(string='Active',default=True,
         store=True)
