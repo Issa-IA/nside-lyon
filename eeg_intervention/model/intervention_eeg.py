@@ -600,16 +600,8 @@ class InterventionLineEeg(models.Model):
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
     active = fields.Boolean(string='Active',default=True, compute='_compute_active',
-        inverse='_inverse_active',
         store=True)
-    @api.depends('task_id.stage_id')
-    def _compute_active(self):
-        for record in self:
-            record.active = record.task_id.stage_id.id != 14
-
-    def _inverse_active(self):
-        for record in self:
-            pass
+   
             
     def archive_record(self):
         for record in self:
