@@ -549,6 +549,12 @@ class InterventionLineEeg(models.Model):
     _description = 'lines'
 
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
+    active = fields.Boolean(string='Archivé', default=False)
+    @api.multi
+    def archive_record(self):
+        for record in self:
+            record.write({'active': True})
+
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
@@ -556,6 +562,8 @@ class InterventionLineEeg(models.Model):
         readonly=True,
         default=lambda self: self.env.uid,
         ondelete='restrict')
+    eeg_state = fields.Selection([('RMA/RFB', 'RMA/RFB'), ('chez le client', 'chez le client')], string='Statut',
+                                      default='RMA/RFB', readonly=False, compute='_set_default_state')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10', store=True)
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
