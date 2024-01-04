@@ -549,7 +549,24 @@ class InterventionLineEeg(models.Model):
     _description = 'lines'
 
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
-    active = fields.Boolean(string='Active', default=True)
+     active = fields.Boolean(
+        string='Active',
+        default=True,
+        compute='_compute_active',
+        inverse='_inverse_active',
+        store=True  # If you want to store the computed value in the database
+    )
+    @api.depends('task_id.stage_id')
+    def _compute_active(self):
+        for record in self:
+            # Set active to True if task_id.stage_id.id is not equal to 14
+            record.active = record.task_id.stage_id.id != 14
+
+    def _inverse_active(self):
+        for record in self:
+            # If you want to handle setting active to False manually, you can add your logic here
+            pass
+            
     def archive_record(self):
         for record in self:
             record.write({'active': False})
@@ -599,10 +616,10 @@ class InterventionLineEeg(models.Model):
                     raise exceptions.ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
 
     @api.model
-    def detect_duplicates(self, serial_number_36):
+    def detect_duplicates(self, serial_number_36, active):
         duplicates = self.search_count([
             ('serial_number_36', '=', serial_number_36),
-            ('active', '=', True]),
+            ('active', '=', True)
         ])
         return duplicates
 
