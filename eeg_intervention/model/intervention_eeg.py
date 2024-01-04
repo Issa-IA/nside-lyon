@@ -599,7 +599,7 @@ class InterventionLineEeg(models.Model):
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
-    active = fields.Boolean(string='Active',default=True, compute='_compute_active',
+    active = fields.Boolean(string='Active',default=True,
         store=True)
    
             
@@ -636,10 +636,7 @@ class InterventionLineEeg(models.Model):
                 except ValueError:
                     rec.serial_number_10 = 0 
                     #raise ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
-    @api.model
-    def detect_duplicates(self, serial_number_36):
-        duplicates = self.search_count([('serial_number_36', '=', serial_number_36)])
-        return duplicates
+   
 
     @api.model
     def create(self, values):
