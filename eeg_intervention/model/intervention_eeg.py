@@ -613,23 +613,17 @@ class InterventionLineEeg(models.Model):
 
 
     @api.model
-    def detect_duplicates(self, serial_number_36, active=True):
-        domain = [('serial_number_36', '=', serial_number_36)]
-        if active:
-            domain.append(('active', '=', True))
-
-        duplicates = self.search_count(domain)
+    def detect_duplicates(self, serial_number_36):
+        duplicates = self.search_count([
+            ('serial_number_36', '=', serial_number_36),
+            ('active', '=', True)
+        ])
         return duplicates
 
     @api.model
     def create(self, values):
         serial_number_36 = values.get('serial_number_36')
         active = values.get('active', True)
-
-        # If the record is active, check for duplicates; otherwise, skip the check
-        if active and self.detect_duplicates(serial_number_36, active=True) > 0:
-            raise exceptions.ValidationError(
-                f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
 
         # Valider la validité du numéro de série base 36
         if serial_number_36:
@@ -639,16 +633,19 @@ class InterventionLineEeg(models.Model):
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
 
-        existing_duplicates = self.env['intervention.line.eeg'].search([
-            ('serial_number_36', '=', serial_number_36),
-            ('id', '!=', self.id),  # Exclude the current record being created/updated
-            ('active', '=', True)  # Ensure we only mark active records as duplicates
-        ])
+        # Create the record with the provided values
+        new_record = super(InterventionLineEeg, self).create(values)
 
-        # Mark existing duplicates as inactive
-        existing_duplicates.write({'active': False})
+        # If the record is active and there are duplicates, mark them as inactive
+        if active and self.detect_duplicates(serial_number_36) > 1:
+            existing_duplicates = self.search([
+                ('serial_number_36', '=', serial_number_36),
+                ('id', '!=', new_record.id),
+                ('active', '=', True)
+            ])
+            existing_duplicates.write({'active': False})
 
-        return super(InterventionLineEeg, self).create(values)
+        return new_record
 
 
 
