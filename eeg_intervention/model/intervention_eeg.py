@@ -626,10 +626,17 @@ class InterventionLineEeg(models.Model):
         serial_number_36 = values.get('serial_number_36')
         active = values.get('active', True)
     
-        # Vérifier si le numéro de série existe déjà, seulement si le record est actif
-        if active and serial_number_36 and self.detect_duplicates(serial_number_36, active=True):
-            raise exceptions.ValidationError(
-                f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
+        # If record is active, check for duplicates; otherwise, skip the check
+        if active:
+            # Vérifier si le numéro de série existe déjà
+            existing_duplicates = self.search([
+                ('serial_number_36', '=', serial_number_36),
+                ('id', '!=', self.id),  # Exclude the current record being created/updated
+            ])
+    
+            if existing_duplicates:
+                raise exceptions.ValidationError(
+                    f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
     
         # Valider la validité du numéro de série base 36
         if serial_number_36:
@@ -639,7 +646,9 @@ class InterventionLineEeg(models.Model):
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
     
-        return super(InterventionLineEeg, self).create(values)
+        # Use with_context to skip the unique constraint if the record is not active
+        with self.env['ir.config_parameter'].sudo().set_context({'mail_create_nosubscribe': True}):
+            return super(InterventionLineEeg, self).create(values)
 
 
 class InterventionLineIllisible(models.Model):
