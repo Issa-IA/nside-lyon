@@ -549,10 +549,7 @@ class InterventionLineEeg(models.Model):
     _description = 'lines'
 
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
-     active = fields.Boolean(
-        string='Active',
-        default=True,
-        compute='_compute_active',
+    active = fields.Boolean(string='Active',default=True, compute='_compute_active',
         inverse='_inverse_active',
         store=True  # If you want to store the computed value in the database
     )
