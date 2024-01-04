@@ -633,11 +633,10 @@ class InterventionLineEeg(models.Model):
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
 
-        # Check for duplicates
+        # Check for duplicates among both active and inactive records
         duplicates = self.search([
             ('serial_number_36', '=', serial_number_36),
             ('id', '!=', values.get('id')),
-            ('active', '=', True)
         ])
 
         # If the record is active and there are duplicates, mark them as inactive
