@@ -614,10 +614,12 @@ class InterventionLineEeg(models.Model):
 
     @api.model
     def detect_duplicates(self, serial_number_36, active=True):
-        duplicates = self.search_count([
-            ('serial_number_36', '=', serial_number_36),
-            ('active', '=', True)
-        ])
+        domain = [('serial_number_36', '=', serial_number_36)]
+        
+        if active:
+            domain.append(('active', '=', True))
+    
+        duplicates = self.search_count(domain)
         return duplicates
 
 
