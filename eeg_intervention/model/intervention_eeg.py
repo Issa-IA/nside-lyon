@@ -614,12 +614,12 @@ class InterventionLineEeg(models.Model):
     def detect_duplicates(self, serial_number_36, active=True):
         domain = [
             ('serial_number_36', '=', serial_number_36),
-            ('active', '=', active)
         ]
+        if active:
+            domain.append(('active', '=', True))
+    
         existing_record = self.search(domain, limit=1)
         return bool(existing_record)
-    
-    
 
 
     @api.model
@@ -650,8 +650,6 @@ class InterventionLineEeg(models.Model):
         existing_duplicates.write({'active': False})
     
         return super(InterventionLineEeg, self).create(values)
-
-
 
 
 
