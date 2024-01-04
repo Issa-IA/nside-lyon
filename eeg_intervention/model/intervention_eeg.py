@@ -632,6 +632,7 @@ class InterventionLineEeg(models.Model):
             existing_duplicates = self.search([
                 ('serial_number_36', '=', serial_number_36),
                 ('id', '!=', self.id),  # Exclude the current record being created/updated
+                ('active', '=', True)  # Ensure we only consider active records as duplicates
             ])
     
             if existing_duplicates:
@@ -646,9 +647,8 @@ class InterventionLineEeg(models.Model):
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
     
-        # Use with_context to skip the unique constraint if the record is not active
-        with self.env['ir.config_parameter'].sudo().set_context({'mail_create_nosubscribe': True}):
-            return super(InterventionLineEeg, self).create(values)
+        return super(InterventionLineEeg, self).create(values)
+
 
 
 class InterventionLineIllisible(models.Model):
