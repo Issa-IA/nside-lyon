@@ -613,7 +613,7 @@ class InterventionLineEeg(models.Model):
                     raise exceptions.ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
 
     @api.model
-    def detect_duplicates(self, serial_number_36, active):
+    def detect_duplicates(self, serial_number_36, active=True):
         duplicates = self.search_count([
             ('serial_number_36', '=', serial_number_36),
             ('active', '=', True)
