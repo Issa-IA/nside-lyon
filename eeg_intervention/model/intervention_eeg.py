@@ -549,10 +549,10 @@ class InterventionLineEeg(models.Model):
     _description = 'lines'
 
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
-    active = fields.Boolean(string='Archivé', default=False)
+    active = fields.Boolean(string='Active', default=True)
     def archive_record(self):
         for record in self:
-            record.write({'active': True})
+            record.write({'active': False})
 
     user_id = fields.Many2one(
         'res.users', string='Opened By',
@@ -602,7 +602,10 @@ class InterventionLineEeg(models.Model):
 
     @api.model
     def detect_duplicates(self, serial_number_36):
-        duplicates = self.search_count([('serial_number_36', '=', serial_number_36)])
+        duplicates = self.search_count([
+            ('serial_number_36', '=', serial_number_36),
+            ('active', '=', True)
+        ])
         return duplicates
 
     @api.model
