@@ -626,16 +626,15 @@ class InterventionLineEeg(models.Model):
         serial_number_36 = values.get('serial_number_36')
         active = values.get('active', True)
     
-        # If record is active, check for duplicates; otherwise, skip the check
+        # If the record is active, check for duplicates; otherwise, skip the check
         if active:
             # Vérifier si le numéro de série existe déjà
-            existing_duplicates = self.search([
+            existing_duplicates = self.search_count([
                 ('serial_number_36', '=', serial_number_36),
-                ('id', '!=', self.id),  # Exclude the current record being created/updated
-                ('active', '=', True)  # Ensure we only consider active records as duplicates
+                ('active', '=', True)
             ])
     
-            if existing_duplicates:
+            if existing_duplicates > 0:
                 raise exceptions.ValidationError(
                     f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
     
@@ -648,6 +647,7 @@ class InterventionLineEeg(models.Model):
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
     
         return super(InterventionLineEeg, self).create(values)
+
 
 
 
