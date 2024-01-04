@@ -598,12 +598,10 @@ class InterventionLineEeg(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
-   
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
     active = fields.Boolean(string='Active',default=True, compute='_compute_active',
         inverse='_inverse_active',
-        store=True
-    )
+        store=True)
     @api.depends('task_id.stage_id')
     def _compute_active(self):
         for record in self:
