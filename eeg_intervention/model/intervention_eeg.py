@@ -598,9 +598,7 @@ class InterventionLineEeg(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10')
     serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
-    _sql_constraints = [
-            ('serial_number_36_unique', 'unique (serial_number_36)', 'Le N° de Série Base 36 doit être unique!'),
-        ]
+   
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
     active = fields.Boolean(string='Active',default=True, compute='_compute_active',
         inverse='_inverse_active',
@@ -658,9 +656,6 @@ class InterventionLineEeg(models.Model):
         serial_number_36 = values.get('serial_number_36')
 
         # Vérifier si le numéro de série existe déjà
-        if serial_number_36 and self.detect_duplicates(serial_number_36) > 0:
-            raise exceptions.ValidationError(
-                f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
 
         # Valider si le numéro de série base 36 est valide
         if serial_number_36:
