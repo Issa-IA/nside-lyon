@@ -550,7 +550,6 @@ class InterventionLineEeg(models.Model):
 
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
     active = fields.Boolean(string='Archivé', default=False)
-    @api.multi
     def archive_record(self):
         for record in self:
             record.write({'active': True})
