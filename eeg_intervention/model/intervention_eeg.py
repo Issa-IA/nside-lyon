@@ -551,17 +551,15 @@ class InterventionLineEeg(models.Model):
     etiquette_id = fields.Many2one('model.etiquette', 'Modèle')
     active = fields.Boolean(string='Active',default=True, compute='_compute_active',
         inverse='_inverse_active',
-        store=True  # If you want to store the computed value in the database
+        store=True 
     )
     @api.depends('task_id.stage_id')
     def _compute_active(self):
         for record in self:
-            # Set active to True if task_id.stage_id.id is not equal to 14
-            record.active = record.task_id.stage_id.id != 14
+            record.active = record.task_id.stage_id.id not in [148, 149]
 
     def _inverse_active(self):
         for record in self:
-            # If you want to handle setting active to False manually, you can add your logic here
             pass
             
     def archive_record(self):
@@ -579,7 +577,7 @@ class InterventionLineEeg(models.Model):
                                       default='RMA/RFB', readonly=False, compute='_set_default_state')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10', store=True)
-    serial_number_36 = fields.Text(string='N° de Série Base 36', copy=False)
+    serial_number_36 = fields.Text(string='N° de Série Base 36', store=True, copy=False)
    
 
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
