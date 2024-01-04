@@ -616,9 +616,10 @@ class InterventionLineEeg(models.Model):
             ('serial_number_36', '=', serial_number_36),
             ('active', '=', active)
         ]
-        duplicates = self.search_count(domain)
-        return duplicates
-
+        existing_record = self.search(domain, limit=1)
+        return bool(existing_record)
+    
+    
 
 
     @api.model
@@ -627,7 +628,7 @@ class InterventionLineEeg(models.Model):
         active = values.get('active', True)
     
         # Vérifier si le numéro de série existe déjà
-        if serial_number_36 and self.detect_duplicates(serial_number_36, active=active) > 0:
+        if serial_number_36 and self.detect_duplicates(serial_number_36, active=active):
             raise exceptions.ValidationError(
                 f"Le N° de Série Base 36 '{serial_number_36}' existe déjà. L'importation a échoué.")
     
@@ -649,6 +650,7 @@ class InterventionLineEeg(models.Model):
         existing_duplicates.write({'active': False})
     
         return super(InterventionLineEeg, self).create(values)
+
 
 
 
