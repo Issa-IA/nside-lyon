@@ -602,7 +602,7 @@ class InterventionLineEeg(models.Model):
     def detect_duplicates(self, serial_number_36):
         duplicates = self.search_count([
             ('serial_number_36', '=', serial_number_36),
-            ('active', 'in', [True, False]),
+            ('active', '=', True]),
         ])
         return duplicates
 
