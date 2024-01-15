@@ -5,12 +5,12 @@ class PartnerHerit(models.Model):
     _inherit = 'res.partner'
 
     
-    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self._default_company_id())
+    company_id = fields.Many2one('res.company', string='Company', compute='_compute_company_id', store=True)
 
-    @api.model
-    def _default_company_id(self):
-        # Si ref_company_ids est vide, laissez company_id vide, sinon, utilisez l'entreprise actuelle.
-        return self.env.company.id if self.ref_company_ids else False
+    @api.depends('ref_company_ids')
+    def _compute_company_id(self):
+        for partner in self:
+            partner.company_id = self.env.company.id if not partner.ref_company_ids else False
 
 
 
