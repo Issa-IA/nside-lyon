@@ -9,8 +9,8 @@ class PartnerHerit(models.Model):
 
     @api.model
     def _default_company_id(self):
-        # Si ref_company_ids est vide, utilisez l'entreprise actuelle, sinon, utilisez la première entreprise référencée.
-        return self.env.company.id if not self.ref_company_ids else self.ref_company_ids[0].id
+        # Si ref_company_ids est vide, laissez company_id vide, sinon, utilisez l'entreprise actuelle.
+        return self.env.company.id if self.ref_company_ids else False
 
 
 
