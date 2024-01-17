@@ -591,6 +591,7 @@ class InterventionLineEeg(models.Model):
     piles = fields.Integer('Piles')
     esthetique = fields.Integer('Esthétique')
     cassees = fields.Integer('Cassées')
+    remplacement = fields.Integer('Etiquette de remplacement')
     illisible = fields.Integer('Illisible')
     illisible_id = fields.Many2one('intervention.line.illisble', 'Illisible_id')
     quantity = fields.Float('Quantité OK')
