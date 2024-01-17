@@ -86,6 +86,7 @@
                                     <field name="piles"/>
                                     <field name="esthetique"/>
                                     <field name="cassees"/>
+                                 <field name="total_casse" />
 
 
                              </tree>
