@@ -22,7 +22,6 @@
                 <field name="total_hs"/>
                 <field name="total_illisible" />
                 <field name="total_casse" />
-                <field name="remplacement" />
 
             </tree>
         </field>
