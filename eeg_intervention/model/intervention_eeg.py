@@ -703,7 +703,7 @@ class Associate(models.Model):
             if eeg:
                 self.eeg = eeg.id
 
-                eeg.sudo().write({'carton_id': self.carton_id.id}
+                eeg.sudo().write({'carton_id': self.carton_id.id})
 
             else:
                 self.eeg = False
