@@ -631,6 +631,7 @@ class InterventionLineEeg(models.Model):
     quantity_illisible = fields.Integer(string='ILLISIBLE')
     quantity_cassees = fields.Integer(string='CASSEES')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
+    associate_id = fields.Many2one('associate.model', 'Associate')
     
     @api.depends('serial_number_36')
     def _compute_display_name(self):
@@ -703,7 +704,7 @@ class Associate(models.Model):
             if eeg:
                 self.eeg = eeg.id
 
-                eeg.write({'carton_id': self.carton_id.id})
+                eeg.write({'associate_id': self.id, 'carton_id': self.carton_id.id})
 
             else:
                 self.eeg = False
