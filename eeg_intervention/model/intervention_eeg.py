@@ -606,7 +606,7 @@ class InterventionLineEeg(models.Model):
     eeg_state = fields.Selection([('RMA/RFB', 'RMA/RFB'), ('chez le client', 'chez le client')], string='Statut',
                                       default='RMA/RFB', readonly=False, compute='_set_default_state')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
-    serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10', store=True)
+    serial_number_10 = fields.Char(string='N° De série Base 10', compute='convert_base_10', store=True)
     serial_number_36 = fields.Char(string='N° de Série Base 36', store=True, copy=False)
    
 
@@ -703,7 +703,7 @@ class Associate(models.Model):
             if eeg:
                 self.eeg = eeg.id
 
-                eeg.carton_id = self.carton_id.id
+                eeg.sudo().write({'carton_id': self.carton_id.id}
 
             else:
                 self.eeg = False
