@@ -701,10 +701,16 @@ class Associate(models.Model):
         if self.code_36:
             eeg = self.env['intervention.line.eeg'].search([('serial_number_36', '=', self.code_36)], limit=1)
             if eeg:
+                # Remplissez le champ eeg
                 self.eeg = eeg.id
+
+                # Mettez à jour le champ carton_id dans intervention.line.eeg avec la valeur de carton_id dans associate.model
+                eeg.write({'carton_id': self.carton_id.id})
+
             else:
-                # Réinitialisez le champ eeg si le code_36 ne correspond à aucun EEG
+                # Réinitialisez le champ eeg et carton_id si le code_36 ne correspond à aucun EEG
                 self.eeg = False
+                self.carton_id = False
                 raise UserError("Aucun EEG trouvé pour le code_36 saisi.")
                 
 class InterventionLineIllisible(models.Model):
