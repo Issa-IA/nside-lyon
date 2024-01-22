@@ -568,7 +568,11 @@ class InterventionLineEeg(models.Model):
     def archive_record(self):
         for record in self:
             record.write({'active': False})
-
+    @api.model
+    def _set_default_state(self):
+        # Logique pour définir l'état par défaut
+        return True
+        
     qr_code_image = fields.Image(string='Code QR', store=True, copy=False)
 
     @api.onchange('serial_number_36')
