@@ -686,6 +686,7 @@ class InterventionLineEeg(models.Model):
 
 class Associate(models.Model):
     _name = 'associate.model'
+    _description = 'associate'
 
     code_36 = fields.Char('Code 36')
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=True)
