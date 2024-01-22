@@ -485,6 +485,7 @@ class Carton(models.Model):
         return False
 
     intervention_line_eeg_ids = fields.One2many('intervention.line.eeg', 'carton_id', string='Lines')
+    associate_eeg_ids = fields.One2many('associate.model','carton_id', string='association')
     intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='_compute_totals')
     total_hs = fields.Integer(string='Total HS', compute='_compute_totals')
@@ -691,6 +692,7 @@ class Associate(models.Model):
     code_36 = fields.Char('Code 36')
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=True)
     task_id = fields.Many2one('project.task', string='Task')
+    carton_id = fields.Many2one('carton.carton', 'Carton')
 
     @api.onchange('code_36')
     def onchange_code_36(self):
