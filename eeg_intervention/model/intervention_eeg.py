@@ -628,6 +628,12 @@ class InterventionLineEeg(models.Model):
     quantity_hs_piles = fields.Integer(string='HS Piles')
     quantity_illisible = fields.Integer(string='ILLISIBLE')
     quantity_cassees = fields.Integer(string='CASSEES')
+    display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
+    
+    @api.depends('marque_id.name')
+    def _compute_display_name(self):
+        for names in self:
+            names.display_name = "[%s] %s" % (names.serial_number_36, names.etiquette_id.name)
 
     @api.depends('serial_number_36')
     def _convert_base_10(self):
@@ -682,7 +688,7 @@ class Associate(models.Model):
     _name = 'associate.model'
 
     code_36 = fields.Char('Code 36')
-    eeg = fields.Many2one('intervention.line.eeg', 'EEG',related='eeg.serial_number_36', string='EEG Serial Number', readonly=True)
+    eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=True)
 
     @api.onchange('code_36')
     def onchange_code_36(self):
