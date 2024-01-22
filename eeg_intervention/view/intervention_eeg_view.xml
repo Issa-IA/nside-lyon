@@ -26,6 +26,16 @@
             </tree>
         </field>
     </record>
+<record id="view_associate_tree" model="ir.ui.view">
+        <field name="name">associate.tree</field>
+        <field name="model">associate.model</field>
+        <field name="priority">4</field>
+        <field name="arch" type="xml">
+            <tree string="Liée" class="" sample="1">
+                <field name="task_id"/>
+            </tree>
+        </field>
+    </record>
 <record model="ir.actions.act_window" id="carton_action_window">
                 <field name="name">Cartons</field>
                 <field name="res_model">carton.carton</field>
