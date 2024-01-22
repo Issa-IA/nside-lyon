@@ -5,7 +5,7 @@ from datetime import timedelta
 from odoo.exceptions import ValidationError, Warning
 import qrcode
 from io import BytesIO
-from PIL import Image
+import base64
 
 
 class Composant(models.Model):
@@ -569,23 +569,26 @@ class InterventionLineEeg(models.Model):
         for record in self:
             record.write({'active': False})
 
-    qrcode_image = fields.Binary(string="QR Code Image", attachment=True)
+    qr_code_image = fields.Image(string='Code QR', store=True, copy=False)
 
-    def generate_qrcode_image(self):
-        for product in self:
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_L,
-                box_size=10,
-                border=4,
-            )
-            qr.add_data(product.serial_number_36)
-            qr.make(fit=True)
+    @api.onchange('serial_number_36')
+    def generate_qr_code(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(self.serial_number_36)
+        qr.make(fit=True)
 
-            img = qr.make_image(fill_color="black", back_color="white")
-            img_buffer = BytesIO()
-            img.save(img_buffer)
-            product.qrcode_image = base64.b64encode(img_buffer.getvalue())
+        img = qr.make_image(fill_color="black", back_color="white")
+        img_bytes_io = BytesIO()
+        img.save(img_bytes_io)
+        img_bytes = img_bytes_io.getvalue()
+        img_base64 = base64.b64encode(img_bytes)
+
+        self.qr_code_image = img_base64
 
     user_id = fields.Many2one(
         'res.users', string='Opened By',
