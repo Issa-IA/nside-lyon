@@ -605,7 +605,7 @@ class InterventionLineEeg(models.Model):
                                       default='RMA/RFB', readonly=False, compute='_set_default_state')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Text(string='N° De série Base 10', compute='convert_base_10', store=True)
-    serial_number_36 = fields.Text(string='N° de Série Base 36', store=True, copy=False)
+    serial_number_36 = fields.Char(string='N° de Série Base 36', store=True, copy=False)
    
 
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
@@ -678,7 +678,23 @@ class InterventionLineEeg(models.Model):
         return new_record
 
 
+class Associate(models.Model):
+    _name = 'associate.model'
 
+    code_36 = fields.Char('Code 36')
+    eeg = fields.Many2one('intervention.line.eeg', 'EEG',related='eeg.serial_number_36', string='EEG Serial Number', readonly=True)
+
+    @api.onchange('code_36')
+    def onchange_code_36(self):
+        if self.code_36:
+            eeg = self.env['eeg.model'].search([('code_36', '=', self.code_36)], limit=1)
+            if eeg:
+                self.eeg = eeg.id
+            else:
+                # Réinitialisez le champ eeg si le code_36 ne correspond à aucun EEG
+                self.eeg = False
+                raise Warning("Le code_36 n'existe pas.")
+                
 class InterventionLineIllisible(models.Model):
     _name = 'intervention.line.illisble'
     _description = 'illisibles'
