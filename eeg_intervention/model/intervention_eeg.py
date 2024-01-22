@@ -487,6 +487,10 @@ class Carton(models.Model):
 
     intervention_line_eeg_ids = fields.One2many('intervention.line.eeg', 'carton_id', string='Lines')
     associate_eeg_ids = fields.One2many('associate.model','carton_id', string='association')
+    @api.onchange('associate_eeg_ids')
+    def addline(self):
+        if len(self.associate_eeg_ids) > 25:
+            raise  ValidationError('Vous avez dépassé la limite de 25 EEG par Tube')
     intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='_compute_totals')
     total_hs = fields.Integer(string='Total HS', compute='_compute_totals')
@@ -631,7 +635,7 @@ class InterventionLineEeg(models.Model):
     quantity_illisible = fields.Integer(string='ILLISIBLE')
     quantity_cassees = fields.Integer(string='CASSEES')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
-    associate_id = fields.Many2one('associate.model', 'Associate')
+    associate_id = fields.Many2one('associate.model', 'Associate', store=True)
     
     @api.depends('serial_number_36')
     def _compute_display_name(self):
