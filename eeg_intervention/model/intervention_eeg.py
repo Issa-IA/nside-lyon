@@ -694,6 +694,7 @@ class Associate(models.Model):
     task_id = fields.Many2one('project.task', string='Task')
     carton_id = fields.Many2one('carton.carton', 'Carton')
 
+
     @api.onchange('code_36')
     def onchange_code_36(self):
         if self.code_36:
@@ -703,7 +704,7 @@ class Associate(models.Model):
             else:
                 # Réinitialisez le champ eeg si le code_36 ne correspond à aucun EEG
                 self.eeg = False
-                raise Warning("Le code_36 n'existe pas.")
+                raise UserError("Aucun EEG trouvé pour le code_36 saisi.")
                 
 class InterventionLineIllisible(models.Model):
     _name = 'intervention.line.illisble'
