@@ -612,13 +612,7 @@ class InterventionLineEeg(models.Model):
 
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
 
-    carton_id = fields.Many2one('carton.carton', 'Carton', compute='_compute_carton_id', store=True)
-    @api.depends('serial_number_36')
-    def _compute_carton_id(self):
-        for record in self:
-            associate_record = self.env['associate.model'].search([('eeg', '=', record.id)], limit=1)
-            if associate_record:
-                record.carton_id = associate_record.carton_id.id
+    carton_id = fields.Many2one('carton.carton', 'Carton', store=True)
     pile_test = fields.Integer('Pile + Test')
     test = fields.Integer('test seulement')
     code_erreur = fields.Integer('Code erreur')
@@ -709,7 +703,7 @@ class Associate(models.Model):
             if eeg:
                 self.eeg = eeg.id
 
-                eeg.sudo().write({'carton_id': self.carton_id.id})
+                eeg.carton_id = self.carton_id.id
 
             else:
                 self.eeg = False
