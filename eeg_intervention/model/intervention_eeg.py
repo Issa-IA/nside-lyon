@@ -630,7 +630,7 @@ class InterventionLineEeg(models.Model):
     quantity_cassees = fields.Integer(string='CASSEES')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
     
-    @api.depends('marque_id.name')
+    @api.depends('serial_number_36')
     def _compute_display_name(self):
         for names in self:
             names.display_name = "[%s] %s" % (names.serial_number_36, names.etiquette_id.name)
