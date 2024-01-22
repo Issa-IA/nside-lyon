@@ -691,7 +691,7 @@ class Associate(models.Model):
     _description = 'associate'
 
     code_36 = fields.Char('Code 36')
-    eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=Truem store=True)
+    eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=True, store=True)
     task_id = fields.Many2one('project.task', string='Task')
     carton_id = fields.Many2one('carton.carton', 'Carton')
 
