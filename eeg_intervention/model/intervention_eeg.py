@@ -3,6 +3,9 @@ import json
 from odoo import api, fields, models, exceptions, SUPERUSER_ID, _
 from datetime import timedelta
 from odoo.exceptions import ValidationError, Warning
+import qrcode
+from io import BytesIO
+from PIL import Image
 
 
 class Composant(models.Model):
