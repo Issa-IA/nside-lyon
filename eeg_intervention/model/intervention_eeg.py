@@ -689,6 +689,7 @@ class Associate(models.Model):
 
     code_36 = fields.Char('Code 36')
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', readonly=True)
+    task_id = fields.Many2one('project.task', string='Task')
 
     @api.onchange('code_36')
     def onchange_code_36(self):
