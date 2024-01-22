@@ -697,7 +697,7 @@ class Associate(models.Model):
     @api.onchange('code_36')
     def onchange_code_36(self):
         if self.code_36:
-            eeg = self.env['eeg.model'].search([('code_36', '=', self.code_36)], limit=1)
+            eeg = self.env['intervention.line.eeg'].search([('serial_number_36', '=', self.code_36)], limit=1)
             if eeg:
                 self.eeg = eeg.id
             else:
