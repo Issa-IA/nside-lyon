@@ -566,6 +566,24 @@ class InterventionLineEeg(models.Model):
         for record in self:
             record.write({'active': False})
 
+    qrcode_image = fields.Binary(string="QR Code Image", attachment=True)
+
+    def generate_qrcode_image(self):
+        for product in self:
+            qr = qrcode.QRCode(
+                version=1,
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=10,
+                border=4,
+            )
+            qr.add_data(product.serial_number_36)
+            qr.make(fit=True)
+
+            img = qr.make_image(fill_color="black", back_color="white")
+            img_buffer = BytesIO()
+            img.save(img_buffer)
+            product.qrcode_image = base64.b64encode(img_buffer.getvalue())
+
     user_id = fields.Many2one(
         'res.users', string='Opened By',
         required=True,
