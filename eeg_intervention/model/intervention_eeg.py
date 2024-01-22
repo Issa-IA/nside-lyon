@@ -635,7 +635,17 @@ class InterventionLineEeg(models.Model):
     quantity_illisible = fields.Integer(string='ILLISIBLE')
     quantity_cassees = fields.Integer(string='CASSEES')
     display_name = fields.Char(compute='_compute_display_name', recursive=True, store=True, index=True)
-    associate_id = fields.Many2one('associate.model', 'Associate', store=True)
+    intervention_associate_ids = fields.One2many('associate.model', 'eeg', string='Associées')
+    last_associate_carton_id = fields.Many2one('carton.carton', string='Last Associate Carton', compute='_compute_last_associate_carton_id', store=True)
+
+    @api.depends('intervention_associate_ids.carton_id')
+    def _compute_last_associate_carton_id(self):
+        for eeg in self:
+            last_associate = eeg.intervention_associate_ids[-1] if eeg.intervention_associate_ids else False
+            if last_associate:
+                eeg.last_associate_carton_id = last_associate.carton_id.id
+            else:
+                eeg.last_associate_carton_id = eeg.carton_id.id if eeg.carton_id else False
     
     @api.depends('serial_number_36')
     def _compute_display_name(self):
@@ -701,6 +711,7 @@ class Associate(models.Model):
     carton_id = fields.Many2one('carton.carton', 'Carton')
 
 
+
     @api.onchange('code_36')
     def onchange_code_36(self):
         if self.code_36:
@@ -708,7 +719,7 @@ class Associate(models.Model):
             if eeg:
                 self.eeg = eeg.id
 
-                eeg.write({'associate_id': self.id, 'carton_id': self.carton_id.id})
+                eeg.write({'carton_id': self.carton_id.id})
 
             else:
                 self.eeg = False
