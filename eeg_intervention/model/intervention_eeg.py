@@ -737,6 +737,7 @@ class Associate(models.Model):
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', store=True)
     task_id = fields.Many2one('project.task', string='Task')
     carton_id = fields.Many2one('carton.carton', 'Carton')
+    tube_id = fields.Many2one('tube.model', 'Tube')
 
 
 
