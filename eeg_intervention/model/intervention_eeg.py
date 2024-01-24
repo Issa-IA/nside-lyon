@@ -713,6 +713,11 @@ class MasterBox(models.Model):
     SN = fields.Char('SN')
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', store=True)
     task_id = fields.Many2one('project.task', string='Task')
+    tube_eeg_ids = fields.One2many('tube.model','masterbox_id', string='Tubes')
+    @api.onchange('tube_eeg_ids')
+    def addline(self):
+        if len(self.tube_eeg_ids) > 8:
+            raise  ValidationError('Vous avez dépassé la limite de 8 Tubes par Masterbox')
     
 class Tube(models.Model):
     _name = 'tube.model'
@@ -728,6 +733,11 @@ class Tube(models.Model):
     eeg = fields.Many2one('intervention.line.eeg', 'EEG', store=True)
     task_id = fields.Many2one('project.task', string='Task')
     masterbox_id = fields.Many2one('masterbox.model', 'MasterBox')
+    associate_eeg_ids = fields.One2many('associate.model','tube_id', string='association')
+    @api.onchange('associate_eeg_ids')
+    def addline(self):
+        if len(self.associate_eeg_ids) > 25:
+            raise  ValidationError('Vous avez dépassé la limite de 25 EEG par Tube')
     
 class Associate(models.Model):
     _name = 'associate.model'
