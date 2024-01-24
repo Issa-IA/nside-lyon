@@ -699,8 +699,36 @@ class InterventionLineEeg(models.Model):
         new_record = super(InterventionLineEeg, self).create(values)
 
         return new_record
+        
+class MasterBox(models.Model):
+    _name = 'masterbox.model'
+    _description = 'masterbox'
 
+    Model = fields.Char('Model')
+    Revision = fields.Char('Revision')
+    Qte = fields.Char('Qte')
+    SOW = fields.Char('SOW')
+    Date = fields.Char('Date')
+    Location = fields.Char('Location')
+    SN = fields.Char('SN')
+    eeg = fields.Many2one('intervention.line.eeg', 'EEG', store=True)
+    task_id = fields.Many2one('project.task', string='Task')
+    
+class Tube(models.Model):
+    _name = 'tube.model'
+    _description = 'tube'
 
+    Model = fields.Char('Model')
+    Revision = fields.Char('Revision')
+    Qte = fields.Char('Qte')
+    SOW = fields.Char('SOW')
+    Date = fields.Char('Date')
+    Location = fields.Char('Location')
+    SN = fields.Char('SN')
+    eeg = fields.Many2one('intervention.line.eeg', 'EEG', store=True)
+    task_id = fields.Many2one('project.task', string='Task')
+    masterbox_id = fields.Many2one('masterbox.model', 'MasterBox')
+    
 class Associate(models.Model):
     _name = 'associate.model'
     _description = 'associate'
