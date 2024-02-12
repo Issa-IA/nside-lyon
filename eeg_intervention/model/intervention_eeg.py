@@ -57,7 +57,7 @@ class inheritTask(models.Model):
                                       default='carton', readonly=False, compute='_compute_proprietaire_type')
     num_palette = fields.Integer(string='Quantité palette')
     task_url = fields.Char(string="URL de la Tâche", compute="_compute_task_url")
-    task_qr_code = fields.Binary(string="QR Code de l'URL", compute="_compute_task_qr_code")
+    task_qr_code = fields.Html(string="QR Code de l'URL", compute="_compute_task_qr_code")
 
     @api.depends('name')
     def _compute_task_url(self):
@@ -71,8 +71,8 @@ class inheritTask(models.Model):
             qr = qrcode.make(record.task_url)
             qr_img = BytesIO()
             qr.save(qr_img)
-            record.task_qr_code = qr_img.getvalue()
-
+            qr_img_b64 = base64.b64encode(qr_img.getvalue()).decode('utf-8')
+            record.task_qr_code = '<img src="data:image/png;base64,%s"/>' % qr_img_b64
 
     @api.depends('cartons_count')
     def _compute_proprietaire_type(self):
