@@ -56,6 +56,7 @@ class inheritTask(models.Model):
     transport_type = fields.Selection([('palette', 'Palette'), ('carton', 'Carton')], string='Transport',
                                       default='carton', readonly=False, compute='_compute_proprietaire_type')
     num_palette = fields.Integer(string='Quantité palette')
+    base_url = "https://inside-lyon-preprod-test-10922170.dev.odoo.com/web?#id={}&view_type=form&model=project.task".format(URL, task_id)
 
     def generate_qr_code(task_id):
         base_url = "https://inside-lyon-preprod-test-10922170.dev.odoo.com/web?#id={}&view_type=form&model=project.task".format(task_id)
