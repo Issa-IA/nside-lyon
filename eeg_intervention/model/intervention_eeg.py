@@ -56,25 +56,22 @@ class inheritTask(models.Model):
     transport_type = fields.Selection([('palette', 'Palette'), ('carton', 'Carton')], string='Transport',
                                       default='carton', readonly=False, compute='_compute_proprietaire_type')
     num_palette = fields.Integer(string='Quantité palette')
-    task_qr_code = fields.Binary(string="Code QR de la Tâche", compute="_compute_task_qr_code")
-
-    @api.depends('name')
-    def _compute_task_qr_code(self):
-        base_url_qr = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        for record in self:
-            task_url_qr = "{}/web?#id={}&view_type=form&model=project.task".format(base_url_qr, record.id)
-            qr = qrcode.make(task_url_qr)
-            qr_img = BytesIO()
-            qr.save(qr_img)
-            record.task_qr_code = qr_img.getvalue()
-            
     task_url = fields.Char(string="URL de la Tâche", compute="_compute_task_url")
+    task_qr_code = fields.Binary(string="QR Code de l'URL", compute="_compute_task_qr_code")
 
     @api.depends('name')
     def _compute_task_url(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        base_url_qr = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:
-            record.task_url = "{}/web?#id={}&view_type=form&model=project.task".format(base_url, record.id)
+            record.task_url = "{}/web?#id={}&view_type=form&model=project.task".format(base_url_qr, record.id)
+
+    @api.depends('task_url')
+    def _compute_task_qr_code(self):
+        for record in self:
+            qr = qrcode.make(record.task_url)
+            qr_img = BytesIO()
+            qr.save(qr_img)
+            record.task_qr_code = qr_img.getvalue()
 
 
     @api.depends('cartons_count')
