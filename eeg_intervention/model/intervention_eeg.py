@@ -56,8 +56,13 @@ class inheritTask(models.Model):
     transport_type = fields.Selection([('palette', 'Palette'), ('carton', 'Carton')], string='Transport',
                                       default='carton', readonly=False, compute='_compute_proprietaire_type')
     num_palette = fields.Integer(string='Quantité palette')
-    URL = "https://inside-lyon-preprod-test-10922170.dev.odoo.com"
-    base_url = "https://inside-lyon-preprod-test-10922170.dev.odoo.com/web?#id={}&view_type=form&model=project.task".format(URL, id)
+    task_url = fields.Char(string="URL de la Tâche", compute="_compute_task_url")
+
+    @api.depends('id')
+    def _compute_task_url(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        for record in self:
+            record.task_url = "{}/web?#id={}&view_type=form&model=project.task".format(base_url, record.id)
 
     def generate_qr_code(task_id):
         base_url = "https://inside-lyon-preprod-test-10922170.dev.odoo.com/web?#id={}&view_type=form&model=project.task".format(task_id)
