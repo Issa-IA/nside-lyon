@@ -57,6 +57,25 @@ class inheritTask(models.Model):
                                       default='carton', readonly=False, compute='_compute_proprietaire_type')
     num_palette = fields.Integer(string='Quantité palette')
 
+    def generate_qr_code(task_id):
+        base_url = "https://inside-lyon-preprod-test-10922170.dev.odoo.com/web?#id={}&view_type=form&model=project.task".format(task_id)
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(base_url)
+        qr.make(fit=True)
+    
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save("qr_code_task_{}.png".format(task_id))
+    
+    if __name__ == "__main__":
+        task_id = "id"  # Remplacez "ID_DE_LA_TACHE" par votre ID de tâche
+        generate_qr_code(task_id)
+
+
     @api.depends('cartons_count')
     def _compute_proprietaire_type(self):
         for record in self:
