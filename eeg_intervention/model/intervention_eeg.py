@@ -58,7 +58,7 @@ class inheritTask(models.Model):
     num_palette = fields.Integer(string='Quantité palette')
     task_url = fields.Char(string="URL de la Tâche", compute="_compute_task_url")
 
-    @api.depends('id')
+    @api.depends('name')
     def _compute_task_url(self):
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:
