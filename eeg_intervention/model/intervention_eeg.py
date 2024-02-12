@@ -60,10 +60,10 @@ class inheritTask(models.Model):
 
     @api.depends('name')
     def _compute_task_qr_code(self):
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        base_url_qr = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         for record in self:
-            task_url = "{}/web?#id={}&view_type=form&model=project.task".format(base_url, record.id)
-            qr = qrcode.make(task_url)
+            task_url_qr = "{}/web?#id={}&view_type=form&model=project.task".format(base_url_qr, record.id)
+            qr = qrcode.make(task_url_qr)
             qr_img = BytesIO()
             qr.save(qr_img)
             record.task_qr_code = qr_img.getvalue()
