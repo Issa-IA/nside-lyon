@@ -695,9 +695,16 @@ class InterventionLineEeg(models.Model):
     @api.model
     def create(self, values):
         serial_number_36 = values.get('serial_number_36')
-        active = values.get('active', True)
 
-        # Valider la validité du numéro de série base 36
+        # Vérifier si le numéro de série existe déjà
+        # Vérifier si un enregistrement avec le même numéro de série existe déjà
+        existing_record = self.search([('serial_number_36', '=', serial_number_36)], limit=1)
+
+        # Si un enregistrement avec le même numéro de série existe déjà, afficher un message
+        if existing_record:
+            raise exceptions.ValidationError(
+                f"Le code-barres '{serial_number_36}' existe déjà. L'importation a échoué.")
+        # Valider si le numéro de série base 36 est valide
         if serial_number_36:
             try:
                 int(serial_number_36, 36)
@@ -705,22 +712,7 @@ class InterventionLineEeg(models.Model):
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
 
-        # Check for duplicates among both active and inactive records
-        existing_duplicates = self.search([
-            ('serial_number_36', '=', serial_number_36),
-            ('id', '!=', values.get('id')),
-        ])
-        if existing_record:
-                print(f"Un enregistrement avec le numéro de série base 36 '{serial_number_36}' existe déjà.")
-
-        # If there are duplicates, and the new record is active, mark existing duplicates as inactive
-        if existing_duplicates and active:
-            existing_duplicates.write({'active': False})
-
-        # Create the record with the provided values
-        new_record = super(InterventionLineEeg, self).create(values)
-
-        return new_record
+        return super(InterventionLineEeg, self).create(values)
         
 class MasterBox(models.Model):
     _name = 'masterbox.model'
