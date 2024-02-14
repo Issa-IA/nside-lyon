@@ -644,7 +644,12 @@ class InterventionLineEeg(models.Model):
         serial_number_36 = values.get('serial_number_36')
 
         # Vérifier si le numéro de série existe déjà
+        existing_record = self.search([('serial_number_36', '=', serial_number_36)], limit=1)
 
+        # Si un enregistrement avec le même numéro de série existe déjà, afficher un message
+        if existing_record:
+            raise exceptions.ValidationError(
+                f"Le code-barres '{serial_number_36}' existe déjà. L'importation a échoué.")
         # Valider si le numéro de série base 36 est valide
         if serial_number_36:
             try:
