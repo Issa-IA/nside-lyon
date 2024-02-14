@@ -710,7 +710,9 @@ class InterventionLineEeg(models.Model):
             ('serial_number_36', '=', serial_number_36),
             ('id', '!=', values.get('id')),
         ])
-    
+        if existing_record:
+                print(f"Un enregistrement avec le numéro de série base 36 '{serial_number_36}' existe déjà.")
+
         # If there are duplicates, and the new record is active, mark existing duplicates as inactive
         if existing_duplicates and active:
             existing_duplicates.write({'active': False})
