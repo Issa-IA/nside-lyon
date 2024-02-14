@@ -7,6 +7,9 @@ from odoo.exceptions import UserError
 import qrcode
 from io import BytesIO
 import base64
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class Composant(models.Model):
@@ -709,9 +712,10 @@ class InterventionLineEeg(models.Model):
         ])
         
         # Si des doublons existent, afficher les numéros de série en double dans un message d'avertissement
-        if existing_duplicates:
-            serial_numbers = ", ".join(existing_duplicates.mapped('serial_number_36'))
-            _logger.warning(f"Des numéros de série en double ont été détectés : {serial_numbers}")
+       if existing_duplicates:
+            _logger.warning("Des numéros de série en double ont été détectés : %s", existing_duplicates.mapped('serial_number_36'))
+
+            
     
         # If there are duplicates, and the new record is active, mark existing duplicates as inactive
         if existing_duplicates and active:
