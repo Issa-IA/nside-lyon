@@ -707,7 +707,12 @@ class InterventionLineEeg(models.Model):
             ('serial_number_36', '=', serial_number_36),
             ('id', '!=', values.get('id')),
         ])
-
+        
+        # Si des doublons existent, afficher les numéros de série en double dans un message d'avertissement
+        if existing_duplicates:
+            serial_numbers = ", ".join(existing_duplicates.mapped('serial_number_36'))
+            _logger.warning(f"Des numéros de série en double ont été détectés : {serial_numbers}")
+    
         # If there are duplicates, and the new record is active, mark existing duplicates as inactive
         if existing_duplicates and active:
             existing_duplicates.write({'active': False})
