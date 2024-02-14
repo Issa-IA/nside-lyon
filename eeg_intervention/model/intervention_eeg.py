@@ -10,6 +10,8 @@ import base64
 import logging
 
 
+_logger = logging.getLogger(__name__)
+
 
 class Composant(models.Model):
     _name = 'composant.model'
