@@ -711,7 +711,7 @@ class InterventionLineEeg(models.Model):
         ])
         
         # Si des doublons existent, afficher les numéros de série en double dans un message d'avertissement
-       if existing_duplicates:
+        if existing_duplicates:
             _logger.warning("Des numéros de série en double ont été détectés : %s", existing_duplicates.mapped('serial_number_36'))
 
             
