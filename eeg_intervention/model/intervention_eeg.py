@@ -7,10 +7,7 @@ from odoo.exceptions import UserError
 import qrcode
 from io import BytesIO
 import base64
-import logging
 
-
-_logger = logging.getLogger(__name__)
 
 
 class Composant(models.Model):
@@ -633,7 +630,9 @@ class InterventionLineEeg(models.Model):
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
     serial_number_10 = fields.Char(string='N° De série Base 10', compute='convert_base_10', store=True)
     serial_number_36 = fields.Char(string='N° de Série Base 36', store=True, copy=False)
-   
+    _sql_constraints = [
+            ('serial_number_36_unique', 'unique (serial_number_36)', 'Le N° de Série Base 36 doit être unique!'),
+        ]
 
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
 
@@ -711,12 +710,6 @@ class InterventionLineEeg(models.Model):
             ('serial_number_36', '=', serial_number_36),
             ('id', '!=', values.get('id')),
         ])
-        
-        # Si des doublons existent, afficher les numéros de série en double dans un message d'avertissement
-        if existing_duplicates:
-            _logger.warning("Des numéros de série en double ont été détectés : %s", existing_duplicates.mapped('serial_number_36'))
-
-            
     
         # If there are duplicates, and the new record is active, mark existing duplicates as inactive
         if existing_duplicates and active:
