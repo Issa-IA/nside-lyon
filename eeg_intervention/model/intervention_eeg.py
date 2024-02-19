@@ -77,10 +77,19 @@ class inheritTask(models.Model):
     @api.depends('task_url')
     def _compute_task_qr_code(self):
         for record in self:
-            qr = qrcode.make(record.task_url)
-            qr_img = BytesIO()
-            qr.save(qr_img)
-            qr_img_b64 = base64.b64encode(qr_img.getvalue()).decode('utf-8')
+            qr = qrcode.QRCode(
+                version=1,  # Version du code QR (plus la version est élevée, plus le code est grand)
+                error_correction=qrcode.constants.ERROR_CORRECT_L,
+                box_size=5,  # Taille des carrés du code QR (ajustez selon vos besoins)
+                border=4,  # Taille de la bordure du code QR
+            )
+            qr.add_data(record.task_url)
+            qr.make(fit=True)
+    
+            qr_img = qr.make_image(fill_color="black", back_color="white")
+            qr_img_byte_array = BytesIO()
+            qr_img.save(qr_img_byte_array, format='PNG')
+            qr_img_b64 = base64.b64encode(qr_img_byte_array.getvalue()).decode('utf-8')
             record.task_qr_code = '<img src="data:image/png;base64,%s"/>' % qr_img_b64
     
     @api.depends('intervention_ids.etiquette_id', 'intervention_ids.pile_test', 'intervention_ids.test', 'intervention_ids.affichage_defectueux', 'intervention_ids.code_erreur', 'intervention_ids.activation', 'intervention_ids.piles', 'intervention_ids.esthetique', 'intervention_ids.cassees', 'intervention_ids.illisible')
