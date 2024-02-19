@@ -60,7 +60,23 @@ class inheritTask(models.Model):
 
     piles_ids = fields.One2many('pile.model', 'task_id', string='Piles', compute='_compute_piles_ids', store=True)
     
-    
+    task_url = fields.Char(string="URL de la Tâche", compute="_compute_task_url")
+    task_qr_code = fields.Html(string="QR Code de l'URL", compute="_compute_task_qr_code")
+
+    @api.depends('name')
+    def _compute_task_url(self):
+        base_url_qr = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        for record in self:
+            record.task_url = "{}/web?#id={}&view_type=form&model=project.task".format(base_url_qr, record.id)
+
+    @api.depends('task_url')
+    def _compute_task_qr_code(self):
+        for record in self:
+            qr = qrcode.make(record.task_url)
+            qr_img = BytesIO()
+            qr.save(qr_img)
+            qr_img_b64 = base64.b64encode(qr_img.getvalue()).decode('utf-8')
+            record.task_qr_code = '<img src="data:image/png;base64,%s"/>' % qr_img_b64
     
     @api.depends('intervention_ids.etiquette_id', 'intervention_ids.pile_test', 'intervention_ids.test', 'intervention_ids.affichage_defectueux', 'intervention_ids.code_erreur', 'intervention_ids.activation', 'intervention_ids.piles', 'intervention_ids.esthetique', 'intervention_ids.cassees', 'intervention_ids.illisible')
     def _compute_piles_ids(self):
@@ -642,14 +658,16 @@ class InterventionLineEeg(models.Model):
     @api.model
     def create(self, values):
         serial_number_36 = values.get('serial_number_36')
-
+    
         # Vérifier si le numéro de série existe déjà
+        # Vérifier si un enregistrement avec le même numéro de série existe déjà
         existing_record = self.search([('serial_number_36', '=', serial_number_36)], limit=1)
-
-        # Si un enregistrement avec le même numéro de série existe déjà, afficher un message
-        if existing_record:
+    
+        # Si un enregistrement avec le même numéro de série existe déjà et n'est pas vide, afficher un message
+        if existing_record and serial_number_36:
             raise exceptions.ValidationError(
                 f"Le code-barres '{serial_number_36}' existe déjà. L'importation a échoué.")
+        
         # Valider si le numéro de série base 36 est valide
         if serial_number_36:
             try:
@@ -657,7 +675,7 @@ class InterventionLineEeg(models.Model):
             except ValueError:
                 raise exceptions.ValidationError(
                     f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
-
+    
         return super(InterventionLineEeg, self).create(values)
         
 
