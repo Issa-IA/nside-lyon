@@ -34,6 +34,7 @@ class inheritTask(models.Model):
 
     qte_annoncee = fields.Integer(string='Qté annoncées')
     shipping_address = fields.Many2one('res.partner', string='Magasin', index=True, ondelete='cascade')
+    date_livraison = fields.Date(string='Date de Livraison')
     contact_store_id = fields.Many2one('res.partner', string='Contact du Magasin', domain="[('parent_id', '=', shipping_address)]")
     qte_recue = fields.Integer(string='Qté reçues')
     qte_non_traitee = fields.Integer(string='Non Traité')
