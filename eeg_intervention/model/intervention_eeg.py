@@ -277,24 +277,35 @@ class inheritTask(models.Model):
     @api.depends('intervention_ids.remplacement')
     def _compute_eeg_remplacee_ids(self):
         for task in self:
-            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and line.remplacement)
+            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and line.remplacement  or line.code_erreur or line.affichage_defectueux or line.activation or line.pile )
 
             quantity_dict = {}
+            eeg_remplace_lines = self.env['intervention.line.eeg']
             for line in eeg_remplacee:
                 etiquette_id = line.etiquette_id
                 quantity_remplacee = line.remplacement
+                quantity_hs = line.code_erreur + line.affichage_defectueux + line.activation + line.piles
 
                 if etiquette_id in quantity_dict:
                     quantity_dict[etiquette_id] += quantity_remplacee
+                    quantity_dict[etiquette_id]['quantity_hs'] += quantity_hs
                 else:
-                    quantity_dict[etiquette_id] = quantity_remplacee
+                    quantity_dict[etiquette_id] = {
+                    'quantity_remplacee' : quantity_remplacee,
+                    'quantity_hs': quantity_hs,
+                    }
 
-            eeg_remplacee_lines = [(0, 0, {
-                'etiquette_id': etiquette_id.id,
-                'quantity_remplacee': quantity,
+            eeg_remplacee_lines += self.env['intervention.line.eeg'].new({
+                    'etiquette_id': etiquette_id.id,
+                    'quantity_remplacee': quantities['quantity_remplacee'],
+                    'quantity_hs': quantities['quantity_hs'],
             }) for etiquette_id, quantity in quantity_dict.items()]
 
-            task.eeg_remplacee_ids = eeg_remplacee_lines
+            task.eeg_remplace_lines = [(5, 0, 0)] + [(0, 0, {
+                'etiquette_id': line.etiquette_id.id,
+                'quantity_remplacee': line.quantity_remplacee,
+                'quantity_hs': line.quantity_hs,
+            }) for line in eeg_remplace_lines]
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
         pass
