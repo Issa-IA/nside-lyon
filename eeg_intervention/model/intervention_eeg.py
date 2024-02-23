@@ -268,10 +268,46 @@ class inheritTask(models.Model):
                                      compute='create_prestation_lines')
     intervention_unique_ids = fields.One2many('intervention.unique', 'task_id', string='Interventions Unique',
                                               compute='_compute_intervention_unique_ids', store=True)
+    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG remplacee',
+                                              compute='_compute_eeg_remplacee_ids', store=True)
     transport_product_carton = fields.Many2one('product.product', string='Transport product Carton', default=4252)
     transport_product_palette = fields.Many2one('product.product', string='Transport product palette', default=5711)
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
     sale_order_intervention_id = fields.Many2one('sale.order', string='Sale Order', store=True)
+    def _compute_eeg_remplacee_ids(self):
+        for task in self:
+            eeg_remplacee = task.eeg_remplacee_ids.filtered(
+                lambda line: line.etiquette_id and (
+                        line.remplacement))
+
+            quantity_dict = {}
+            eeg_remplacee = self.env['intervention.line.eeg']
+
+            # Collect data without writing to the database
+            for line in unique_interventions:
+                etiquette_id = line.etiquette_id
+                quantity_remplacee = line.remplacement
+                
+
+                if etiquette_id in quantity_dict:
+                    quantity_dict[etiquette_id]['quantity_remplacee'] += quantity_remplacee
+                else:
+                    quantity_dict[etiquette_id] = {
+                        'quantity_remplacee': quantity_remplacee
+                    }
+
+            # Write all data to the database at once using create
+            for etiquette_id, quantities in quantity_dict.items():
+                unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                    'etiquette_id': etiquette_id.id,
+                    'quantity_remplacee': quantities['quantity_remplacee'],
+                })
+
+            task.eeg_remplacee_ids = [(5, 0, 0)] + [(0, 0, {
+                'etiquette_id': line.etiquette_id.id,
+                'quantity_remplacee': line.quantity_remplacee,
+
+            }) for line in eeg_remplacee]
 
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
@@ -398,6 +434,14 @@ class prestation(models.Model):
     price_total = fields.Float(string='Price total')
     task_id = fields.Many2one('project.task', string='Task')
 
+class EEGRemplacee(models.Model):
+    _name = 'eeg.remplacee'
+    _description = 'EEG Remplacee'
+
+    task_id = fields.Many2one('project.task', string='Task')
+    etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
+    quantity_remplacee = fields.Integer(string='REMPLACEE')
+    
 
 class InterventionUnique(models.Model):
     _name = 'intervention.unique'
@@ -521,6 +565,7 @@ class Carton(models.Model):
     intervention_line_illisible_ids = fields.One2many('intervention.line.illisble', 'carton_id', string='Lines')
     total_ok = fields.Integer(string='Total OK', compute='_compute_totals')
     total_hs = fields.Integer(string='Total HS', compute='_compute_totals')
+    total_remplacee = fields.Integer(string='TotalRemplacee', compute='_compute_totals')
     total_illisible = fields.Integer(string='Total Illisible', compute='_compute_totals')
     total_casse = fields.Integer(string='Total cassée', compute='_compute_totals')
     pile_test = fields.Integer(string='Total Pile + Test', compute='calcul_total_fields')
@@ -531,9 +576,10 @@ class Carton(models.Model):
     piles = fields.Integer(string='Total Piles', compute='calcul_total_fields')
     esthetique = fields.Integer(string='Total Esthétique', compute='calcul_total_fields')
     cassees = fields.Integer(string='Total Cassées', compute='calcul_total_fields')
+    remplacement = fields.Integer(string='Etiquette de remplacement', compute='calcul_total_fields')
 
     @api.depends('intervention_line_illisible_ids.qte_illisible', 'intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test', 'intervention_line_eeg_ids.code_erreur',
-                 'intervention_line_eeg_ids.affichage_defectueux', 'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles', 'intervention_line_eeg_ids.cassees', 'intervention_line_eeg_ids.esthetique')
+                 'intervention_line_eeg_ids.affichage_defectueux','intervention_line_eeg_ids.remplacement', 'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles', 'intervention_line_eeg_ids.cassees', 'intervention_line_eeg_ids.esthetique')
     def _compute_totals(self):
         for rec in self:
             selected_lines = rec.intervention_line_illisible_ids
@@ -541,6 +587,7 @@ class Carton(models.Model):
             rec.total_ok = rec.pile_test + rec.test
             rec.total_hs = rec.code_erreur + rec.affichage_defectueux + rec.activation + rec.piles
             rec.total_casse = rec.cassees + rec.esthetique
+            rec.total_remplacee = rec.remplacement
 
     def write(self, values):
         res = super(Carton, self).write(values)
@@ -566,7 +613,7 @@ class Carton(models.Model):
     @api.depends('intervention_line_eeg_ids.pile_test', 'intervention_line_eeg_ids.test',
                      'intervention_line_eeg_ids.code_erreur', 'intervention_line_eeg_ids.affichage_defectueux',
                      'intervention_line_eeg_ids.activation', 'intervention_line_eeg_ids.piles',
-                     'intervention_line_eeg_ids.esthetique', 'intervention_line_eeg_ids.cassees')
+                     'intervention_line_eeg_ids.esthetique', 'intervention_line_eeg_ids.cassees','intervention_line_eeg_ids.remplacement')
     def calcul_total_fields(self):
         for rec in self:
             selected_lines = rec.intervention_line_eeg_ids
@@ -578,6 +625,8 @@ class Carton(models.Model):
             rec.piles = sum(selected_lines.mapped('piles'))
             rec.esthetique = sum(selected_lines.mapped('esthetique'))
             rec.cassees = sum(selected_lines.mapped('cassees'))
+            rec.remplacement = sum(selected_lines.mapped('remplacement'))
+            
 
 
 class InterventionLineEeg(models.Model):
@@ -659,6 +708,7 @@ class InterventionLineEeg(models.Model):
     illisible_id = fields.Many2one('intervention.line.illisble', 'Illisible_id')
     quantity = fields.Float('Quantité OK')
     quantity_ok = fields.Integer(string='OK')
+    quantity_remplacee = fields.Integer(string='REMPLACEE')
     quantity_hs = fields.Integer(string='HS')
     quantity_hs_piles = fields.Integer(string='HS Piles')
     quantity_illisible = fields.Integer(string='ILLISIBLE')
