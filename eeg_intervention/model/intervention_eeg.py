@@ -274,40 +274,27 @@ class inheritTask(models.Model):
     transport_product_palette = fields.Many2one('product.product', string='Transport product palette', default=5711)
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
     sale_order_intervention_id = fields.Many2one('sale.order', string='Sale Order', store=True)
+    @api.depends('intervention_ids.remplacement')
     def _compute_eeg_remplacee_ids(self):
         for task in self:
-            eeg_remplacee = task.intervention_ids.filtered(
-                lambda line: line.etiquette_id and (
-                        line.remplacement))
+            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and line.remplacement)
 
             quantity_dict = {}
-            eeg_remplacee_lines = self.env['intervention.line.eeg']
-
-            # Collect data without writing to the database
             for line in eeg_remplacee:
                 etiquette_id = line.etiquette_id
                 quantity_remplacee = line.remplacement
-                
 
                 if etiquette_id in quantity_dict:
-                    quantity_dict[etiquette_id]['quantity_remplacee'] += quantity_remplacee
+                    quantity_dict[etiquette_id] += quantity_remplacee
                 else:
-                    quantity_dict[etiquette_id] = {
-                        'quantity_remplacee': quantity_remplacee
-                    }
+                    quantity_dict[etiquette_id] = quantity_remplacee
 
-            # Write all data to the database at once using create
-            for etiquette_id, quantities in quantity_dict.items():
-                eeg_remplacee_lines += self.env['intervention.line.eeg'].new({
-                    'etiquette_id': etiquette_id.id,
-                    'quantity_remplacee': quantities['quantity_remplacee'],
-                })
+            eeg_remplacee_lines = [(0, 0, {
+                'etiquette_id': etiquette_id.id,
+                'quantity_remplacee': quantity,
+            }) for etiquette_id, quantity in quantity_dict.items()]
 
-            task.eeg_remplacee_ids = [(5, 0, 0)] + [(0, 0, {
-                'etiquette_id': line.etiquette_id.id,
-                'quantity_remplacee': line.quantity_remplacee,
-
-            }) for line in eeg_remplacee_lines]
+            task.eeg_remplacee_ids = eeg_remplacee_lines
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
         pass
