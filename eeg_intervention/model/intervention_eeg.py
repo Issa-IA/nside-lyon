@@ -276,7 +276,7 @@ class inheritTask(models.Model):
     sale_order_intervention_id = fields.Many2one('sale.order', string='Sale Order', store=True)
     def _compute_eeg_remplacee_ids(self):
         for task in self:
-            eeg_remplacee = task.eeg_remplacee_ids.filtered(
+            eeg_remplacee = task.intervention_ids.filtered(
                 lambda line: line.etiquette_id and (
                         line.remplacement))
 
@@ -308,7 +308,6 @@ class inheritTask(models.Model):
                 'quantity_remplacee': line.quantity_remplacee,
 
             }) for line in eeg_remplacee_lines]
-
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
         pass
