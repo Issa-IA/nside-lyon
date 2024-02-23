@@ -281,10 +281,10 @@ class inheritTask(models.Model):
                         line.remplacement))
 
             quantity_dict = {}
-            eeg_remplacee = self.env['intervention.line.eeg']
+            eeg_remplacee_lines = self.env['intervention.line.eeg']
 
             # Collect data without writing to the database
-            for line in unique_interventions:
+            for line in eeg_remplacee:
                 etiquette_id = line.etiquette_id
                 quantity_remplacee = line.remplacement
                 
@@ -298,7 +298,7 @@ class inheritTask(models.Model):
 
             # Write all data to the database at once using create
             for etiquette_id, quantities in quantity_dict.items():
-                unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                eeg_remplacee_lines += self.env['intervention.line.eeg'].new({
                     'etiquette_id': etiquette_id.id,
                     'quantity_remplacee': quantities['quantity_remplacee'],
                 })
@@ -307,7 +307,7 @@ class inheritTask(models.Model):
                 'etiquette_id': line.etiquette_id.id,
                 'quantity_remplacee': line.quantity_remplacee,
 
-            }) for line in eeg_remplacee]
+            }) for line in eeg_remplacee_lines]
 
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
