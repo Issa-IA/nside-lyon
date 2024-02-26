@@ -52,12 +52,11 @@ class inheritTask(models.Model):
 
     def action_view_total_attente_remplacement(self):
         self.ensure_one()
-        total_etiquettes_attente = sum(eeg.quantity_hs - eeg.quantity_remplacee for eeg in self.eeg_remplacee_ids)
         return {
             'type': 'ir.actions.act_window',
             'name': 'Liste des EEG Remplacee',
             'res_model': 'eeg.remplacee',
-            'view_mode': 'list,
+            'view_mode': 'list',
             'domain': [('task_id', '=', self.id)],
             'target': 'new',
         }
