@@ -34,18 +34,6 @@ class inheritTask(models.Model):
 
     qte_annoncee = fields.Integer(string='Qté annoncées')
 
-    
-    quantity_remplacee = fields.Integer(string='Quantité étiquettes remplacées', compute='_compute_intervention_unique_ids')
-    quantity_hs = fields.Integer(string='Quantité étiquettes HS', compute='_compute_intervention_unique_ids')
-
-    @api.depends('intervention_ids.quantity_remplacee', 'intervention_ids.quantity_hs')
-    def _compute_intervention_unique_ids(self):
-        for task in self:
-            quantity_remplacee = sum(task.intervention_ids.mapped('quantity_remplacee'))
-            quantity_hs = sum(task.intervention_ids.mapped('quantity_hs'))
-            task.quantity_remplacee = quantity_remplacee
-            task.quantity_hs = quantity_hs
-
     shipping_address = fields.Many2one('res.partner', string='Magasin', index=True, ondelete='cascade')
     contact_store_id = fields.Many2one('res.partner', string='Contact du Magasin',
                                        domain="[('parent_id', '=', shipping_address)]")
@@ -288,39 +276,39 @@ class inheritTask(models.Model):
     sale_order_intervention_id = fields.Many2one('sale.order', string='Sale Order', store=True)
     @api.depends('intervention_ids.remplacement')
     
+    @api.depends('intervention_ids.remplacement', 'intervention_ids.code_erreur', 'intervention_ids.affichage_defectueux', 'intervention_ids.activation', 'intervention_ids.piles')
     def _compute_eeg_remplacee_ids(self):
         for task in self:
-            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and line.remplacement  or line.code_erreur or line.affichage_defectueux or line.activation or line.pile )
-
+            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and (line.remplacement or line.code_erreur or line.affichage_defectueux or line.activation or line.piles))
+    
             quantity_dict = {}
             eeg_remplace_lines = self.env['intervention.line.eeg']
             for line in eeg_remplacee:
                 etiquette_id = line.etiquette_id
                 quantity_remplacee = line.remplacement
                 quantity_hs = line.code_erreur + line.affichage_defectueux + line.activation + line.piles
-
+    
                 if etiquette_id in quantity_dict:
-                    quantity_dict[etiquette_id] += quantity_remplacee
+                    quantity_dict[etiquette_id]['quantity_remplacee'] += quantity_remplacee
                     quantity_dict[etiquette_id]['quantity_hs'] += quantity_hs
                 else:
                     quantity_dict[etiquette_id] = {
-                    'quantity_remplacee' : quantity_remplacee,
-                    'quantity_hs': quantity_hs,
+                        'quantity_remplacee': quantity_remplacee,
+                        'quantity_hs': quantity_hs,
                     }
             for etiquette_id, quantities in quantity_dict.items():
-                unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                eeg_remplace_lines += self.env['intervention.line.eeg'].new({
                     'etiquette_id': etiquette_id.id,
-                    'quantity_hs': quantities['quantity_hs'],
                     'quantity_remplacee': quantities['quantity_remplacee'],
+                    'quantity_hs': quantities['quantity_hs'],
                 })
-
-            task.eeg_remplace_lines = [(5, 0, 0)] + [(0, 0, {
+    
+            task.eeg_remplacee_ids = [(5, 0, 0)] + [(0, 0, {
                 'etiquette_id': line.etiquette_id.id,
                 'quantity_remplacee': line.quantity_remplacee,
                 'quantity_hs': line.quantity_hs,
             }) for line in eeg_remplace_lines]
 
-    
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
         pass
