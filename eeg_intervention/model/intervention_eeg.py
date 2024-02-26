@@ -275,6 +275,7 @@ class inheritTask(models.Model):
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
     sale_order_intervention_id = fields.Many2one('sale.order', string='Sale Order', store=True)
     @api.depends('intervention_ids.remplacement')
+    
     def _compute_eeg_remplacee_ids(self):
         for task in self:
             eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and line.remplacement  or line.code_erreur or line.affichage_defectueux or line.activation or line.pile )
@@ -295,11 +296,10 @@ class inheritTask(models.Model):
                     'quantity_hs': quantity_hs,
                     }
              for etiquette_id, quantities in quantity_dict.items():
-                unique_intervention_lines += self.env['intervention.line.eeg'].new({
-                    'etiquette_id': etiquette_id.id,
-                    'quantity_hs': quantities['quantity_hs'],
-                    'quantity_remplacee': quantities['quantity_remplacee'],
-                
+                 unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                     'etiquette_id': etiquette_id.id,
+                     'quantity_hs': quantities['quantity_hs'],
+                     'quantity_remplacee': quantities['quantity_remplacee'],
                 })
 
             task.eeg_remplace_lines = [(5, 0, 0)] + [(0, 0, {
@@ -307,6 +307,8 @@ class inheritTask(models.Model):
                 'quantity_remplacee': line.quantity_remplacee,
                 'quantity_hs': line.quantity_hs,
             }) for line in eeg_remplace_lines]
+
+    
     @api.onchange('intervention_unique_ids')
     def _onchange_intervention_unique_ids(self):
         pass
