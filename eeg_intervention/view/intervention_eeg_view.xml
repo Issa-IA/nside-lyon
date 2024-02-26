@@ -142,6 +142,9 @@
                      <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
+                        <button name="action_view_total_attente_remplacement" string="En attente de remplacement" type="object" class="oe_stat_button"  icon="fa-random" groups="eeg_intervention.group_admin_rma" attrs="{'invisible': [('remplacement_active', '=', False)]}">
+                                    <field string="En attente de remplacement" name="total_attente_remplacement" widget="statinfo"/>
+                     </button>
                             </div>
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
                     <field name="shipping_address"/>
@@ -154,6 +157,7 @@
                                     <field name="qte_recue"/>
                                     <field name="qte_non_traitee"/>
                                      <field name="sequence1"/>
+                                     <field name="remplacement_active"/>
                                 </group>
                              </group>
 
