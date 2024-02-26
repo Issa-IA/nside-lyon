@@ -48,11 +48,16 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False)
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
+    
+    @api.onchange('eeg_remplacee_ids')
+    def _onchange_eeg_remplacee_ids(self):
+        self.update_remplacement()
+
     @api.depends('eeg_remplacee_ids.quantity_remplacee')
-    def _compute_remplacement_active(self):
-        for task in self:
-            if not task.remplacement_active and any(eeg.quantity_remplacee != 0 for eeg in task.eeg_remplacee_ids):
-                task.remplacement_active = True
+    def update_remplacement(self):
+        for rec in self:
+            if not rec.remplacement_active and any(eeg.quantity_remplacee != 0 for eeg in rec.eeg_remplacee_ids):
+                rec.remplacement_active = True
 
     @api.depends('intervention_ids.remplace', 'intervention_ids.code_erreur', 'intervention_ids.affichage_defectueux', 'intervention_ids.activation', 'intervention_ids.piles')
     def _compute_eeg_remplacee_ids(self):
