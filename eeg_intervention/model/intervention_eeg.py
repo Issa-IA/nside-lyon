@@ -57,13 +57,9 @@ class inheritTask(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Liste des EEG Remplacee',
             'res_model': 'eeg.remplacee',
-            'view_mode': 'list,form',
+            'view_mode': 'list,
             'domain': [('task_id', '=', self.id)],
             'target': 'new',
-            'context': {
-                'default_total_etiquettes_attente': total_etiquettes_attente,
-                'default_eeg_remplacee_ids': [(6, 0, self.eeg_remplacee_ids.ids)],
-            },
         }
     @api.depends('carton_ids')
     def _compute_num_cartons_client(self):
