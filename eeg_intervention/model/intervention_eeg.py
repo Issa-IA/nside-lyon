@@ -54,16 +54,16 @@ class inheritTask(models.Model):
             if not rec.remplacement_active and any(eeg_remplacee.quantity_remplacee >= 1 for eeg_remplacee in rec.eeg_remplacee_ids):
                 rec.remplacement_active = True
 
-    @api.depends('intervention_ids.remplacement', 'intervention_ids.code_erreur', 'intervention_ids.affichage_defectueux', 'intervention_ids.activation', 'intervention_ids.piles')
+    @api.depends('intervention_ids.remplace', 'intervention_ids.code_erreur', 'intervention_ids.affichage_defectueux', 'intervention_ids.activation', 'intervention_ids.piles')
     def _compute_eeg_remplacee_ids(self):
         for task in self:
-            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and (line.remplacement or line.code_erreur or line.affichage_defectueux or line.activation or line.piles))
+            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and (line.remplace or line.code_erreur or line.affichage_defectueux or line.activation or line.piles))
     
             quantity_dict = {}
             eeg_remplace_lines = self.env['intervention.line.eeg']
             for line in eeg_remplacee:
                 etiquette_id = line.etiquette_id
-                quantity_remplacee = line.remplacement
+                quantity_remplacee = line.remplace
                 quantity_hs = line.code_erreur + line.affichage_defectueux + line.activation + line.piles
     
                 if etiquette_id in quantity_dict:
@@ -728,6 +728,7 @@ class InterventionLineEeg(models.Model):
     quantity_hs_piles = fields.Integer(string='HS Piles')
     quantity_illisible = fields.Integer(string='ILLISIBLE')
     quantity_cassees = fields.Integer(string='CASSEES')
+    quantity_remplacee = fields.Integer(string='REMPLACEE')
 
     @api.depends('serial_number_36')
     def convert_base_10(self):
