@@ -50,19 +50,19 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     total_attente_remplacement = fields.Integer(string='Total En Attente de Remplacement', compute='_compute_total_attente_remplacement')
 
-    @api.depends('eeg_remplacee_ids.attente_remplacement')
-    def _compute_total_attente_remplacement(self):
-        for task in self:
-            task.total_attente_remplacement = sum(eeg.attente_remplacement for eeg in task.eeg_remplacee_ids)
-
     def action_view_total_attente_remplacement(self):
         self.ensure_one()
+        total_etiquettes_attente = sum(eeg.quantity_hs - eeg.quantity_remplacee for eeg in self.eeg_remplacee_ids)
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Total En Attente de Remplacement',
+            'name': 'Nombre d\'Etiquettes en Attente de Remplacement',
             'res_model': 'project.task',
             'view_mode': 'form',
             'res_id': self.id,
+            'context': {
+                'default_total_etiquettes_attente': total_etiquettes_attente,
+                'default_eeg_remplacee_ids': [(6, 0, self.eeg_remplacee_ids.ids)],
+            },
             'views': [(False, 'form')],
             'target': 'new',
         }
