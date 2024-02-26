@@ -268,8 +268,24 @@ class inheritTask(models.Model):
                                      compute='create_prestation_lines')
     intervention_unique_ids = fields.One2many('intervention.unique', 'task_id', string='Interventions Unique',
                                               compute='_compute_intervention_unique_ids', store=True)
-    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG remplacee',
-                                              compute='_compute_eeg_remplacee_ids', store=True)
+    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee')
+
+    @api.depends('eeg_remplacee_ids.quantity_hs', 'eeg_remplacee_ids.quantity_remplacee', 'eeg_remplacee_ids.etiquette_id')
+    def _compute_total_hs_remplace(self):
+        for task in self:
+            total_hs = 0
+            total_remplacee = 0
+            for line in task.eeg_remplacee_ids:
+                if line.etiquette_id:
+                    if line.etiquette_id.name == 'HS':
+                        total_hs += line.quantity_hs
+                    elif line.etiquette_id.name == 'Remplace':
+                        total_remplacee += line.quantity_remplacee
+            task.total_hs = total_hs
+            task.total_remplacee = total_remplacee
+
+    total_hs_r = fields.Integer(string='Total HS', compute='_compute_total_hs_remplace')
+    total_remplacee = fields.Integer(string='Total Remplacee', compute='_compute_total_hs_remplace')
     transport_product_carton = fields.Many2one('product.product', string='Transport product Carton', default=4252)
     transport_product_palette = fields.Many2one('product.product', string='Transport product palette', default=5711)
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
@@ -440,8 +456,8 @@ class EEGRemplacee(models.Model):
 
     task_id = fields.Many2one('project.task', string='Task')
     etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
-    quantity_remplacee = fields.Integer(string='REMPLACEE')
-    
+    quantity_remplacee = fields.Integer(string='Qte REMPLACEE')
+    quantity_hs = fields.Integer(string='Qte HS')
 
 class InterventionUnique(models.Model):
     _name = 'intervention.unique'
