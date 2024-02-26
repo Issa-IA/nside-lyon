@@ -46,6 +46,64 @@ class inheritTask(models.Model):
     sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
     num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
     pile_factured_total = fields.Float(string='Total Pile Facturée')
+    remplacement_active = fields.Boolean(string='Remplacement', default=False)
+    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
+    @api.depends('remplacement_active', 'eeg_remplacee_ids.quantity_remplacee')
+    def update_remplacement(self):
+        for rec in self:
+            if not rec.remplacement_active and any(eeg_remplacee.quantity_remplacee >= 1 for eeg_remplacee in rec.eeg_remplacee_ids):
+                rec.remplacement_active = True
+
+    @api.depends('intervention_ids.remplacement', 'intervention_ids.code_erreur', 'intervention_ids.affichage_defectueux', 'intervention_ids.activation', 'intervention_ids.piles')
+    def _compute_eeg_remplacee_ids(self):
+        for task in self:
+            eeg_remplacee = task.intervention_ids.filtered(lambda line: line.etiquette_id and (line.remplacement or line.code_erreur or line.affichage_defectueux or line.activation or line.piles))
+    
+            quantity_dict = {}
+            eeg_remplace_lines = self.env['intervention.line.eeg']
+            for line in eeg_remplacee:
+                etiquette_id = line.etiquette_id
+                quantity_remplacee = line.remplacement
+                quantity_hs = line.code_erreur + line.affichage_defectueux + line.activation + line.piles
+    
+                if etiquette_id in quantity_dict:
+                    quantity_dict[etiquette_id]['quantity_remplacee'] += quantity_remplacee
+                    quantity_dict[etiquette_id]['quantity_hs'] += quantity_hs
+                else:
+                    quantity_dict[etiquette_id] = {
+                        'quantity_remplacee': quantity_remplacee,
+                        'quantity_hs': quantity_hs,
+                    }
+            for etiquette_id, quantities in quantity_dict.items():
+                eeg_remplace_lines += self.env['intervention.line.eeg'].new({
+                    'etiquette_id': etiquette_id.id,
+                    'quantity_remplacee': quantities['quantity_remplacee'],
+                    'quantity_hs': quantities['quantity_hs'],
+                })
+    
+            task.eeg_remplacee_ids = [(5, 0, 0)] + [(0, 0, {
+                'etiquette_id': line.etiquette_id.id,
+                'quantity_remplacee': line.quantity_remplacee,
+                'quantity_hs': line.quantity_hs,
+            }) for line in eeg_remplace_lines]
+
+    total_attente_remplacement = fields.Integer(string='Total En Attente de Remplacement', compute='_compute_total_attente_remplacement')
+    @api.depends('eeg_remplacee_ids.attente_remplacement')
+    def _compute_total_attente_remplacement(self):
+        for task in self:
+            task.total_attente_remplacement = sum(eeg.attente_remplacement for eeg in task.eeg_remplacee_ids)
+
+    def action_view_total_attente_remplacement(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'EEG Remplacee',
+            'res_model': 'eeg.remplacee',
+            'view_mode': 'list',
+            'domain': [('task_id', '=', self.id)],
+        }
+
+
     sale_order__intervention_id = fields.Many2one('sale.order', string='Commande intervention', store=True)
     @api.depends('carton_ids')
     def _compute_num_cartons_client(self):
@@ -384,6 +442,20 @@ class prestation(models.Model):
     price_total = fields.Float(string='Price total')
     task_id = fields.Many2one('project.task', string='Task')
 
+class EEGRemplacee(models.Model):
+    _name = 'eeg.remplacee'
+    _description = 'EEG Remplacee'
+
+    task_id = fields.Many2one('project.task', string='Task')
+    etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
+    quantity_remplacee = fields.Integer(string='Qte REMPLACEE')
+    quantity_hs = fields.Integer(string='Qte HS')
+    attente_remplacement = fields.Integer(string='En attente de remplacement', compute='_compute_attente_remplacement')
+
+    @api.depends('quantity_remplacee', 'quantity_hs')
+    def _compute_attente_remplacement(self):
+        for record in self:
+            record.attente_remplacement = record.quantity_hs - record.quantity_remplacee
 
 class InterventionUnique(models.Model):
     _name = 'intervention.unique'
