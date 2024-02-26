@@ -269,7 +269,7 @@ class inheritTask(models.Model):
                                      compute='create_prestation_lines')
     intervention_unique_ids = fields.One2many('intervention.unique', 'task_id', string='Interventions Unique',
                                               compute='_compute_intervention_unique_ids', store=True)
-    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee')
+    eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
     transport_product_carton = fields.Many2one('product.product', string='Transport product Carton', default=4252)
     transport_product_palette = fields.Many2one('product.product', string='Transport product palette', default=5711)
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
