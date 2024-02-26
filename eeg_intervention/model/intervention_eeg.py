@@ -295,11 +295,11 @@ class inheritTask(models.Model):
                     'quantity_remplacee' : quantity_remplacee,
                     'quantity_hs': quantity_hs,
                     }
-             for etiquette_id, quantities in quantity_dict.items():
-                 unique_intervention_lines += self.env['intervention.line.eeg'].new({
-                     'etiquette_id': etiquette_id.id,
-                     'quantity_hs': quantities['quantity_hs'],
-                     'quantity_remplacee': quantities['quantity_remplacee'],
+            for etiquette_id, quantities in quantity_dict.items():
+                unique_intervention_lines += self.env['intervention.line.eeg'].new({
+                    'etiquette_id': etiquette_id.id,
+                    'quantity_hs': quantities['quantity_hs'],
+                    'quantity_remplacee': quantities['quantity_remplacee'],
                 })
 
             task.eeg_remplace_lines = [(5, 0, 0)] + [(0, 0, {
