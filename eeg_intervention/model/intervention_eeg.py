@@ -33,6 +33,19 @@ class inheritTask(models.Model):
     _inherit = 'project.task'
 
     qte_annoncee = fields.Integer(string='Qté annoncées')
+
+    
+    quantity_remplacee = fields.Integer(string='Quantité étiquettes remplacées', compute='_compute_intervention_unique_ids')
+    quantity_hs = fields.Integer(string='Quantité étiquettes HS', compute='_compute_intervention_unique_ids')
+
+    @api.depends('intervention_ids.quantity_remplacee', 'intervention_ids.quantity_hs')
+    def _compute_intervention_unique_ids(self):
+        for task in self:
+            quantity_remplacee = sum(task.intervention_ids.mapped('quantity_remplacee'))
+            quantity_hs = sum(task.intervention_ids.mapped('quantity_hs'))
+            task.quantity_remplacee = quantity_remplacee
+            task.quantity_hs = quantity_hs
+
     shipping_address = fields.Many2one('res.partner', string='Magasin', index=True, ondelete='cascade')
     contact_store_id = fields.Many2one('res.partner', string='Contact du Magasin',
                                        domain="[('parent_id', '=', shipping_address)]")
@@ -269,23 +282,6 @@ class inheritTask(models.Model):
     intervention_unique_ids = fields.One2many('intervention.unique', 'task_id', string='Interventions Unique',
                                               compute='_compute_intervention_unique_ids', store=True)
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee')
-
-    @api.depends('eeg_remplacee_ids.quantity_hs', 'eeg_remplacee_ids.quantity_remplacee', 'eeg_remplacee_ids.etiquette_id')
-    def _compute_total_hs_remplace(self):
-        for task in self:
-            total_hs = 0
-            total_remplacee = 0
-            for line in task.eeg_remplacee_ids:
-                if line.etiquette_id:
-                    if line.etiquette_id.name == 'HS':
-                        total_hs += line.quantity_hs
-                    elif line.etiquette_id.name == 'Remplace':
-                        total_remplacee += line.quantity_remplacee
-            task.total_hs = total_hs
-            task.total_remplacee = total_remplacee
-
-    total_hs_r = fields.Integer(string='Total HS', compute='_compute_total_hs_remplace')
-    total_remplacee = fields.Integer(string='Total Remplacee', compute='_compute_total_hs_remplace')
     transport_product_carton = fields.Many2one('product.product', string='Transport product Carton', default=4252)
     transport_product_palette = fields.Many2one('product.product', string='Transport product palette', default=5711)
     product_carton = fields.Many2one('product.product', string='Product carton', default=5293)
