@@ -48,7 +48,7 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False)
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
-    @api.depends('remplacement_active', 'eeg_remplacee_ids.quantity_remplacee')
+    @api.depends('eeg_remplacee_ids', 'eeg_remplacee_ids.quantity_remplacee')
     def update_remplacement(self):
         for rec in self:
             if not rec.remplacement_active and any(eeg_remplacee.quantity_remplacee >= 1 for eeg_remplacee in rec.eeg_remplacee_ids):
@@ -633,6 +633,12 @@ class Carton(models.Model):
     piles = fields.Integer(string='Total Piles', compute='calcul_total_piles')
     esthetique = fields.Integer(string='Total Esthétique', compute='calcul_total_esthetique')
     cassees = fields.Integer(string='Total Cassées', compute='calcul_total_ligne_cassee')
+    remplacement = fields.Integer(string='Etiquette de remplacement', compute='calcul_lignes_remplacee')
+    @api.depends('intervention_line_eeg_ids.remplace')
+    def calcul_lignes_remplacee(self):
+        for rec in self:
+            selected_lines = rec.intervention_line_eeg_ids
+            rec.pile_test = sum(selected_lines.mapped('remplace'))
 
     @api.depends('intervention_line_eeg_ids.pile_test')
     def calcul_total_pile_test(self):
