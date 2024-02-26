@@ -153,12 +153,7 @@
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
                             </div>
-                 <xpath expr="//sheet" position="after">
-            <div class="o_statusbar_status">
-                <field name="eeg_remplacee_ids" widget="many2many_tags" options="{'no_create': True}"
-                       attrs="{'invisible': [('name', 'not ilike', 'RMA')]}"/>
-            </div>
-        </xpath>
+       
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
                     <field name="shipping_address"/>
                 </xpath>
