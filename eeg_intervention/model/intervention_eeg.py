@@ -442,6 +442,12 @@ class EEGRemplacee(models.Model):
     etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
     quantity_remplacee = fields.Integer(string='Qte REMPLACEE')
     quantity_hs = fields.Integer(string='Qte HS')
+    attente_remplacement = fields.Integer(string='En attente de remplacement', compute='_compute_attente_remplacement')
+
+    @api.depends('quantity_remplacee', 'quantity_hs')
+    def _compute_attente_remplacement(self):
+        for record in self:
+            record.attente_remplacement = record.quantity_hs - record.quantity_remplacee
 
 class InterventionUnique(models.Model):
     _name = 'intervention.unique'
