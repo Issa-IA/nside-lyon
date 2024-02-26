@@ -58,7 +58,6 @@ class inheritTask(models.Model):
             'res_model': 'eeg.remplacee',
             'view_mode': 'list',
             'domain': [('task_id', '=', self.id)],
-            'target': 'new',
         }
     @api.depends('carton_ids')
     def _compute_num_cartons_client(self):
