@@ -55,16 +55,15 @@ class inheritTask(models.Model):
         total_etiquettes_attente = sum(eeg.quantity_hs - eeg.quantity_remplacee for eeg in self.eeg_remplacee_ids)
         return {
             'type': 'ir.actions.act_window',
-            'name': 'Nombre d\'Etiquettes en Attente de Remplacement',
-            'res_model': 'project.task',
-            'view_mode': 'form',
-            'res_id': self.id,
+            'name': 'Liste des EEG Remplacee',
+            'res_model': 'eeg.remplacee',
+            'view_mode': 'list,form',
+            'domain': [('task_id', '=', self.id)],
+            'target': 'new',
             'context': {
                 'default_total_etiquettes_attente': total_etiquettes_attente,
                 'default_eeg_remplacee_ids': [(6, 0, self.eeg_remplacee_ids.ids)],
             },
-            'views': [(False, 'form')],
-            'target': 'new',
         }
     @api.depends('carton_ids')
     def _compute_num_cartons_client(self):
