@@ -49,6 +49,10 @@ class inheritTask(models.Model):
     num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     total_attente_remplacement = fields.Integer(string='Total En Attente de Remplacement', compute='_compute_total_attente_remplacement')
+    @api.depends('eeg_remplacee_ids.attente_remplacement')
+    def _compute_total_attente_remplacement(self):
+        for task in self:
+            task.total_attente_remplacement = sum(eeg.attente_remplacement for eeg in task.eeg_remplacee_ids)
 
     def action_view_total_attente_remplacement(self):
         self.ensure_one()
