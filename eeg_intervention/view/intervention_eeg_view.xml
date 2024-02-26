@@ -152,8 +152,9 @@
                      <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
-                     <button name="action_view_total_attente_remplacement" string="Total En Attente de Remplacement" type="object" icon="fa-random"/>
-                            <field string="Etiquettes" name="total_attente_remplacement" widget="statinfo"/>
+                     <button name="action_view_total_attente_remplacement" string="Total En Attente de Remplacement" type="object" icon="fa-random">
+                     </button>
+                            <field name="total_attente_remplacement" widget="statinfo"/>
                             </div>
        
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
