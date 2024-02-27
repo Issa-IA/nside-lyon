@@ -46,7 +46,7 @@ class inheritTask(models.Model):
     sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
     num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
     pile_factured_total = fields.Float(string='Total Pile Facturée')
-    remplacement_active = fields.Boolean(string='Remplacement', default=False, , compute="update_remplacement")
+    remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
     
     @api.depends('eeg_remplacee_ids')
