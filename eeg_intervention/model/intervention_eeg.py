@@ -635,11 +635,18 @@ class Carton(models.Model):
     esthetique = fields.Integer(string='Total Esthétique', compute='calcul_total_esthetique')
     cassees = fields.Integer(string='Total Cassées', compute='calcul_total_ligne_cassee')
     remplacement = fields.Integer(string='Etiquette de remplacement', compute='calcul_lignes_remplacee')
+    reliquat_total = fields.Integer(string='Etiquette reliquat', compute='calcul_lignes_reliquat')
     @api.depends('intervention_line_eeg_ids.remplace')
     def calcul_lignes_remplacee(self):
         for rec in self:
             selected_lines = rec.intervention_line_eeg_ids
-            rec.pile_test = sum(selected_lines.mapped('remplace'))
+            rec.remplacement = sum(selected_lines.mapped('remplace'))
+            
+    @api.depends('intervention_line_eeg_ids.reliquat')
+    def calcul_lignes_reliquat(self):
+        for rec in self:
+            selected_lines = rec.intervention_line_eeg_ids
+            rec.reliquat_total = sum(selected_lines.mapped('reliquat'))
 
     @api.depends('intervention_line_eeg_ids.pile_test')
     def calcul_total_pile_test(self):
@@ -727,6 +734,7 @@ class InterventionLineEeg(models.Model):
     esthetique = fields.Integer('Esthétique')
     cassees = fields.Integer('Cassées')
     remplace = fields.Integer('Etiquette remplacé')
+    reliquat = fields.Integer('Etiquette reliquat')
     illisible = fields.Integer('Illisible')
     illisible_id = fields.Many2one('intervention.line.illisble', 'Illisible_id')
     quantity = fields.Float('Quantité OK')
