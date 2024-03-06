@@ -496,6 +496,13 @@ class ModelCarton(models.Model):
         store=True, readonly=False, required=True)
 
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
+    active = fields.Boolean(string='Archivé', default=False)
+
+    def action_archive(self):
+        self.write({'active': True})
+
+    def action_restore(self):
+        self.write({'active': False})
 
 
 class MarqueEtiquette(models.Model):
