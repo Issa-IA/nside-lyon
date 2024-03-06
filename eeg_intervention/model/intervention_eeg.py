@@ -499,10 +499,10 @@ class ModelCarton(models.Model):
     active = fields.Boolean(string='Archivé', default=False)
 
     def action_archive(self):
-        self.write({'active': True})
+        self.write({'active': False})
 
     def action_restore(self):
-        self.write({'active': False})
+        self.write({'active': True})
 
 
 class MarqueEtiquette(models.Model):
