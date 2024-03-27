@@ -48,6 +48,12 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
+
+    def calculer_date_deadline(self):
+        if self.stage_id == 98:
+            date_aujourdhui = fields.Date.today()
+            date_deadline = datetime.strptime(date_aujourdhui, '%Y-%m-%d') + timedelta(days=30)
+            self.date_deadline = date_deadline.strftime('%Y-%m-%d')
     
     @api.depends('eeg_remplacee_ids')
     def update_remplacement(self):
