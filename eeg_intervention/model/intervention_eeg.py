@@ -54,7 +54,7 @@ class inheritTask(models.Model):
     def _onchange_stage_id(self):
         for rec in self:
             if self.stage_id.id == 98:
-                new_date = fields.Date.today() + relativedelta.relativedelta(days=30)
+                new_date = fields.Date.today() + relativedelta(days=30)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
 
     @api.depends('eeg_remplacee_ids')
