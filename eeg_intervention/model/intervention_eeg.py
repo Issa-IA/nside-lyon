@@ -2,6 +2,7 @@ import re
 import json
 from odoo import api, fields, models, exceptions, SUPERUSER_ID, _
 from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError,Warning
 from odoo.exceptions import UserError
 import qrcode
@@ -48,6 +49,14 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
+
+    @api.onchange('stage_id')
+    def _onchange_stage_id(self):
+        for rec in self:
+            if self.stage_id.id == 98:
+                new_date = fields.Date.today() + relativedelta(days=30)
+                self.date_deadline = new_date.strftime('%Y-%m-%d')
+
     
     @api.depends('eeg_remplacee_ids')
     def update_remplacement(self):
