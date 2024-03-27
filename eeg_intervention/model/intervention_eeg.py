@@ -49,12 +49,13 @@ class inheritTask(models.Model):
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
 
-    def calculer_date_deadline(self):
-        if self.stage_id == 98:
-            date_aujourdhui = fields.Date.today()
-            date_deadline = datetime.strptime(date_aujourdhui, '%Y-%m-%d') + timedelta(days=30)
-            self.date_deadline = date_deadline.strftime('%Y-%m-%d')
-    
+    @api.onchange('stage_id')
+    def _onchange_stage_id(self):
+        if self.stage_id.id == 98:
+            today = datetime.today()
+            new_date = today + timedelta(days=30)
+            self.date_deadline = new_date.strftime('%Y-%m-%d')
+
     @api.depends('eeg_remplacee_ids')
     def update_remplacement(self):
         for rec in self:
