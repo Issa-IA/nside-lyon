@@ -49,7 +49,29 @@ class inheritTask(models.Model):
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
+    ecart = fields.Boolean(string='Écart', compute='_compute_ecart')
 
+    @api.depends('qte_recue', 'qte_annoncee', 'name')
+    def _compute_ecart(self):
+        for record in self:
+            if record.name and 'RFB' in record.name:
+                record.ecart = record.qte_recue > record.qte_annoncee + 1000
+            elif record.name and 'RMA' in record.name:
+                if record.qte_annoncee != 0:
+                    ecart_percent = (record.qte_recue - record.qte_annoncee) / record.qte_annoncee * 100
+                    record.ecart = ecart_percent >= 10
+                else:
+                    record.ecart = False
+            else:
+                record.ecart = False
+
+    @api.depends('ecart')
+    def _compute_kanban_state(self):
+        for record in self:
+            if record.ecart:
+                record.kanban_state = 'blocked'
+            else:
+                record.kanban_state = 'done'
     @api.onchange('stage_id')
     def _onchange_stage_id(self):
         for rec in self:
