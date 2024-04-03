@@ -71,7 +71,7 @@ class inheritTask(models.Model):
             if record.ecart:
                 record.kanban_state = 'blocked'
             else:
-                record.kanban_state = 'done'
+                record.kanban_state = 'normal'
     
     
     @api.onchange('stage_id')
