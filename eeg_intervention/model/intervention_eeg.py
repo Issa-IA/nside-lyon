@@ -72,11 +72,16 @@ class inheritTask(models.Model):
                 record.kanban_state = 'blocked'
             else:
                 record.kanban_state = 'done'
+    
+    
     @api.onchange('stage_id')
     def _onchange_stage_id(self):
         for rec in self:
-            if self.stage_id.id == 98:
-                new_date = fields.Date.today() + relativedelta(days=30)
+            if rec.stage_id.id == 98:
+                if 'INFOMIL' in rec.partner_id.display_name.upper():
+                    new_date = fields.Date.today() + relativedelta(days=30)
+                else:
+                    new_date = fields.Date.today() + relativedelta(weeks=6)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
 
     
