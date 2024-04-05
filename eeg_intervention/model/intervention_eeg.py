@@ -66,16 +66,29 @@ class inheritTask(models.Model):
                 record.ecart = False
 
     
-    
-    @api.onchange('stage_id')
+    date_reception = fields.Date(string='Date de réception')
+    date_reception_client = fields.Date(string='Date de réception Client')
+    date_expedition_tunisie = fields.Date(string='Date expédition en Tunisie')
+    date_expedition_france = fields.Date(string='Date expédition en France')
+    date_expedition = fields.Date(string='Date expédition')
+
+
+    @api.onchange('stage_id','kanban_state')
     def _onchange_stage_id(self):
         for rec in self:
-            if rec.stage_id.id == 98:
-                if 'INFOMIL' in rec.partner_id.display_name.upper():
-                    new_date = fields.Date.today() + relativedelta(days=30)
-                else:
-                    new_date = fields.Date.today() + relativedelta(weeks=6)
+            if self.stage_id.id == 98:
+                new_date = fields.Date.today() + relativedelta(days=30)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
+                rec.date_reception = fields.Date.today().strftime('%Y-%m-%d')
+                if self.kanban_state == 'done':
+                    rec.date_expedition_tunisie = fields.Date.today().strftime('%Y-%m-%d')
+            elif rec.stage_id.id == 149:
+                today_date = fields.Date.today().strftime('%Y-%m-%d')
+                rec.date_reception_client = today_date
+            elif rec.stage_id.id == 125:
+                rec.date_expedition_france = fields.Date.today().strftime('%Y-%m-%d')
+            elif rec.stage_id.id == 148:
+                rec.date_expedition = fields.Date.today().strftime('%Y-%m-%d')
 
     
     @api.depends('eeg_remplacee_ids')
