@@ -44,7 +44,7 @@ class inheritTask(models.Model):
     intervention_ids = fields.One2many('intervention.line.eeg', 'task_id', string='Lines')
     intervention_illisible_ids = fields.One2many('intervention.line.illisble', 'task_id', string='Lines Illisible')
     etiquette_count = fields.Integer(compute='_compute_intervention_count', string='Intervention Count')
-    sequence1 = fields.Char(string='Dossier N°', required=True, copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
+    sequence1 = fields.Char(string='Dossier N°', copy=False, readonly=True, default=lambda self: self.env['ir.sequence'].next_by_code('project.tasksequence'))
     num_cartons_client = fields.Integer(string='Nombre de carton ICR', compute='_compute_num_cartons_client')
     pile_factured_total = fields.Float(string='Total Pile Facturée')
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
