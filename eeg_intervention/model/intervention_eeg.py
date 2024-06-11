@@ -79,8 +79,7 @@ class inheritTask(models.Model):
             if self.stage_id.id == 98:
                 new_date = fields.Date.today() + relativedelta(days=30)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
-                if self.kanban_state == 'done':
-                    rec.date_expedition_tunisie = fields.Date.today().strftime('%Y-%m-%d')
+                rec.date_reception = fields.Date.today().strftime('%Y-%m-%d')
             elif rec.stage_id.id == 149:
                 today_date = fields.Date.today().strftime('%Y-%m-%d')
                 rec.date_reception_client = today_date
