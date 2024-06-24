@@ -51,9 +51,9 @@ class inheritTask(models.Model):
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
     ecart = fields.Boolean(string='Écart', compute='_compute_ecart')
     @api.depends('intervention_ids.reliquat')
-        def _compute_count_reliquat(self):
-            for task in self:
-                task.count_reliquat = sum(task.intervention_ids.mapped('reliquat'))
+    def _compute_count_reliquat(self):
+        for task in self:
+            task.count_reliquat = sum(task.intervention_ids.mapped('reliquat'))
         
                 
     @api.depends('qte_recue', 'qte_annoncee', 'name')
