@@ -55,21 +55,6 @@ class inheritTask(models.Model):
             for task in self:
                 task.count_reliquat = sum(task.intervention_ids.mapped('reliquat'))
         
-      
-    
-    @api.onchange('count_reliquat', 'intervention_ids.reliquat')
-    def _onchange_count_reliquat(self):
-        partial_tag = self.env['project.tags'].search([('id', '=', 1)], limit=1)
-        for rec in self:
-            if not partial_tag:
-                return  # Sortie si l'étiquette n'est pas trouvée
-            
-            if rec.count_reliquat > 0:
-                if partial_tag not in rec.tag_ids:
-                    rec.tag_ids = [(4, partial_tag.id)] 
-            else:
-                if partial_tag in rec.tag_ids or rec.count_reliquat == 0:
-                    rec.tag_ids = [(3, partial_tag.id)]
                 
     @api.depends('qte_recue', 'qte_annoncee', 'name')
     def _compute_ecart(self):
