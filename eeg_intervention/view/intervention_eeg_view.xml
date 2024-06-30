@@ -169,6 +169,9 @@
                                      <field name="sequence1"/>
                                      <field name="remplacement_active"/>
                                 </group>
+                                <group string="Images destruction">
+                                 <field name="image_ids" context="{'default_name': name}" mode="kanban" add-label="Ajouter une photo" nolabel="1"/>
+                             0  </group>
                              </group>
 
 
