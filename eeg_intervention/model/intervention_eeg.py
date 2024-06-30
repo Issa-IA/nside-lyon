@@ -16,7 +16,17 @@ class Composant(models.Model):
     etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
     product = fields.Many2one('product.product', string='Piles')
     quantity = fields.Float(string='Quantité')
-    
+
+
+class TaskImage(models.Model):
+    _name = 'task.image'
+    _description = 'Task Image'
+
+    name = fields.Char("Name")
+    image = fields.Binary("Image", attachment=True)
+    task_id = fields.Many2one('project.task', string="Task", ondelete='cascade')
+
+
 class PileModel(models.Model):
     _name = 'pile.model'
     _description = 'Pile'
@@ -50,6 +60,34 @@ class inheritTask(models.Model):
     remplacement_active = fields.Boolean(string='Remplacement', default=False, compute="update_remplacement")
     eeg_remplacee_ids = fields.One2many('eeg.remplacee', 'task_id', string='EEG Remplacee', compute="_compute_eeg_remplacee_ids", store=True)
     ecart = fields.Boolean(string='Écart', compute='_compute_ecart')
+    
+    count_reliquat = fields.Float(string='Total Reliquat', compute='_compute_count_reliquat', store=True)
+    tag_ids = fields.Many2many('project.tags', string='Tags')
+    image_ids = fields.One2many('task.image', 'task_id', string="Images")
+
+    @api.depends('count_reliquat')
+    def _update_tags_based_on_reliquat(self):
+        partial_tag = self.env['project.tags'].browse(1)
+        for task in self:
+            if task.count_reliquat > 0:
+                if partial_tag not in task.tag_ids:
+                    task.tag_ids = [(4, partial_tag.id)]
+            else:
+                if partial_tag in task.tag_ids:
+                    task.tag_ids = [(3, partial_tag.id)]
+
+    @api.model
+    def create(self, vals):
+        task = super(inheritTask, self).create(vals)
+        task._update_tags_based_on_reliquat()
+        return task
+
+    def write(self, vals):
+        result = super(inheritTask, self).write(vals)
+        self._update_tags_based_on_reliquat()
+        return result
+
+    
     @api.depends('intervention_ids.reliquat')
     def _compute_count_reliquat(self):
         for task in self:
