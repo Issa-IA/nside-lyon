@@ -27,6 +27,7 @@
         "security/ir.model.access.csv",
         "view/intervention_eeg_view.xml",
         "view/etiquette_view.xml",
+        "view/archive_eeg_task.xml",
         "report/Report.xml",
         "report/Etiquettes_barcode.xml",
         "report/bon_livraison.xml",

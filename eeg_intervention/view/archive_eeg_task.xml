@@ -1,0 +1,72 @@
+<odoo>
+    <data>
+
+        <!-- Action to open the list view -->
+        <record id="action_archive_eeg" model="ir.actions.act_window">
+            <field name="name">Archives EEG</field>
+            <field name="res_model">archive.eeg</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Tree (List) View -->
+        <record id="view_archive_eeg_tree" model="ir.ui.view">
+            <field name="name">archive.eeg.tree</field>
+            <field name="model">archive.eeg</field>
+            <field name="arch" type="xml">
+                <tree>
+
+                    <field name="carton_id"/>
+                    <field name="etiquette_id"/>
+                    <field name="ref_eeg"/>
+                    <field name="serial_number_10"/>
+                    <field name="serial_number_36"/>
+                    <field name="task_id"/>
+                    <field name="state_eeg"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Optional: Search View -->
+        <record id="search_view_archive_eeg" model="ir.ui.view">
+            <field name="name">archive.eeg.search</field>
+            <field name="model">archive.eeg</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="carton_id"/>
+                    <field name="etiquette_id"/>
+                    <filter name="state_eeg_filter" string="State" domain="[('state_eeg', '!=', False)]" context="{'group_by': 'state_eeg'}"/>
+                </search>
+            </field>
+        </record>
+  <!-- Search View (Ensure this is correctly defined) -->
+        <record id="search_view_archive_eeg" model="ir.ui.view">
+            <field name="name">archive.eeg.search</field>
+            <field name="model">archive.eeg</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="carton_id"/>
+                    <field name="etiquette_id"/>
+                    <filter name="state_eeg_filter" string="State" domain="[('state_eeg', '!=', False)]" context="{'group_by': 'state_eeg'}"/>
+                </search>
+            </field>
+        </record>
+        <record id="view_confirmation_popup" model="ir.ui.view">
+            <field name="name">confirmation.popup.form</field>
+            <field name="model">confirmation.popup</field>
+            <field name="arch" type="xml">
+                <form string="Confirmation">
+                        <label for="confirm_delete" string="Souhaitez-vous supprimer les etiquettes après la création des archives ?" />
+                        <field name="confirm_delete" style="margin-left:10px; margin-right: 10px"/>
+                    <footer>
+                        <button string="Confirmer" type="object" name="action_confirm" class="btn-primary"/>
+                        <button string="Annuler" type="object" name="action_cancel" class="btn-secondary"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

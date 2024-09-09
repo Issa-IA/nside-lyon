@@ -87,6 +87,7 @@
                                     <field name="esthetique"/>
                                     <field name="cassees"/>
                                     <field name="remplace"/>
+                                    <field name="related_archive_ids" widget="many2many_tags" options="{'no_create': True}" string="Related Tasks"/>
 
 
                              </tree>
@@ -134,7 +135,10 @@
             <field name="arch" type="xml">
                  <header>
                      <button name="create_sale_order" string="Créer Commande" type="object" class="oe_highlight" />
+                     <button name="traitement_admin" string="Traitment admin" type="object" class="btn-primary"/>
+
                  </header>
+
                  <div class="oe_button_box" name="button_box">
                                  <button name="action_open_related_cartons" type="object" class="oe_stat_button"  icon="fa-cubes" groups="eeg_intervention.group_admin_rma">
                                     <field string="Cartons" name="cartons_count" widget="statinfo"/>
@@ -144,6 +148,9 @@
                      </button>
                         <button name="action_view_total_attente_remplacement" string="En attente de remplacement" type="object" class="oe_stat_button"  icon="fa-random" groups="eeg_intervention.group_admin_rma" attrs="{'invisible': [('remplacement_active', '=', False)]}">
                                     <field string="En attente de remplacement" name="total_attente_remplacement" widget="statinfo"/>
+                     </button>
+                      <button name="action_open_related_archives_ids" string="Archives EEG" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
+                                    <field string="Archives" name="archive_eeg_count" widget="statinfo"/>
                      </button>
                             </div>
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
