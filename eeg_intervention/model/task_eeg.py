@@ -437,19 +437,19 @@ class inheritTask(models.Model):
             order_lines_by_product = {}
             for intervention in task.intervention_unique_ids:
                 for component in intervention.etiquette_id.composant_ids:
-                    product_id = component.product.id
+                    product = component.product.id
 
-                    if product_id in order_lines_by_product:
-                        order_line = SaleOrderLine.browse(order_lines_by_product[product_id])
+                    if product in order_lines_by_product:
+                        order_line = SaleOrderLine.browse(order_lines_by_product[product])
                         order_line.product_uom_qty += component.quantity * intervention.quantity_ok
                     else:
                         order_line = SaleOrderLine.create({
                             'order_id': order.id,
-                            'product_id': product_id,
+                            'product_id': product.id,
                             'product_uom_qty': component.quantity * intervention.quantity_ok,
                             'price_unit': component.product.list_price,
                         })
-                        order_lines_by_product[product_id] = order_line.id
+                        order_lines_by_product[product] = order_line.id
 
             order_lines_by_service = {}
 
