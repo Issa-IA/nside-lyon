@@ -435,21 +435,34 @@ class inheritTask(models.Model):
             task.sale_order__intervention_id = order.id
 
             order_lines_by_product = {}
-            for intervention in task.intervention_unique_ids:
-                for component in intervention.etiquette_id.composant_ids:
-                    product = component.product.id
 
-                    if product in order_lines_by_product:
-                        order_line = SaleOrderLine.browse(order_lines_by_product[product])
-                        order_line.product_uom_qty += component.quantity * intervention.quantity_ok
-                    else:
-                        order_line = SaleOrderLine.create({
-                            'order_id': order.id,
-                            'product_id': product.id,
-                            'product_uom_qty': component.quantity * intervention.quantity_ok,
-                            'price_unit': component.product.list_price,
-                        })
-                        order_lines_by_product[product] = order_line.id
+            # Parcourir toutes les interventions de la tâche
+            for intervention in task.intervention_unique_ids:
+                # Vérifier si l'intervention a une étiquette associée
+                if intervention.etiquette_id:
+                    # Parcourir les composants de l'étiquette
+                    for component in intervention.etiquette_id.composant_ids:
+                        product_id = component.product.id
+
+                        # Si une ligne de commande existe déjà pour ce produit
+                        if product_id in order_lines_by_product:
+                            # Récupérer la ligne de commande existante
+                            order_line = SaleOrderLine.browse(order_lines_by_product[product_id])
+                            # Mettre à jour la quantité du produit dans la ligne de commande
+                            order_line.product_uom_qty += component.quantity * intervention.quantity_ok
+                        else:
+                            # Si aucune ligne n'existe, en créer une nouvelle (si nécessaire)
+                            order_line = SaleOrderLine.create({
+                                'order_id': order.id,
+                                'product_id': product_id,
+                                'product_uom_qty': component.quantity * intervention.quantity_ok,
+                                'price_unit': component.product.list_price,
+                            })
+                            # Stocker l'ID de la nouvelle ligne de commande dans le dictionnaire
+                            order_lines_by_product[product_id] = order_line.id
+                else:
+                    # Gérer le cas où l'étiquette n'existe pas (facultatif)
+                    print(f"Aucune étiquette pour l'intervention {intervention.id}")
 
             order_lines_by_service = {}
 
