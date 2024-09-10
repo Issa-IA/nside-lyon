@@ -387,41 +387,33 @@ class inheritTask(models.Model):
         prestation_obj = self.env['prestation.model']
         prestation_ids = self.env['prestation.model']
 
-        # Parcourir toutes les interventions uniques
         for record in self.intervention_unique_ids:
             etiquette_id = record.etiquette_id
             quantity = record.quantity - record.quantity_cassees
 
-            # Récupérer la liste de prix associée à la marque de l'étiquette
             liste_de_prix = etiquette_id.marque_id.pricelist_id
 
             if liste_de_prix:
-                # Parcourir les éléments de la liste de prix
                 for item in liste_de_prix.item_ids:
                     price = item.fixed_price
                     product = item.product_id
 
-                    # Filtrer les prestations existantes par produit et prix
-                    existing_line = self.prestation_ids.filtered(
+                    existing_line = prestation_ids.filtered(
                         lambda line: line.product == product and line.price == price)
 
                     if existing_line:
-                        # Si la ligne existe déjà, on met à jour la quantité
                         existing_line.quantity += quantity
-                        existing_line.price_total = existing_line.quantity * price
                     else:
-                        # Sinon, on crée une nouvelle ligne de prestation
-                        new_prestation = prestation_obj.create({
+                        prestation_ids |= prestation_obj.create({
                             'etiquette_id': etiquette_id.id,
                             'product': product.id,
                             'price': price,
                             'price_total': price * quantity,
                             'task_id': self.id,
                             'quantity': quantity,
-                        })
-                        prestation_ids |= new_prestation
 
-        # Met à jour les prestations associées à cette tâche
+                        })
+
         self.prestation_ids = prestation_ids
 
     @api.depends('intervention_ids.etiquette_id')
