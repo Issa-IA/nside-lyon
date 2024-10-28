@@ -74,14 +74,14 @@ class inheritTask(models.Model):
             else:
                 record.ecart = False
 
-    date_reception = fields.Date(string='Date de réception')
-    date_reception_client = fields.Date(string='Date de réception Client')
-    date_expedition_tunisie = fields.Date(string='Date expédition en Tunisie')
-    date_expedition_france = fields.Date(string='Date expédition en France')
-    date_expedition = fields.Date(string='Date expédition')
+    date_reception = fields.Date(string='Date de réception', compute='_update_dates', store=True, inverse='_inverse_dates')
+    date_reception_client = fields.Date(string='Date de réception Client, compute='_update_dates', store=True, inverse='_inverse_dates')
+    date_expedition_tunisie = fields.Date(string='Date expédition en Tunisie', compute='_update_dates', store=True, inverse='_inverse_dates')
+    date_expedition_france = fields.Date(string='Date expédition en France', compute='_update_dates', store=True, inverse='_inverse_dates')
+    date_expedition = fields.Date(string='Date expédition', compute='_update_dates', store=True, inverse='_inverse_dates')
 
-    @api.onchange('stage_id', 'kanban_state')
-    def _onchange_stage_id(self):
+    @api.depends('stage_id')
+    def _update_dates(self):
         for rec in self:
             if self.stage_id.id == 98:
                 new_date = fields.Date.today() + relativedelta(days=30)
@@ -94,6 +94,11 @@ class inheritTask(models.Model):
                 rec.date_expedition_france = fields.Date.today().strftime('%Y-%m-%d')
             elif rec.stage_id.id == 148:
                 rec.date_expedition = fields.Date.today().strftime('%Y-%m-%d')
+    
+    def _inverse_dates(self):
+        # This method will store the editable fields' values
+        pass
+
 
     @api.depends('eeg_remplacee_ids')
     def update_remplacement(self):
