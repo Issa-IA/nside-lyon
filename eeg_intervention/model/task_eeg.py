@@ -74,11 +74,11 @@ class inheritTask(models.Model):
             else:
                 record.ecart = False
 
-    date_reception = fields.Date(string='Date de réception', compute='_update_dates', store=True, inverse='_inverse_dates')
-    date_reception_client = fields.Date(string='Date de réception Client, compute='_update_dates', store=True, inverse='_inverse_dates')
-    date_expedition_tunisie = fields.Date(string='Date expédition en Tunisie', compute='_update_dates', store=True, inverse='_inverse_dates')
-    date_expedition_france = fields.Date(string='Date expédition en France', compute='_update_dates', store=True, inverse='_inverse_dates')
-    date_expedition = fields.Date(string='Date expédition', compute='_update_dates', store=True, inverse='_inverse_dates')
+    date_reception = fields.Date(string='Date de réception', compute='_update_dates', store=True, inverse='_inverse_dates',)
+    date_reception_client = fields.Date(string='Date de réception Client, compute='_update_dates', store=True, inverse='_inverse_dates',)
+    date_expedition_tunisie = fields.Date(string='Date expédition en Tunisie', compute='_update_dates', store=True, inverse='_inverse_dates',)
+    date_expedition_france = fields.Date(string='Date expédition en France', compute='_update_dates', store=True, inverse='_inverse_dates',)
+    date_expedition = fields.Date(string='Date expédition', compute='_update_dates', store=True, inverse='_inverse_dates',)
 
     @api.depends('stage_id')
     def _update_dates(self):
