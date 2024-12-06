@@ -2,276 +2,350 @@
 <odoo>
 
 
-    <record
-                        id="report_intervention_bon_livraison"
-                        model="ir.actions.report"
-
- >
+  <record
+    id="report_intervention_bon_livraison"
+    model="ir.actions.report"
+  >
     <field name="name">Bon livraison</field>
     <field name="model">project.task</field>
     <field name="report_type">qweb-pdf</field>
     <field name="report_name">eeg_intervention.bon_livraison</field>
-     <field name="report_file">eeg_intervention.bon_livraison</field>
-     <field name="attachment_use">True</field>
+    <field name="report_file">eeg_intervention.bon_livraison</field>
+    <field name="attachment_use">True</field>
     <field name="print_report_name">'Bon de livraison - %s' % (object.name)</field>
 
 
+  </record>
+  <template id="bon_livraison">
+    <t t-call="web.html_container">
+      <t t-call="web.basic_layout">
+        <t t-foreach="docs" t-as="doc">
+          <div class="page">
+            <div class="row">
+              <div class="col" style="margin-bottom:5px;">
+                <span></span>
+                <br />
+              </div>
+            </div>
+            <table class="table table-sm" style="border:2px solid black;">
+              <thead>
+              </thead>
+              <tbody>
+                <td class="text-center" style="border-top:2px solid black;">
+                  <h3>
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;">BON DE LIVRAISON</span>
+                    </b>
+                  </h3>
 
- </record>
-<template id="bon_livraison">
-     <t t-call="web.html_container">
-     <t t-call="web.basic_layout">
-     <t t-foreach="docs" t-as="doc">
-           <div class="page">
-                           <div class="row">
-      <div class="col" style="margin-bottom:5px;">
-        <span></span><br/>
-      </div>
-    </div>
-        <table class="table table-sm" style="border:2px solid black;">
-      <thead>
-      </thead>
-      <tbody>
-        <td class="text-center" style="border-top:2px solid black;">
+                </td>
+              </tbody>
+            </table>
+            <table class="table o_report_block_table table-sm" style="border:2px solid black;">
+              <thead>
 
-             <h3><b><span style="font-family: Times New Roman, Times, serif;">BON DE LIVRAISON</span></b></h3>
-
-        </td>
-      </tbody>
-    </table>
-     <table class="table o_report_block_table table-sm" style="border:2px solid black;">
-      <thead>
-
-      </thead>
-      <tbody>
-        <tr style="border:2px solid black;">
-          <th rowspan ="4" style="border-top:2px solid black; border-right:2px solid black;"><b>
-            <span style="font-family: Times New Roman, Times, serif;">DIGITAL IMPORT SERVICES COMPANY</span><br/>
-            <span style="font-family: Times New Roman, Times, serif;">By AGILE DISPLAY</span><br/>
-            <span style="font-family: Times New Roman, Times, serif;">Parc d'Activités du Clape-Loup</span><br/>
-            <span style="font-family: Times New Roman, Times, serif;">11 rue des Frênes</span><br/>
-            <span style="font-family: Times New Roman, Times, serif;">69280 SAINTE CONSORCE</span><br/>
-            <span style="font-family: Times New Roman, Times, serif;">FAX: +33 (0) 6 77 88 14 53</span><br/>
-          </b></th>
-        <td style="border-top:2px solid black; height: 22px;"></td>
-        <td style="border-top:2px solid black;"></td>
-        <td style="border-top:2px solid black;"></td>
-        </tr>
-        <tr  style="border:2px solid black;">
-          <td style="border-right:2px solid black; height: 10px;"><span>Commande</span></td>
-          <td style="border-right:2px solid black;"><span><p t-field="doc.name"/></span></td>
-          <td style="border-right:2px solid black; width:50px;"><span></span></td>
-        </tr>
-         <tr  style="border:2px solid black;">
-          <td style="border-right:2px solid black; height: 10px;"><span>Suivi par</span></td>
-          <td style="border-right:2px solid black;"><span></span></td>
-          <td style="border-right:2px solid black;"><span></span></td>
-        </tr>
-            <tr  style="border:2px solid black;">
-          <td style="border:2px solid black;"><span></span></td>
-          <td style="border:2px solid black;"><span></span></td>
-          <td style="border:2px solid black; border-bottom:2px solid black;"><span></span></td>
-        </tr>
-
-      </tbody>
-    </table >
-</table>
-           <table class="table o_report_block_table table-borderless" style="border:1px solid black;">
-      <thead>
-
-      </thead>
-      <tbody>
-        <tr style="border:1px solid black;">
-          <td style="border-right:1px solid black; border-top:1px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Bon de Livraison</span>
-            <br/>
-            <span t-field="doc.date_livraison"/>
-            <span><p/></span>
-            <span><t t-esc="doc.name"/></span>
-          </td>
-           <td style="border:1px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Client: <t t-esc="doc.partner_id.parent_id.name"/> </span>
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-           <table class="table o_report_block_table table-borderless" style="border:1px solid black;">
-      <thead>
-
-      </thead>
-      <tbody>
-        <tr style="border-right:1px solid black; border-top:1px solid black;">
-          <td style="border-right:1px solid black; border-top:1px solid black;">
-            <span style="font-family: Times New Roman, Times, serif;"> Adresse de Livraison : </span>
-
-          </td>
-
-        </tr>
-        <tr style="border-right:1px solid black; border_bottom:1px solid black;">
-             <td style="border-top:1px solid black; border-right:1px solid black; border_bottom:1px solid black;">
-
-            <div><span style="font-family: Times New Roman, Times, serif;">  <p t-field="doc.shipping_address"/></span></div>
-            <t t-foreach="doc.shipping_address" t-as="add">
-                 <div><span style="font-family: Times New Roman, Times, serif;"> <p t-field="add.street"/> </span></div>
-            <div><span style="font-family: Times New Roman, Times, serif;"><p t-field="add.street2"/> </span></div>
-                <div>
-                    <span style="font-family: Times New Roman, Times, serif;">
-                         <t t-if="add.zip is not False and add.city is not False">
-                        <t t-set="var" t-value="add.zip +' '+ add.city"/>
-                          <t t-esc="var"/>
-                        </t>
+              </thead>
+              <tbody>
+                <tr style="border:2px solid black;">
+                  <th rowspan="4" style="border-top:2px solid black; border-right:2px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;">DIGITAL IMPORT
+                        SERVICES COMPANY</span>
+                      <br />
+                      <span style="font-family: Times New Roman, Times, serif;">By AGILE DISPLAY</span>
+                      <br />
+                      <span style="font-family: Times New Roman, Times, serif;">Parc d'Activités du
+                        Clape-Loup</span>
+                      <br />
+                      <span style="font-family: Times New Roman, Times, serif;">11 rue des Frênes</span>
+                      <br />
+                      <span style="font-family: Times New Roman, Times, serif;">69280 SAINTE
+                        CONSORCE</span>
+                      <br />
+                      <span style="font-family: Times New Roman, Times, serif;">FAX: +33 (0) 6 77 88
+                        14 53</span>
+                      <br />
+                    </b>
+                  </th>
+                  <td style="border-top:2px solid black; height: 22px;"></td>
+                  <td style="border-top:2px solid black;"></td>
+                  <td style="border-top:2px solid black;"></td>
+                </tr>
+                <tr style="border:2px solid black;">
+                  <td style="border-right:2px solid black; height: 10px;">
+                    <span>Commande</span>
+                  </td>
+                  <td style="border-right:2px solid black;">
+                    <span>
+                      <p t-field="doc.name" />
                     </span>
-                </div>
+                  </td>
+                  <td style="border-right:2px solid black; width:50px;">
+                    <span></span>
+                  </td>
+                </tr>
+                <tr style="border:2px solid black;">
+                  <td style="border-right:2px solid black; height: 10px;">
+                    <span>Suivi par</span>
+                  </td>
+                  <td style="border-right:2px solid black;">
+                    <span></span>
+                  </td>
+                  <td style="border-right:2px solid black;">
+                    <span></span>
+                  </td>
+                </tr>
+                <tr style="border:2px solid black;">
+                  <td style="border:2px solid black;">
+                    <span></span>
+                  </td>
+                  <td style="border:2px solid black;">
+                    <span></span>
+                  </td>
+                  <td style="border:2px solid black; border-bottom:2px solid black;">
+                    <span></span>
+                  </td>
+                </tr>
 
-            </t>
-              <div t-if="doc.contact_store_id">
-<span>Contact : <span t-field="doc.contact_store_id.name"> - </span> <span t-field="doc.contact_store_id.phone"/></span>
-</div>
-          </td></tr>
-      </tbody>
-    </table>
-    
-     
-           <table class="table o_report_block_table table-borderless" style="border:1px solid black;">
-      <thead>
-
-      </thead>
-      <tbody>
-        <tr style="border:1px solid black;">
-      
-          <td style="border-right:1px solid black;border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Désignation</span></b>
-          </td>
-            <td style="border-right:1px solid black;border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté annoncées</span></b>
-          </td>
-       
-          <td style="border-right:1px solid black; border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté reçues</span></b>
-          </td>
-            <td style="border-right:1px solid black; border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté OK</span></b>
-          </td>
-           <td style="border-right:1px solid black; border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté remplacée</span></b>
-          </td>
-            <td style="border-right:1px solid black; border-top:1px solid black; border-right:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté illisible</span></b>
-          </td>
-           <td style="border-right:1px solid black; border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Qté cassées</span></b>
-          </td>
-           <td style="border-right:1px solid black; border-top:1px solid black;">
-            <b><span style="font-family: Times New Roman, Times, serif;"> Reliquat </span></b>
-          </td>
-        
-     
-        </tr>
-<tr>
-   
-    <td/>
-    <td><span t-field="doc.qte_annoncee"/></td>
-    <td><span t-field="doc.qte_recue"/></td>
-   
-   
-               <t t-set="sum_row4" t-value="0"/>
-                 <t t-foreach="doc.intervention_ids" t-as="line">
-                     <t t-set="sum_row4" t-value="sum_row4 +line.pile_test +line.test"/>
-                     </t>
-               
-          <td>
-              <t t-esc="sum_row4"/>
-          </td>
-            <t t-set="sum_row3" t-value="0"/>
-                 <t t-foreach="doc.intervention_ids" t-as="line">
-                     <t t-set="sum_row3" t-value="sum_row3+line.remplace"/>
-                     </t>
-               
-          <td>
-              <t t-esc="sum_row3"/>
-          </td>
-      
-                 <t t-set="sum_row1" t-value="0"/>
-                 <t t-foreach="doc.intervention_ids" t-as="line">
-                     <t t-set="sum_row1" t-value="sum_row1+line.illisible"/>
-                     </t>
-               
-          <td>
-              <t t-esc="sum_row1"/>
-          </td>
-              
-              <t t-set="sum_row5" t-value="0"/>
-                 <t t-foreach="doc.intervention_ids" t-as="line">
-                     <t t-set="sum_row5" t-value="sum_row5 +line.esthetique +line.cassees"/>
-                     </t>
-               
-          <td>
-              <t t-esc="sum_row5"/>
-          </td>
-         
-
-       <t t-set="sum_row9" t-value="0"/>
-                 <t t-foreach="doc.intervention_ids" t-as="line">
-                     <t t-set="sum_row9" t-value="sum_row9 +line.reliquat"/>
-                     </t>
-               
-          <td style="border-right:1px solid black;">
-              <t t-esc="sum_row9"/>
-          </td>
-   
-    
-</tr>
-
-    <t t-set="unique_names" t-value="doc.intervention_ids.mapped('etiquette_id')"/>
-        <t t-foreach="unique_names" t-as="name">
-          <t t-set="lines_with_name" t-value="doc.intervention_ids.filtered(lambda r: r.etiquette_id == name)"/>
-          <t t-set="lines" t-value="doc.intervention_ids"/>
-          <tr>
-     
-            <td>
-              <t t-esc="name.name"/>
-            </td>
-            <td/>
-              <td/>
-                   <td>
-              <t t-esc="sum(lines_with_name.mapped('test')) + sum(lines_with_name.mapped('pile_test'))"/>
-            </td>
-           <td>
-              <t t-esc="sum(lines_with_name.mapped('remplace'))"/>
-            </td>
-       
-              <td>
-              <t t-esc="sum(lines_with_name.mapped('illisible'))"/>
-            </td>
-            <td>
-              <t t-esc="sum(lines_with_name.mapped('esthetique')) + sum(lines_with_name.mapped('cassees'))"/>
-            </td>
-        
-                <td style="border-right:1px solid black;">
-              <t t-esc="sum(lines_with_name.mapped('reliquat'))"/>
-            </td>
+              </tbody>
+            </table>
             
-          </tr>
+            <table class="table o_report_block_table table-borderless"
+              style="border:1px solid black;">
+              <thead>
+
+              </thead>
+              <tbody>
+                <tr style="border:1px solid black;">
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <span style="font-family: Times New Roman, Times, serif;"> Bon de Livraison</span>
+                    <br />
+                    <span t-field="doc.date_livraison" />
+                    <span>
+                      <p />
+                    </span>
+                    <span>
+                      <t t-esc="doc.name" />
+                    </span>
+                  </td>
+                  <td style="border:1px solid black;">
+                    <span style="font-family: Times New Roman, Times, serif;"> Client: <t
+                        t-esc="doc.partner_id.parent_id.name" />
+                    </span>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table o_report_block_table table-borderless"
+              style="border:1px solid black;">
+              <thead>
+
+              </thead>
+              <tbody>
+                <tr style="border-right:1px solid black; border-top:1px solid black;">
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <span style="font-family: Times New Roman, Times, serif;"> Adresse de Livraison
+                      : </span>
+
+                  </td>
+
+                </tr>
+                <tr style="border-right:1px solid black; border_bottom:1px solid black;">
+                  <td
+                    style="border-top:1px solid black; border-right:1px solid black; border_bottom:1px solid black;">
+
+                    <div>
+                      <span style="font-family: Times New Roman, Times, serif;">
+                        <p t-field="doc.shipping_address" />
+                      </span>
+                    </div>
+                    <t t-foreach="doc.shipping_address" t-as="add">
+                      <div>
+                        <span style="font-family: Times New Roman, Times, serif;">
+                          <p t-field="add.street" />
+                        </span>
+                      </div>
+                      <div>
+                        <span style="font-family: Times New Roman, Times, serif;">
+                          <p t-field="add.street2" />
+                        </span>
+                      </div>
+                      <div>
+                        <span style="font-family: Times New Roman, Times, serif;">
+                          <t t-if="add.zip is not False and add.city is not False">
+                            <t t-set="var" t-value="add.zip +' '+ add.city" />
+                            <t t-esc="var" />
+                          </t>
+                        </span>
+                      </div>
+
+                    </t>
+                    <div t-if="doc.contact_store_id">
+                      <span>Contact : <span t-field="doc.contact_store_id.name"> - </span> <span
+                          t-field="doc.contact_store_id.phone" /></span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table o_report_block_table table-borderless"
+              style="border:1px solid black;">
+              <thead>
+              </thead>
+              <tbody>
+                <tr style="border:1px solid black;">
+                  <td style="border-right:1px solid black;border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Désignation</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black;border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté annoncées</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté reçues</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté OK</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté remplacée</span>
+                    </b>
+                  </td>
+                  <td
+                    style="border-right:1px solid black; border-top:1px solid black; border-right:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté illisible</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Qté cassées</span>
+                    </b>
+                  </td>
+                  <td style="border-right:1px solid black; border-top:1px solid black;">
+                    <b>
+                      <span style="font-family: Times New Roman, Times, serif;"> Reliquat </span>
+                    </b>
+                  </td>
+                </tr>
+                <tr>
+                  <td />
+                  <td>
+                    <span t-field="doc.qte_annoncee" />
+                  </td>
+                  <td>
+                    <span t-field="doc.qte_recue" />
+                  </td>
+                  <t t-set="sum_row4" t-value="0" />
+                  <t t-foreach="doc.intervention_ids" t-as="line">
+                    <t t-set="sum_row4" t-value="sum_row4 +line.pile_test +line.test" />
+                  </t>
+                  <td>
+                    <t t-esc="sum_row4" />
+                  </td>
+                  <t t-set="sum_row3" t-value="0" />
+                  <t t-foreach="doc.intervention_ids" t-as="line">
+                    <t t-set="sum_row3" t-value="sum_row3+line.remplace" />
+                  </t>
+
+                  <td>
+                    <t t-esc="sum_row3" />
+                  </td>
+
+                  <t t-set="sum_row1" t-value="0" />
+                  <t t-foreach="doc.intervention_ids" t-as="line">
+                    <t t-set="sum_row1" t-value="sum_row1+line.illisible" />
+                  </t>
+
+                  <td>
+                    <t t-esc="sum_row1" />
+                  </td>
+
+                  <t t-set="sum_row5" t-value="0" />
+                  <t t-foreach="doc.intervention_ids" t-as="line">
+                    <t t-set="sum_row5" t-value="sum_row5 +line.esthetique +line.cassees" />
+                  </t>
+
+                  <td>
+                    <t t-esc="sum_row5" />
+                  </td>
+
+
+                  <t t-set="sum_row9" t-value="0" />
+                  <t t-foreach="doc.intervention_ids" t-as="line">
+                    <t t-set="sum_row9" t-value="sum_row9 +line.reliquat" />
+                  </t>
+
+                  <td style="border-right:1px solid black;">
+                    <t t-esc="sum_row9" />
+                  </td>
+
+
+                </tr>
+
+                <t t-set="unique_names" t-value="doc.intervention_ids.mapped('etiquette_id')" />
+                <t t-foreach="unique_names" t-as="name">
+                  <t t-set="lines_with_name"
+                    t-value="doc.intervention_ids.filtered(lambda r: r.etiquette_id == name)" />
+                  <t t-set="lines" t-value="doc.intervention_ids" />
+                  <tr>
+
+                    <td>
+                      <t t-esc="name.name" />
+                    </td>
+                    <td />
+                    <td />
+                    <td>
+                      <t
+                        t-esc="sum(lines_with_name.mapped('test')) + sum(lines_with_name.mapped('pile_test'))" />
+                    </td>
+                    <td>
+                      <t t-esc="sum(lines_with_name.mapped('remplace'))" />
+                    </td>
+
+                    <td>
+                      <t t-esc="sum(lines_with_name.mapped('illisible'))" />
+                    </td>
+                    <td>
+                      <t
+                        t-esc="sum(lines_with_name.mapped('esthetique')) + sum(lines_with_name.mapped('cassees'))" />
+                    </td>
+
+                    <td style="border-right:1px solid black;">
+                      <t t-esc="sum(lines_with_name.mapped('reliquat'))" />
+                    </td>
+
+                  </tr>
+
+                </t>
+
+
+                <tr>
+                  <td style="border-right:1px solid black; border-top:1px solid black;" colspan="9" />
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+        </t>
+          <div class="page">
+            <div class="footer text-center" style="margin:0px; padding:0px;font-size:12px;"> Page <span
+                class="page" />/<span class="topage" />
+            </div>
+          </div>
+
+
+        </t>
+      </t>
     
-</t>
-
-
-        <tr>
-            <td style="border-right:1px solid black; border-top:1px solid black;" colspan="9"/>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-         <div class="page">
-                            <div class="footer text-center" style="margin:0px; padding:0px;font-size:12px;">
-                                Page <span class="page"/>/<span class="topage"/>
-                            </div>
-         </div>
-
-
-         </t>
-         </t>
-         </t>
-</template>
+  </template>
 </odoo>
