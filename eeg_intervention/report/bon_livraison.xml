@@ -22,16 +22,20 @@
         <t t-foreach="docs" t-as="doc">
           <div class="page">
             <div class="row">
+            </div>
+            <div class="row">
               <div class="col" style="margin-bottom:5px;">
-                <span></span>
+                <span />
                 <br />
               </div>
             </div>
-            <table class="table table-sm" style="border:2px solid black;">
+            <table class="table o_report_block_table table-borderless"
+              style="border:1px solid black;">
               <thead>
               </thead>
               <tbody>
-                <td class="text-center" style="border-top:2px solid black;">
+                <td class="text-center" style="border-top:1px solid black;">
+
                   <h3>
                     <b>
                       <span style="font-family: Times New Roman, Times, serif;">BON DE LIVRAISON</span>
@@ -41,75 +45,6 @@
                 </td>
               </tbody>
             </table>
-            <table class="table o_report_block_table table-sm" style="border:2px solid black;">
-              <thead>
-
-              </thead>
-              <tbody>
-                <tr style="border:2px solid black;">
-                  <th rowspan="4" style="border-top:2px solid black; border-right:2px solid black;">
-                    <b>
-                      <span style="font-family: Times New Roman, Times, serif;">DIGITAL IMPORT
-                        SERVICES COMPANY</span>
-                      <br />
-                      <span style="font-family: Times New Roman, Times, serif;">By AGILE DISPLAY</span>
-                      <br />
-                      <span style="font-family: Times New Roman, Times, serif;">Parc d'Activités du
-                        Clape-Loup</span>
-                      <br />
-                      <span style="font-family: Times New Roman, Times, serif;">11 rue des Frênes</span>
-                      <br />
-                      <span style="font-family: Times New Roman, Times, serif;">69280 SAINTE
-                        CONSORCE</span>
-                      <br />
-                      <span style="font-family: Times New Roman, Times, serif;">FAX: +33 (0) 6 77 88
-                        14 53</span>
-                      <br />
-                    </b>
-                  </th>
-                  <td style="border-top:2px solid black; height: 22px;"></td>
-                  <td style="border-top:2px solid black;"></td>
-                  <td style="border-top:2px solid black;"></td>
-                </tr>
-                <tr style="border:2px solid black;">
-                  <td style="border-right:2px solid black; height: 10px;">
-                    <span>Commande</span>
-                  </td>
-                  <td style="border-right:2px solid black;">
-                    <span>
-                      <p t-field="doc.name" />
-                    </span>
-                  </td>
-                  <td style="border-right:2px solid black; width:50px;">
-                    <span></span>
-                  </td>
-                </tr>
-                <tr style="border:2px solid black;">
-                  <td style="border-right:2px solid black; height: 10px;">
-                    <span>Suivi par</span>
-                  </td>
-                  <td style="border-right:2px solid black;">
-                    <span></span>
-                  </td>
-                  <td style="border-right:2px solid black;">
-                    <span></span>
-                  </td>
-                </tr>
-                <tr style="border:2px solid black;">
-                  <td style="border:2px solid black;">
-                    <span></span>
-                  </td>
-                  <td style="border:2px solid black;">
-                    <span></span>
-                  </td>
-                  <td style="border:2px solid black; border-bottom:2px solid black;">
-                    <span></span>
-                  </td>
-                </tr>
-
-              </tbody>
-            </table>
-            
             <table class="table o_report_block_table table-borderless"
               style="border:1px solid black;">
               <thead>
@@ -120,11 +55,11 @@
                   <td style="border-right:1px solid black; border-top:1px solid black;">
                     <span style="font-family: Times New Roman, Times, serif;"> Bon de Livraison</span>
                     <br />
-                    <span t-field="doc.date_livraison" />
                     <span>
+                      <span t-field="doc.date_livraison" />
                       <p />
                     </span>
-                    <span>
+                    <span class="o_bold">
                       <t t-esc="doc.name" />
                     </span>
                   </td>
@@ -189,12 +124,16 @@
                 </tr>
               </tbody>
             </table>
+
+
             <table class="table o_report_block_table table-borderless"
               style="border:1px solid black;">
               <thead>
+
               </thead>
               <tbody>
-                <tr style="border:1px solid black;">
+                <tr style="border:1px solid black;" class="o_bold">
+
                   <td style="border-right:1px solid black;border-top:1px solid black;">
                     <b>
                       <span style="font-family: Times New Roman, Times, serif;"> Désignation</span>
@@ -205,6 +144,7 @@
                       <span style="font-family: Times New Roman, Times, serif;"> Qté annoncées</span>
                     </b>
                   </td>
+
                   <td style="border-right:1px solid black; border-top:1px solid black;">
                     <b>
                       <span style="font-family: Times New Roman, Times, serif;"> Qté reçues</span>
@@ -236,8 +176,11 @@
                       <span style="font-family: Times New Roman, Times, serif;"> Reliquat </span>
                     </b>
                   </td>
+
+
                 </tr>
                 <tr>
+
                   <td />
                   <td>
                     <span t-field="doc.qte_annoncee" />
@@ -245,10 +188,13 @@
                   <td>
                     <span t-field="doc.qte_recue" />
                   </td>
+
+
                   <t t-set="sum_row4" t-value="0" />
                   <t t-foreach="doc.intervention_ids" t-as="line">
                     <t t-set="sum_row4" t-value="sum_row4 +line.pile_test +line.test" />
                   </t>
+
                   <td>
                     <t t-esc="sum_row4" />
                   </td>
@@ -335,17 +281,17 @@
               </tbody>
             </table>
           </div>
-          
+
         </t>
-          <div class="page">
-            <div class="footer text-center" style="margin:0px; padding:0px;font-size:12px;"> Page <span
-                class="page" />/<span class="topage" />
-            </div>
+        <div class="page">
+          <div class="footer text-center" style="margin:0px; padding:0px;font-size:12px;"> Page <span
+              class="page" />/<span class="topage" />
           </div>
+        </div>
 
 
-        </t>
       </t>
-    
+    </t>
+
   </template>
 </odoo>
