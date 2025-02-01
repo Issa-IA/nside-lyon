@@ -5,7 +5,7 @@
         <record id="action_archive_eeg" model="ir.actions.act_window">
             <field name="name">Archives EEG</field>
             <field name="res_model">archive.eeg</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
 
         <!-- Tree (List) View -->
@@ -13,7 +13,7 @@
             <field name="name">archive.eeg.tree</field>
             <field name="model">archive.eeg</field>
             <field name="arch" type="xml">
-                <tree>
+                <list>
 
                     <field name="carton_id"/>
                     <field name="etiquette_id"/>
@@ -23,7 +23,7 @@
                     <field name="task_id"/>
                     <field name="state_eeg"/>
                     <field name="company_id"/>
-                </tree>
+                </list>
             </field>
         </record>
 

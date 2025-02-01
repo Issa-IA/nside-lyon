@@ -334,7 +334,7 @@ class inheritTask(models.Model):
             'res_model': 'carton.carton',
             'domain': [('task_id', '=', self.id)],
             'context': {'search_default_task_id': self.id, 'default_task_id': self.id},
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
         }
 
     def action_open_related_etiquettes(self):
@@ -344,7 +344,7 @@ class inheritTask(models.Model):
             'res_model': 'intervention.line.eeg',
             'domain': [('task_id', '=', self.id)],
             'context': {'search_default_task_id': self.id, 'default_task_id': self.id},
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
         }
 
     @api.model
@@ -530,7 +530,7 @@ class inheritTask(models.Model):
             'res_model': 'archive.eeg',
             'domain': [('task_id', '=', self.id)],
             'context': {'search_default_task_id': self.id, 'default_task_id': self.id},
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
         }
 
     @api.depends('archives_ids')

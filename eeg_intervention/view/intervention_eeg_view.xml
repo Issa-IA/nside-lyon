@@ -10,11 +10,11 @@
             <field name="company_id"></field>
     </record>
     <record id="view_carton_tree" model="ir.ui.view">
-        <field name="name">cartons.tree</field>
+        <field name="name">cartons.list</field>
         <field name="model">carton.carton</field>
         <field name="priority">4</field>
         <field name="arch" type="xml">
-            <tree string="Carton" class="" sample="1">
+            <list string="Carton" class="" sample="1">
                 <field name="name"/>
                 <field name="model_carton"/>
                 <field name="task_id"/>
@@ -23,12 +23,13 @@
                 <field name="total_illisible" />
                 <field name="total_casse" />
 
-            </tree>
+            </list>
         </field>
     </record>
 <record model="ir.actions.act_window" id="carton_action_window">
                 <field name="name">Cartons</field>
                 <field name="res_model">carton.carton</field>
+                <field name="view_mode">list</field> 
         </record>
         <menuitem
             parent="project.menu_project_config"
@@ -41,7 +42,7 @@
                 <field name="model">carton.carton</field>
                 <field name="arch" type="xml">
                     <form string="carton" duplicate="0">
-                        <sheet>
+                        <sheet string="Cartons">
 
 
                             <div class="oe_title">
@@ -69,10 +70,10 @@
                                             </group>
                                          </group>
 
-                        <notebook position="inside">
+                        <notebook>
                        <page string="Details" name="lines">
                             <field name ="intervention_line_eeg_ids">
-                             <tree string="Lines eeg" create="true" editable="top" multi_edit="true">
+                             <list string="Lines eeg" create="true" editable="top" multi_edit="true">
                                     <field name="etiquette_id"/>
                                     <field name="serial_number_10"/>
                                     <field name="serial_number_36"/>
@@ -90,7 +91,7 @@
                                     <field name="related_archive_ids" widget="many2many_tags" options="{'no_create': True}" string="Related Tasks"/>
 
 
-                             </tree>
+                             </list>
                             </field>
 
                         </page>
@@ -108,21 +109,18 @@
                         </page>
                         <page string="Illisibles" name="illisible">
                             <field name ="intervention_line_illisible_ids">
-                             <tree string="Illisible eeg" create="true" editable="top" multi_edit="true">
+                             <list string="Illisible eeg" create="true" editable="top" multi_edit="true">
                                     <field name="etiquette_id"/>
                                     <field name="qte_illisible"/>
                                     <field name="task_id"/>
                                     <field name="carton_id"/>
-                             </tree>
+                             </list>
                             </field>
                         </page>
                         </notebook>
                           </sheet>
 
-                         <div class="oe_chatter">
-                        <field name="message_follower_ids" groups="base.group_user"/>
-                        <field name="message_ids"/>
-                    </div>
+                         <chatter reload_on_follower="True"/>
                     </form>
                 </field>
 
@@ -146,16 +144,23 @@
                      <button name="action_open_related_etiquettes" string="Etiquettes" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
                                     <field string="Etiquettes" name="etiquette_count" widget="statinfo"/>
                      </button>
-                        <button name="action_view_total_attente_remplacement" string="En attente de remplacement" type="object" class="oe_stat_button"  icon="fa-random" groups="eeg_intervention.group_admin_rma" attrs="{'invisible': [('remplacement_active', '=', False)]}">
+                        <button name="action_view_total_attente_remplacement" string="En attente de remplacement" type="object" class="oe_stat_button"  icon="fa-random" groups="eeg_intervention.group_admin_rma" 
+                            invisible = "remplacement_active == False">
                                     <field string="En attente de remplacement" name="total_attente_remplacement" widget="statinfo"/>
                      </button>
                       <button name="action_open_related_archives_ids" string="Archives EEG" type="object" class="oe_stat_button"  icon="fa-credit-card" groups="eeg_intervention.group_admin_rma">
                                     <field string="Archives" name="archive_eeg_count" widget="statinfo"/>
                      </button>
-                            </div>
+                </div>
                 <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='partner_id']" position="after">
                     <field name="shipping_address"/>
                 </xpath>
+
+  <xpath expr="//field[@name='shipping_address']" position="after">
+    <field name="contact_store_id"/>
+  </xpath>
+
+  
                  <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='user_ids']" position="after">
                     <field name="x_studio_intervenant" string="Intervenant"/>
                     <field name="x_studio_marque" string="Marque"/>
@@ -164,7 +169,7 @@
                     <field name="date_expedition_france"/>
                     <field name="date_expedition"/>
                     <field name="date_reception_client"/>
-                    <field name="task_url" attrs="{}" invisible="1"/>
+                    <field name="task_url" invisible="1"/>
                   </xpath>
                 <xpath expr="//page[@name='extra_info']" position="after">
                         <page string="RMA/RFB" name="gestion_rma" groups="eeg_intervention.group_admin_rma">
@@ -178,13 +183,57 @@
                                 </group>
                                 <group string="Images destruction">
                                  <field name="image_ids" context="{'default_name': name}" mode="kanban" add-label="Ajouter une photo" nolabel="1"/>
-                             0  </group>
+                           </group>
                              </group>
 
 
                         </page>
+                        <page string="Fiche consommation" name="studio_page_Lr9mG">
+                          <group name="studio_group_Lr9mG">
+                                <group name="studio_group_Lr9mG_left">
+                                  <field name="num_cartons_client"/>
+                                  <field name="transport_type"/>
+                                  <field name="num_palette"/>
+                                </group>
+                                <group name="studio_group_Lr9mG_right">
+                                  <field name="sale_order__intervention_id" string="Bon de commande RMA"/>
+                                </group>
+                          </group>
+                          <field name="eeg_remplacee_ids" invisible="1"/>
+                                  <field name="intervention_unique_ids">
+                                    <list string="Intervention Unique">
+                                      <field name="etiquette_id" optional="show"/>
+                                      <field name="quantity_ok" optional="show"/>
+                                      <field name="quantity_hs" optional="show"/>
+                                      <field name="quantity_illisible" optional="show"/>
+                                      <field name="quantity_cassees" optional="show"/>
+                                      <field name="id" column_invisible="True"/>
+                                    </list>
+                                  </field>
+                                  <field name="piles_ids">
+                                    <list string="Pile">
+                                      <field name="product_id" optional="show" string="Piles consommées"/>
+                                      <field name="pile_factured" optional="show"/>
+                                      <field name="pile_non_facture" optional="show"/>
+                                      <field name="id" column_invisible="True"/>
+                                    </list>
+                                  </field>
+                                  <field name="prestation_ids">
+                                    <list string="prestation.model">
+                                      <field name="etiquette_id" optional="show"/>
+                                      <field name="product" optional="show"/>
+                                      <field name="quantity" optional="show"/>
+                                      <field name="price" optional="show" string="Prix"/>
+                                      <field name="price_total" optional="show"/>
+                                      <field name="id" column_invisible="True"/>
+                                    </list>
+                                  </field>
+                 
+                        </page>
+                      
                     </xpath>
             </field>
+
 </record>
 
 

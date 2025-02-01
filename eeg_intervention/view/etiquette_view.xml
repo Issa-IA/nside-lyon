@@ -5,7 +5,7 @@
         <field name="model">intervention.line.eeg</field>
         <field name="priority">2</field>
         <field name="arch" type="xml">
-            <tree string="Etiquettes" sample="1" editable="bottom">
+            <list string="Etiquettes" sample="1" editable="bottom">
                 <field name="etiquette_id" />
                 <field name="serial_number_10" />
                 <field name="serial_number_36" />
@@ -19,14 +19,16 @@
                 <field name="piles"/>
                 <field name="esthetique" />
                 <field name="cassees" />
-            </tree>
+            </list>
         </field>
     </record>
 
     <record model="ir.actions.act_window" id="etiquette_action_window">
                 <field name="name">EEG</field>
                 <field name="res_model">intervention.line.eeg</field>
+                <field name="view_mode">tree</field> 
         </record>
+
         <menuitem
             parent="project.menu_project_config"
             id="menu_etiquette_form"
