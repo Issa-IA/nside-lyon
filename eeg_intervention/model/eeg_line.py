@@ -97,27 +97,29 @@ class InterventionLineEeg(models.Model):
                     # raise ValidationError(f"Le code-barres '{rec.serial_number_36}' n'est pas valide.")
 
 
-    @api.model
-    def create(self, values):
-        serial_number_36 = values.get('serial_number_36')
-
-        # Vérifier si le numéro de série existe déjà
-        # Vérifier si un enregistrement avec le même numéro de série existe déjà
-        existing_record = self.search([('serial_number_36', '=', serial_number_36)], limit=1)
-
-        # Si un enregistrement avec le même numéro de série existe déjà et n'est pas vide, afficher un message
-        if existing_record and serial_number_36:
-            raise exceptions.ValidationError(
-                f"Le code-barres '{serial_number_36}' existe déjà. L'importation a échoué.")
-
-        if serial_number_36:
-            try:
-                int(serial_number_36, 36)
-            except ValueError:
+    @api.model_create_multi
+    def create(self, vals_list):
+        for values in vals_list:
+            serial_number_36 = values.get('serial_number_36')
+    
+            # Vérifier si le numéro de série existe déjà
+            # Vérifier si un enregistrement avec le même numéro de série existe déjà
+            existing_record = self.search([('serial_number_36', '=', serial_number_36)], limit=1)
+    
+            # Si un enregistrement avec le même numéro de série existe déjà et n'est pas vide, afficher un message
+            if existing_record and serial_number_36:
                 raise exceptions.ValidationError(
-                    f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+                    f"Le code-barres '{serial_number_36}' existe déjà. L'importation a échoué.")
+    
+            if serial_number_36:
+                try:
+                    int(serial_number_36, 36)
+                except ValueError:
+                    raise exceptions.ValidationError(
+                        f"Le code-barres '{serial_number_36}' n'est pas valide. L'importation a échoué.")
+    
+            return super(InterventionLineEeg, self).create(values)
 
-        return super(InterventionLineEeg, self).create(values)
 
     related_archive_ids = fields.Many2many(
         comodel_name='project.task',
