@@ -3,6 +3,7 @@ from odoo import api, fields, models, exceptions, SUPERUSER_ID, _
 
 class Composant(models.Model):
     _name = 'composant.model'
+    _description = 'Composant'
 
     etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
     product = fields.Many2one('product.product', string='Piles')
@@ -32,6 +33,7 @@ class PileModel(models.Model):
 
 class prestation(models.Model):
     _name = 'prestation.model'
+    _description = 'Prestation'
 
     etiquette_id = fields.Many2one('model.etiquette', string='Etiquette')
     product = fields.Many2one('product.product', string='Prestation')
