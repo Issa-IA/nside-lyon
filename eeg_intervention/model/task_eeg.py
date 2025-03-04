@@ -84,7 +84,7 @@ class inheritTask(models.Model):
     def _update_dates(self):
         for rec in self:
             if self.stage_id.id == 98:
-                new_date = fields.Date.today() + relativedelta(days=30)
+                new_date = fields.Date.today() + relativedelta(days=28)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
                 rec.date_reception = fields.Date.today().strftime('%Y-%m-%d')
             elif rec.stage_id.id == 149:
