@@ -1,0 +1,11 @@
+<odoo>
+    <report
+        id="action_report_task_excel"
+        model="project.task"
+        string="Task EEG Excel Report"
+        report_type="xlsx"
+        name="excel_report.model_task_excel_report"
+        file="excel_report.model_task_excel_report"
+        attachment_use="False"
+    />
+</odoo>

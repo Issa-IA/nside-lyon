@@ -1,0 +1,26 @@
+<odoo>
+    <!-- Vue FORM (déjà en place, pas à modifier si elle fonctionne) -->
+    
+<!-- <record id="view_task_form_excel_report" model="ir.ui.view">
+        <field name="name">project.task.form.excel.report</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <header>
+                <button name="model_task_excel_report" string="Export Excel Report" type="object" class="oe_highlight"/>
+            </header>
+        </field>
+    </record> -->
+
+    <!-- Vue TREE (LISTE) avec bouton Export -->
+     <record id="action_export_task_excel_report" model="ir.actions.server">
+        <field name="name">Rapport de traitement</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="binding_model_id" ref="project.model_project_task"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = env['project.task'].browse(records.ids).model_task_excel_report()
+        </field>
+    </record>
+</odoo>
