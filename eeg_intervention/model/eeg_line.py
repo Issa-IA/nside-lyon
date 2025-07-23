@@ -56,7 +56,7 @@ class InterventionLineEeg(models.Model):
 
     def _inverse_serial_number_10(self):
         return
-    )
+    
     serial_number_36 = fields.Text(string='N° de Série Base 36')
     task_id = fields.Many2one('project.task', 'Tâche', index=True, copy=False)
     active = fields.Boolean(string='Active' ,default=True,
