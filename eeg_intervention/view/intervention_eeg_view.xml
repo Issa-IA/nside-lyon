@@ -182,7 +182,26 @@
                                      <field name="remplacement_active"/>
                                 </group>
                                 <group string="Images destruction">
-                                 <field name="image_ids" context="{'default_name': name}" mode="kanban" add-label="Ajouter une photo" nolabel="1"/>
+                                  <field
+                                    colspan="2"
+                                    name="image_ids"
+                                    context="{'default_name': name}"
+                                    mode="kanban"
+                                    nolabel="1"
+                                >
+                                    <kanban>
+                                        <templates>
+                                            <t t-name="card">
+                                                <div class="oe_kanban_global_click p-2">
+                                                    <field name="image" widget="image" class="img-fluid"/>
+                                                    <div class="mt-2 text-center">
+                                                        <field name="name"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
                            </group>
                              </group>
 
