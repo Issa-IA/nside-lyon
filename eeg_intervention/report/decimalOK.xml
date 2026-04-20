@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<report         id="report_decimal_ok_etiquette"
-                model="project.task"
-                string="Test OK"
-                name="eeg_intervention.report_decimal_ok"
-                file="eeg_intervention.report_decimal_ok"
-                report_type="qweb-text"
-                print_report_name = "'150E (OK) - %s' % object.name"
-/>
+
+    <record
+    id="report_decimal_ok_etiquette"
+    model="ir.actions.report"
+  >
+    <field name="name">TEST OK</field>
+    <field name="model">project.task</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.report_decimal_ok</field>
+    <field name="report_file">eeg_intervention.report_decimal_ok</field>
+    <field name="attachment_use">True</field>
+    <field name="print_report_name">'150E (OK) - %s' % (object.name)</field>
+
+
+  </record>
 <template id="report_decimal_ok">
 150E (OK):
 <t t-foreach="docs" t-as="doc">
