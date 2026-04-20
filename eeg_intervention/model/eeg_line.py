@@ -28,6 +28,7 @@ class ModelEtiquette(models.Model):
         default=lambda self: self.env.uid,
         ondelete='restrict')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company)
+    
 
     @api.depends('marque_id.name')
     def _compute_display_name(self):
