@@ -2,15 +2,20 @@
 <odoo>
     <data>
 
-        <report
-            id="report_texte_hs_etiquette"
-            model="carton.carton"
-            string="TEST HS"
-            name="eeg_intervention.report_test_hs"
-            file="eeg_intervention.report_test_hs"
-            report_type="qweb-text"
-            print_report_name="'Carton- %s' % object.name"
-        />
+          <record
+    id="report_texte_hs_etiquette"
+    model="ir.actions.report"
+  >
+    <field name="name">TEST HS</field>
+    <field name="model">carton.carton</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.report_test_hs</field>
+    <field name="report_file">eeg_intervention.report_test_hs</field>
+    <field name="attachment_use">True</field>
+    <field name="print_report_name">'Carton - %s' % (object.name)</field>
+
+
+  </record>
 
         <template id="report_test_hs">
             <t t-foreach="docs" t-as="doc">
