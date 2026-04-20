@@ -1,11 +1,17 @@
 <odoo>
-    <report
-        id="action_report_task_excel"
-        model="project.task"
-        string="Task EEG Excel Report"
-        report_type="xlsx"
-        name="excel_report.model_task_excel_report"
-        file="excel_report.model_task_excel_report"
-        attachment_use="False"
-    />
+
+              <record
+    id="action_report_task_excel"
+    model="ir.actions.report"
+  >
+    <field name="name">Task EEG Excel Report</field>
+    <field name="model">project.task</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">excel_report.model_task_excel_report</field>
+    <field name="report_file">excel_report.model_task_excel_report</field>
+    <field name="attachment_use">True</field>
+    <field name="print_report_name">'Carton - %s' % (object.name)</field>
+
+
+  </record>
 </odoo>
