@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<report         id="report_test_ok_etiquette"
-                model="carton.carton"
-                string="Test 150E OK"
-                name="eeg_intervention.report_test_ok"
-                file="eeg_intervention.report_test_ok"
-                report_type="qweb-text"
-                print_report_name = "'TEST OK - %s' % object.name"
-/>
+<record
+    id="report_test_ok_etiquette"
+    model="ir.actions.report"
+  >
+    <field name="name">Test 150E OK</field>
+    <field name="model">carton.carton</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">eeg_intervention.report_test_ok</field>
+    <field name="report_file">eeg_intervention.report_test_ok</field>
+    <field name="attachment_use">True</field>
+    <field name="print_report_name">'TEST OK - %s' % (object.name)</field>
+
+
+  </record>
+  
 <template id="report_test_ok">
 <t t-foreach="docs" t-as="doc">
 <t t-foreach="doc.intervention_line_eeg_ids" t-as="table_line">
