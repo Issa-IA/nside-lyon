@@ -83,16 +83,16 @@ class inheritTask(models.Model):
     @api.depends('stage_id')
     def _update_dates(self):
         for rec in self:
-            if self.stage_id.id == 98:
+            if rec.stage_id.id in [98, 548]:
                 new_date = fields.Date.today() + relativedelta(days=28)
                 self.date_deadline = new_date.strftime('%Y-%m-%d')
                 rec.date_reception = fields.Date.today().strftime('%Y-%m-%d')
-            elif rec.stage_id.id == 149:
+            elif rec.stage_id.id in [149, 560]:
                 today_date = fields.Date.today().strftime('%Y-%m-%d')
                 rec.date_reception_client = today_date
-            elif rec.stage_id.id == 125:
+            elif rec.stage_id.id in [125, 551]:
                 rec.date_expedition_france = fields.Date.today().strftime('%Y-%m-%d')
-            elif rec.stage_id.id == 148:
+            elif rec.stage_id.id in [148, 552]:
                 rec.date_expedition = fields.Date.today().strftime('%Y-%m-%d')
     
     def _inverse_dates(self):
