@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_form_validated_button" model="ir.ui.view">
+            <field name="name">sale.order.form.validated.button</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                  <xpath expr="//field[@name='user_extend']" position="after">
+                    <button
+                        name="action_mark_validated"
+                        string="Signer"
+                        type="object"
+                        class="btn-primary"
+                        invisible="0"/>
+                </xpath>
+
+                
+
+            </field>
+        </record>
+    </data>
+</odoo>
