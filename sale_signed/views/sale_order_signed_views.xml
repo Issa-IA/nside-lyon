@@ -6,14 +6,15 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                  <xpath expr="//field[@name='user_extend']" position="after">
+                 <header>
+                
                     <button
                         name="action_mark_validated"
                         string="Signer"
                         type="object"
                         class="btn-primary"
                         invisible="0"/>
-                </xpath>
+                 </header>
 
                 
 

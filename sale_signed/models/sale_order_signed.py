@@ -18,16 +18,19 @@ class SaleOrderSignedStage(models.Model):
         for order in self:
             if order.state in ('sale', 'done'):
                 continue
-            order.write({'state': 'signed'})
+
+            order.state = 'signed'
 
     def action_confirm(self):
+
         for order in self:
             if order.state != 'signed':
                 raise UserError(
                     "Vous devez passer le devis à l’état signé avant de confirmer."
                 )
-        self.write({'state': 'sale'})
-        return True
 
+           
+            order.state = 'draft'
 
-
+      
+        return super().action_confirm()
