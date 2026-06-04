@@ -29,13 +29,6 @@ class ModelEtiquette(models.Model):
         ondelete='restrict')
     company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.company, required=True)
 
-    @api.depends('marque_id.name')
-    def _compute_display_name(self):
-        for names in self:
-            if names.marque_id:
-                names.display_name = "[%s] %s" % (names.marque_id.name, names.name)
-            else:
-                names.display_name = names.name
 
 
 class InterventionLineEeg(models.Model):
